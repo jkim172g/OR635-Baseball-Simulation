@@ -4,6 +4,7 @@ import numpy as np
 import random
 
 
+import pdb
 
 class Batter:
     
@@ -44,6 +45,11 @@ class Team:
         
         self.batters = batters
         self.pitchers = pitchers
+        self.score = 0
+        self.batter_index = 0
+        self.num_batters = len(batters)
+        self.pitcher_index = 0
+        self.num_pitchers = len(pitchers)
     
     def __str__(self):
         return "Team"
@@ -59,9 +65,7 @@ class Game:
         self.outs = 0
         self.strikes = 0
         self.balls = 0
-        self.team1_score = 0
-        self.team2_score = 0
-        self.bases = [False, False, False]
+        self.bases = [0,0,0]
         self.team1_batter_index = 0
         self.team2_batter_index = 0
         self.team1_pitcher_index = 0
@@ -69,6 +73,12 @@ class Game:
         
         self.team1 = team1
         self.team2 = team2
+        
+        self.event_log = {'Inning':[self.inning], 'Inning Half':[self.inning_half],'Event':['Init'],
+                          'Outs':[self.outs], 'Strikes':[self.strikes], 'Balls':[self.balls],
+                          'Bases':[self.bases], 'Team 1 Score':[0], 'Team 2 Score':[0],
+                          'Batter':['NA'], 'Pitcher':['NA'],
+                          }
     
     def pitch(self, batter, pitcher):
         # Get pitch details
@@ -116,74 +126,120 @@ class Game:
         return result
         
     
-    def move_bases(self, action):
+    def move_bases(self, action, batting_team):
         #Put logic here for moving bases based on the action
-        #Calculate score as needed
-        #This logic may be messy - trying to think of a more elegant way to do it than a million if statements
+     
         ## How do we determine whether a player already on base was out?
+        #pdb.set_trace()
+        if action == 'home_run':
+            batting_team.score += sum(self.bases) + 1
+            self.bases = [0,0,0]
         
-        pass
+        elif action == 'walk' or action == 'single':
+            batting_team.score += self.bases[2]
+            self.bases[2] = self.bases[1]
+            self.bases[1] = self.bases[0]
+            self.bases[0] = 1
+            
+        elif action == 'double':
+            
+            batting_team.score += self.bases[2] + self.bases[1]
+            self.bases[2] = self.bases[0]
+            self.bases[1] = 1
+            self.bases[0] = 0
+        
+        elif action == 'triple':
+            batting_team.score += sum(self.bases)
+            self.bases = [0,0,1]
+        
+        else:
+            self.outs += 1
     
-    def simulate_inning_half(self, batting_team, batter_up, pitching_team, pitcher_up):
-        
-        
-        
+    def simulate_inning_half(self, batting_team, pitching_team):
         
         while self.outs < 3:
             #Set batter and pitcher
-            current_batter = batting_team.batters[batter_up]
-            current_pitcher = pitching_team.pitcher[pitcher_up]
+            self.strikes = 0
+            self.balls = 0
+            current_batter = batting_team.batters[batting_team.batter_index]
+            current_pitcher = pitching_team.pitchers[pitching_team.pitcher_index]
             #Run through a pitch and update outcomes
             hit = False
             while self.strikes < 3 and self.balls < 4 and not hit:
                 #Get result of pitch
-                pitch_result = self.pitch(self,current_batter, current_pitcher)
+                pitch_result = self.pitch(current_batter, current_pitcher)
                 #Update stats
                 if pitch_result == 'strike':
                         self.strikes += 1
-                if pitch_result == 'ball':
+                        #Record an out if strike out
+                        if self.strikes == 3:
+                            self.outs += 1
+                elif pitch_result == 'ball':
                         self.balls += 1
+                        #Record a walk if ball 4
+                        if self.balls ==4:
+                            self.move_bases('walk',batting_team)
                 else:
-                    self.move_bases(self,pitch_result)
+                    #Move bases if hit
+                    self.move_bases(pitch_result,batting_team)
                     hit = True
-            # Add an out or walk depending on result of at-bat
-            if self.strikes == 3:
-                self.outs += 1
-            if self.balls ==4:
-                self.move_bases(self,'walk')
-            batter_up +=1
-            
-            
-            
-                    
-            
+                #After each pitch, update current game state
+                self.update_event_log(current_batter, current_pitcher,pitch_result)
+
+            #Update batter
+            if batting_team.batter_index < batting_team.num_batters-1:
+                batting_team.batter_index += 1
+            else:
+                batting_team.batter_index =0
+        
+    def update_event_log(self,current_batter, current_pitcher, event):
+        #Add all current information to the event log
+        self.event_log['Inning'].append(self.inning)
+        self.event_log['Inning Half'].append(self.inning_half)
+        self.event_log['Outs'].append(self.outs)
+        self.event_log['Strikes'].append(self.strikes)
+        self.event_log['Balls'].append(self.balls)
+        self.event_log['Bases'].append(self.bases[:])
+        self.event_log['Team 1 Score'].append(self.team1.score)
+        self.event_log['Team 2 Score'].append(self.team2.score)
+        self.event_log['Batter'].append(current_batter.name)
+        self.event_log['Pitcher'].append(current_pitcher.name)
+        self.event_log['Event'].append(event)
     
     def play_ball(self):
-        
+        #pdb.set_trace()
         #Loop through innings
         while self.inning <= 9:
+            self.outs = 0
+            self.strikes = 0
+            self.balls = 0
+            self.bases = [0,0,0]
             if self.inning_half == 'top':
                 #If top of the inning, team1 is batting and team2 is pitching
-                batter_index = self.team1_batter_index
-                pitcher_index = self.team2_pitcher_index
-                self.simulate_inning_half(self, team1, batter_index, team2, pitcher_index)    
+
+                self.simulate_inning_half(team1, team2)    
+                self.inning_half = 'bottom'
+                
             else:
                 #If bottom of the inning, team2 is batting and team1 is pitching
-                batter_index = self.team2_batter_index
-                pitcher_index = self.team1_pitcher_index
-                self.simulate_inning_half(self, team2, batter_index, team1, pitcher_index) 
+
+                self.simulate_inning_half(team2, team1) 
+                self.inning_half = 'top'
+                self.inning += 1
+            
+        return self.event_log
      
     
 
 if __name__ == '__main__':
-    batter1_data= {'name':'Joe', 'team':'Nationals', 'swing_prob':0.5, 'contact_prob':0.7,
+    generic_batter_data= {'name':'1', 'team':'Nationals', 'swing_prob':0.5, 'contact_prob':0.3,
                    'outcome_prob':{'single':0.25,
                                    'double':0.1,
                                    'triple':0.05,
                                    'home_run':0.05,
                                    'ground_out':0.3,
                                    'fly_out':0.3}}
-    pitcher1_data= {'name':'Pete', 'team':'Nationals', 
+    pitcher1_data= {'name':'1', 'team':'Nationals', 
                'pitch_type_prob':{'fastball':0.25,
                                   'curveball':0.25,
                                   'slider':0.25,
@@ -194,15 +250,25 @@ if __name__ == '__main__':
                                   'down':0.25,
                                   'side':0.25,
                                   'fade':0.25},
-               'strike_prob':0.5}
+               'strike_prob':0.4}
         
-    batter1 = Batter(batter1_data)  
-    pitcher1 = Pitcher(pitcher1_data)
+    batter_data = [generic_batter_data.copy() for i in range(9)]
+    i = 1
+    for batter in batter_data:
+        batter['name'] = str(i)
+        i += 1
     
-    team1 = Team([batter1],[pitcher1])
-    team2 = Team([batter1],[pitcher1])
+    
+    batters = [Batter(batter) for batter in batter_data]
+    
+    pitcher1 = Pitcher(pitcher1_data)
+    team1 = Team(batters,[pitcher1])
+    team2 = Team(batters,[pitcher1])
         
-        
+    game = Game(team1, team2)   
+    game.play_ball()
+    
+    event_log = pd.DataFrame(game.event_log)
         
         
         
