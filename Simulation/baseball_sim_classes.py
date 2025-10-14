@@ -92,10 +92,10 @@ class Game:
         strike = True if np.random.uniform() < pitcher.strike_prob else False
         if strike:
             #If strike, check if batter swings
-            swing = True if np.random.uniform() < batter.swing_prob else False
+            swing = True if np.random.uniform() < batter.swing_prob['strike'] else False
             if swing:
                 #If batter swings, check if contact was made
-                contact = True if np.random.uniform() < batter.contact_prob else False
+                contact = True if np.random.uniform() < batter.contact_prob['strike'] else False
                 #If contact was made, calculate result
                 if contact:
                     result = random.choices(list(batter.outcome_prob.keys()), list(batter.outcome_prob.values()))[0]
@@ -108,10 +108,10 @@ class Game:
                 result = 'strike'
         else:
             #If ball was thrown, check if it was swung at
-            swing = True if np.random.uniform() < batter.swing_prob else False
+            swing = True if np.random.uniform() < batter.swing_prob['ball'] else False
             if swing:
                 #If batter swings, check if contact was made
-                contact = True if np.random.uniform() < batter.contact_prob else False
+                contact = True if np.random.uniform() < batter.contact_prob['ball'] else False
                 #If contact was made, calculate result
                 if contact:
                     result = random.choices(list(batter.outcome_prob.keys()), list(batter.outcome_prob.values()))[0]
@@ -135,12 +135,21 @@ class Game:
             batting_team.score += sum(self.bases) + 1
             self.bases = [0,0,0]
         
-        elif action == 'walk' or action == 'single':
+        elif action == 'walk':
+            if self.bases == [1,1,1]:
+                batting_team.score += self.bases[2]
+            if self.bases[0] == 1 and self.bases[1] == 1:
+                self.bases[2] = 1
+            
+            self.bases[1] = 1 if self.bases[0] == 1 else self.bases[1]
+            self.bases[0] = 1
+        
+        elif action == 'single':
             batting_team.score += self.bases[2]
             self.bases[2] = self.bases[1]
             self.bases[1] = self.bases[0]
             self.bases[0] = 1
-            
+        
         elif action == 'double':
             
             batting_team.score += self.bases[2] + self.bases[1]
@@ -232,7 +241,8 @@ class Game:
     
 
 if __name__ == '__main__':
-    generic_batter_data= {'name':'1', 'team':'Nationals', 'swing_prob':0.5, 'contact_prob':0.3,
+    generic_batter_data= {'name':'1', 'team':'Nationals', 'swing_prob':{'strike':0.75, 'ball':0.25}, 
+                          'contact_prob':{'strike':0.35, 'ball':0.2},
                    'outcome_prob':{'single':0.25,
                                    'double':0.1,
                                    'triple':0.05,
@@ -264,13 +274,45 @@ if __name__ == '__main__':
     pitcher1 = Pitcher(pitcher1_data)
     team1 = Team(batters,[pitcher1])
     team2 = Team(batters,[pitcher1])
-        
-    game = Game(team1, team2)   
+    
+    game = Game(team1, team2)
     game.play_ball()
     
     event_log = pd.DataFrame(game.event_log)
+    
+    ### Some code below to run 100 games and compute team record, average score
+    # scores = {i:[] for i in range(1,10)}
+    # team1_record = [0,0,0]
+    # team2_record = [0,0,0]
+    # for i in range(100):
+    #     team1 = Team(batters,[pitcher1])
+    #     team2 = Team(batters,[pitcher1])
         
+    #     game = Game(team1, team2)   
+    #     game.play_ball()
         
+    #     event_log = pd.DataFrame(game.event_log)
+        
+    #     team1_score = event_log.at[len(event_log)-1,'Team 1 Score']
+    #     team2_score = event_log.at[len(event_log)-1,'Team 2 Score']
+        
+    #     if team1_score > team2_score:
+    #         team1_record[0] += 1
+    #         team2_record[1] += 1
+    #     elif team2_score > team1_score:
+    #         team1_record[1] += 1
+    #         team2_record[0] += 1
+    #     else:
+    #         team1_record[2] += 1
+    #         team2_record[2] += 1
+        
+    #     for j in range(1,10):
+    #         max_index = max(event_log[event_log['Inning'] == j].index)
+    #         scores[j].append(event_log.at[max_index, 'Team 1 Score'])
+    #         scores[j].append(event_log.at[max_index, 'Team 2 Score'])
+            
+    # avg_scores_by_inning = {i:np.average(scores[i]) for i in range(1,10)}    
+      
         
         
         
