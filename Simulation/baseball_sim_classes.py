@@ -75,9 +75,8 @@ class Game:
         self.team2 = team2
         
         self.event_log = {'Inning':[self.inning], 'Inning Half':[self.inning_half],'Event':['Init'],
-                          'Outs':[self.outs], 'Strikes':[self.strikes], 'Balls':[self.balls],
-                          'Bases':[self.bases], 'Team 1 Score':[0], 'Team 2 Score':[0],
-                          'Batter':['NA'], 'Pitcher':['NA'],
+                          'Batter':['NA'], 'Bases':[self.bases], 'Balls':[self.balls],
+                          'Strikes':[self.strikes], 'Outs':[self.outs],'Team 1 Score':[0], 'Team 2 Score':[0], 'Pitcher':['NA'],
                           }
     
     def pitch(self, batter, pitcher):
@@ -241,13 +240,13 @@ class Game:
     
 
 if __name__ == '__main__':
-    generic_batter_data= {'name':'1', 'team':'Nationals', 'swing_prob':{'strike':0.75, 'ball':0.25}, 
+    generic_batter_data= {'name':'1', 'team':'Nationals', 'swing_prob':{'strike':0.75, 'ball':0.1}, 
                           'contact_prob':{'strike':0.35, 'ball':0.2},
-                   'outcome_prob':{'single':0.25,
+                   'outcome_prob':{'single':0.175,
                                    'double':0.1,
                                    'triple':0.05,
-                                   'home_run':0.05,
-                                   'ground_out':0.3,
+                                   'home_run':0.025,
+                                   'ground_out':0.35,
                                    'fly_out':0.3}}
     pitcher1_data= {'name':'1', 'team':'Nationals', 
                'pitch_type_prob':{'fastball':0.25,
@@ -260,20 +259,35 @@ if __name__ == '__main__':
                                   'down':0.25,
                                   'side':0.25,
                                   'fade':0.25},
-               'strike_prob':0.4}
+               'strike_prob':0.5}
+    
+    pitcher2_data= {'name':'2', 'team':'Nationals', 
+               'pitch_type_prob':{'fastball':0.25,
+                                  'curveball':0.25,
+                                  'slider':0.25,
+                                  'changeup':0.25},
+               'velocity_dist':{95:0.5, 
+                                100:0.5},
+               'movement_prob':{'straight':0.25,
+                                  'down':0.25,
+                                  'side':0.25,
+                                  'fade':0.25},
+               'strike_prob':0.5}
         
-    batter_data = [generic_batter_data.copy() for i in range(9)]
+    batter_data = [generic_batter_data.copy() for i in range(18)]
     i = 1
     for batter in batter_data:
         batter['name'] = str(i)
         i += 1
     
     
-    batters = [Batter(batter) for batter in batter_data]
+    batters1 = [Batter(batter) for batter in batter_data[0:8]]
+    batters2 = [Batter(batter) for batter in batter_data[9:]]
     
     pitcher1 = Pitcher(pitcher1_data)
-    team1 = Team(batters,[pitcher1])
-    team2 = Team(batters,[pitcher1])
+    pitcher2 = Pitcher(pitcher2_data)
+    team1 = Team(batters1,[pitcher1])
+    team2 = Team(batters2,[pitcher2])
     
     game = Game(team1, team2)
     game.play_ball()
@@ -284,9 +298,9 @@ if __name__ == '__main__':
     # scores = {i:[] for i in range(1,10)}
     # team1_record = [0,0,0]
     # team2_record = [0,0,0]
-    # for i in range(100):
-    #     team1 = Team(batters,[pitcher1])
-    #     team2 = Team(batters,[pitcher1])
+    # for i in range(1000):
+    #     team1 = Team(batters1,[pitcher1])
+    #     team2 = Team(batters2,[pitcher1])
         
     #     game = Game(team1, team2)   
     #     game.play_ball()
