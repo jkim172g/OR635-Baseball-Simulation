@@ -217,7 +217,7 @@ class Game:
     def play_ball(self):
         #pdb.set_trace()
         #Loop through innings
-        while self.inning <= 9:
+        while self.inning <= 9 or (self.inning >=9 and team1.score == team2.score):
             self.outs = 0
             self.strikes = 0
             self.balls = 0
@@ -230,10 +230,14 @@ class Game:
                 
             else:
                 #If bottom of the inning, team2 is batting and team1 is pitching
-
-                self.simulate_inning_half(team2, team1) 
-                self.inning_half = 'top'
-                self.inning += 1
+                if self.inning == 9 and team2.score > team1.score:
+                    self.inning += 1
+                    pass
+                    
+                else:
+                    self.simulate_inning_half(team2, team1) 
+                    self.inning_half = 'top'
+                    self.inning += 1
             
         return self.event_log
      
@@ -242,9 +246,9 @@ class Game:
 if __name__ == '__main__':
     generic_batter_data= {'name':'1', 'team':'Nationals', 'swing_prob':{'strike':0.75, 'ball':0.1}, 
                           'contact_prob':{'strike':0.35, 'ball':0.2},
-                   'outcome_prob':{'single':0.175,
+                   'outcome_prob':{'single':0.205,
                                    'double':0.1,
-                                   'triple':0.05,
+                                   'triple':0.02,
                                    'home_run':0.025,
                                    'ground_out':0.35,
                                    'fly_out':0.3}}
