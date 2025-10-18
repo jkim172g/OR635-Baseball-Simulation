@@ -275,6 +275,9 @@ if __name__ == '__main__':
     # TODO add selection based on team? Data currently has lots of blanks bc of trades/moves
     batter_df = pd.read_excel("../Data/Merged_Data.xlsx", sheet_name='Batting Data')
     pitcher_df = pd.read_excel("../Data/Merged_Data.xlsx", sheet_name='Pitching Data')
+    pitcher_df.fillna(0, inplace=True) # TODO is this ok? Or need to be more selective like below?
+    # pitcher_df[["FA%", "FT%", "FC%", "FS%", "FO%", "SI%", "SL%", "CU%", "KC%", "EP%", "CH%", "SC%", "KN%", "UN%"]] = pitcher_df[["FA%", "FT%", "FC%", "FS%", "FO%", "SI%", "SL%", "CU%", "KC%", "EP%", "CH%", "SC%", "KN%", "UN%"]].fillna(0)
+
 
     batter_ids = list(batter_df["PlayerId"])
     pitcher_ids = list(pitcher_df["PlayerId"])
@@ -298,7 +301,7 @@ if __name__ == '__main__':
                 'contact_prob': {'strike': row["Z-Contact%"], 'ball': row["O-Contact%"]},
                 'outcome_prob': perturb_values(base_outcome_prob, .05) # TODO replace with calculated %s, from power stats like SLG, LO, etc., still TBD
             }
-        )(batter_df[batter_df["PlayerId"] == bid])
+        )(batter_df[batter_df["PlayerId"] == bid].iloc[0])
             for bid in selected_batter_ids
     ]
     i = 1
@@ -327,7 +330,7 @@ if __name__ == '__main__':
              'movement_prob': perturb_values(base_movement_prob, 0.05), # TODO replace with params for some other RN pull on pitch
              'strike_prob': row["Zone%"] # prob inside zone, not of being a strike bc of zone/swing/foul
             }
-        )(pitcher_df[pitcher_df["PlayerId"] == pid])
+        )(pitcher_df[pitcher_df["PlayerId"] == pid].iloc[0])
             for pid in selected_pitcher_ids
     ]
     
@@ -344,6 +347,8 @@ if __name__ == '__main__':
     game.play_ball()
     
     event_log = pd.DataFrame(game.event_log)
+    # TODO add batter to the game log
+    event_log.to_csv("event_log.csv")
     
     ### Some code below to run 100 games and compute team record, average score
     # scores = {i:[] for i in range(1,10)}
