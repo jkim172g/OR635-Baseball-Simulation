@@ -66,6 +66,8 @@ class Game:
         self.strikes = 0
         self.balls = 0
         self.bases = [0,0,0]
+        # self.bases = {"First": False, "Second": False, "Third": False}
+        # TODO could also place the players on the bases, to track their stats?
         self.team1_batter_index = 0
         self.team2_batter_index = 0
         self.team1_pitcher_index = 0
@@ -236,56 +238,92 @@ class Game:
                 self.inning += 1
             
         return self.event_log
-     
+    
+
+def perturb_values(orig_val_dict, range):
+    val_dict = orig_val_dict.copy()
+    # perturb
+    for k, v in val_dict.items():
+        direction = random.choice([-1, 1])
+        scale = random.random()
+        perturb = scale * direction * range
+        val_dict[k] = v + perturb
+
+    # normalize back to 1
+    denom = sum(val_dict.values())
+    norm = 1/denom
+    for k, v in val_dict.items():
+        val_dict[k] = v*norm
+
+    return val_dict
     
 
 if __name__ == '__main__':
-    generic_batter_data= {'name':'1', 'team':'Nationals', 'swing_prob':{'strike':0.75, 'ball':0.1}, 
-                          'contact_prob':{'strike':0.35, 'ball':0.2},
-                   'outcome_prob':{'single':0.175,
-                                   'double':0.1,
-                                   'triple':0.05,
-                                   'home_run':0.025,
-                                   'ground_out':0.35,
-                                   'fly_out':0.3}}
-    pitcher1_data= {'name':'1', 'team':'Nationals', 
-               'pitch_type_prob':{'fastball':0.25,
-                                  'curveball':0.25,
-                                  'slider':0.25,
-                                  'changeup':0.25},
-               'velocity_dist':{95:0.5, 
-                                100:0.5},
-               'movement_prob':{'straight':0.25,
-                                  'down':0.25,
-                                  'side':0.25,
-                                  'fade':0.25},
-               'strike_prob':0.5}
+    # TODO add selection based on team? Data currently has lots of blanks bc of trades/moves
+    batter_df = pd.read_excel("Merged_Data.xlsx", sheet_name='Batting Data')
+    pitcher_df = pd.read_excel("Merged_Data.xlsx", sheet_name='Pitching Data')
+
+    batter_ids = batter_df["PlayerID"]
+    pitcher_ids = pitcher_df["PlayerID"]
+    # TODO add pitching changes, relief pitching. Currently just selecting a starting pitcher for each side to pitch the whole game
+
+    selected_batter_ids = random.sample(batter_ids, 18) # samples w/o replacement
+    selected_pitcher_ids = random.sample(pitcher_ids, 2) # samples w/o replacemnet
     
-    pitcher2_data= {'name':'2', 'team':'Nationals', 
-               'pitch_type_prob':{'fastball':0.25,
-                                  'curveball':0.25,
-                                  'slider':0.25,
-                                  'changeup':0.25},
-               'velocity_dist':{95:0.5, 
-                                100:0.5},
-               'movement_prob':{'straight':0.25,
-                                  'down':0.25,
-                                  'side':0.25,
-                                  'fade':0.25},
-               'strike_prob':0.5}
+    base_outcome_prob = {'single': 0.175,
+                        'double': 0.1,
+                        'triple': 0.05,
+                        'home_run': 0.025,
+                        'ground_out': 0.35,
+                        'fly_out': 0.3}
         
-    batter_data = [generic_batter_data.copy() for i in range(18)]
+    batter_data = [
+        (lambda row: 
+            {'name': row["Name"],
+                'team': row["Team"],
+                'swing_prob': {'strike': row["Z-Swing%"], 'ball': row["O-Swing%"]},
+                'contact_prob': {'strike': row["Z-Contact%"], 'ball': row["O-Contact%"]},
+                'outcome_prob': perturb_values(base_outcome_prob, .05) # TODO replace with calculated %s, from power stats like SLG, LO, etc., still TBD
+            }
+        )(batter_df[batter_df["PlayerID"] == bid])
+            for bid in selected_batter_ids
+    ]
     i = 1
     for batter in batter_data:
         batter['name'] = str(i)
         i += 1
+
+    base_velocity_dist = {95:0.5,
+                        100:0.5}
+    
+    base_movement_prob = {'straight': 0.25,
+                                  'down': 0.25,
+                                  'side': 0.25,
+                                  'fade': 0.25}
+
+    pitcher_data = [
+        (lambda row:
+            {'name': row["Name"],
+             'team': row["Team"],
+             'pitch_type_prob': {'fastball': row["FA%"] + row["FT%"], # Adding 4-seam, 2-seam, and unclassified tgr
+                                  'curveball': row["CU%"],
+                                  'slider': row["SL%"],
+                                  'changeup': row["CH%"]},
+                                  # TODO what to do if they don't add to 1, bc of other pitch types? Just expand categories handled in sim?
+             'velocity_dist': perturb_values(base_velocity_dist, 0.05), # TODO replace with params for some other RN pull on pitch
+             'movement_prob': perturb_values(base_movement_prob, 0.05), # TODO replace with params for some other RN pull on pitch
+             'strike_prob': row["Zone%"] # prob inside zone, not of being a strike bc of zone/swing/foul
+            }
+        )(pitcher_df[pitcher_df["PlayerID"] == pid])
+            for pid in selected_pitcher_ids
+    ]
     
     
     batters1 = [Batter(batter) for batter in batter_data[0:8]]
     batters2 = [Batter(batter) for batter in batter_data[9:]]
     
-    pitcher1 = Pitcher(pitcher1_data)
-    pitcher2 = Pitcher(pitcher2_data)
+    pitcher1 = Pitcher(pitcher_data[0])
+    pitcher2 = Pitcher(pitcher_data[1])
     team1 = Team(batters1,[pitcher1])
     team2 = Team(batters2,[pitcher2])
     
