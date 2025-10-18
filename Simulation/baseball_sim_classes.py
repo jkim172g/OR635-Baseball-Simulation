@@ -273,11 +273,11 @@ def perturb_values(orig_val_dict, range):
 
 if __name__ == '__main__':
     # TODO add selection based on team? Data currently has lots of blanks bc of trades/moves
-    batter_df = pd.read_excel("Merged_Data.xlsx", sheet_name='Batting Data')
-    pitcher_df = pd.read_excel("Merged_Data.xlsx", sheet_name='Pitching Data')
+    batter_df = pd.read_excel("../Data/Merged_Data.xlsx", sheet_name='Batting Data')
+    pitcher_df = pd.read_excel("../Data/Merged_Data.xlsx", sheet_name='Pitching Data')
 
-    batter_ids = batter_df["PlayerID"]
-    pitcher_ids = pitcher_df["PlayerID"]
+    batter_ids = list(batter_df["PlayerId"])
+    pitcher_ids = list(pitcher_df["PlayerId"])
     # TODO add pitching changes, relief pitching. Currently just selecting a starting pitcher for each side to pitch the whole game
 
     selected_batter_ids = random.sample(batter_ids, 18) # samples w/o replacement
@@ -298,7 +298,7 @@ if __name__ == '__main__':
                 'contact_prob': {'strike': row["Z-Contact%"], 'ball': row["O-Contact%"]},
                 'outcome_prob': perturb_values(base_outcome_prob, .05) # TODO replace with calculated %s, from power stats like SLG, LO, etc., still TBD
             }
-        )(batter_df[batter_df["PlayerID"] == bid])
+        )(batter_df[batter_df["PlayerId"] == bid])
             for bid in selected_batter_ids
     ]
     i = 1
@@ -327,7 +327,7 @@ if __name__ == '__main__':
              'movement_prob': perturb_values(base_movement_prob, 0.05), # TODO replace with params for some other RN pull on pitch
              'strike_prob': row["Zone%"] # prob inside zone, not of being a strike bc of zone/swing/foul
             }
-        )(pitcher_df[pitcher_df["PlayerID"] == pid])
+        )(pitcher_df[pitcher_df["PlayerId"] == pid])
             for pid in selected_pitcher_ids
     ]
     
