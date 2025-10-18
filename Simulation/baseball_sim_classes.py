@@ -76,7 +76,7 @@ class Game:
         self.team1 = team1
         self.team2 = team2
         
-        self.event_log = {'Inning':[self.inning], 'Inning Half':[self.inning_half],'Event':['Init'],
+        self.event_log = {'Inning':[self.inning], 'Inning Half':[self.inning_half],'Event':['Init'], 'Pitch Outcome':['Init'],
                           'Batter':['NA'], 'Bases':[self.bases], 'Balls':[self.balls],
                           'Strikes':[self.strikes], 'Outs':[self.outs],'Team 1 Score':[0], 'Team 2 Score':[0], 'Pitcher':['NA'],
                           }
@@ -92,6 +92,7 @@ class Game:
         
         strike = True if np.random.uniform() < pitcher.strike_prob else False
         if strike:
+            pitch_result = 'strike'
             #If strike, check if batter swings
             swing = True if np.random.uniform() < batter.swing_prob['strike'] else False
             if swing:
@@ -99,6 +100,7 @@ class Game:
                 contact = True if np.random.uniform() < batter.contact_prob['strike'] else False
                 #If contact was made, calculate result
                 if contact:
+           
                     result = random.choices(list(batter.outcome_prob.keys()), list(batter.outcome_prob.values()))[0]
                 
                 else:
@@ -108,6 +110,7 @@ class Game:
                 #If strike not swung at, strike
                 result = 'strike'
         else:
+            pitch_result= 'ball'
             #If ball was thrown, check if it was swung at
             swing = True if np.random.uniform() < batter.swing_prob['ball'] else False
             if swing:
@@ -124,7 +127,7 @@ class Game:
                 #if ball not swung at, result is a ball
                 result = 'ball'
                
-        return result
+        return result, pitch_result
         
     
     def move_bases(self, action, batting_team):
@@ -177,24 +180,24 @@ class Game:
             hit = False
             while self.strikes < 3 and self.balls < 4 and not hit:
                 #Get result of pitch
-                pitch_result = self.pitch(current_batter, current_pitcher)
+                event, pitch_result = self.pitch(current_batter, current_pitcher)
                 #Update stats
-                if pitch_result == 'strike':
+                if event == 'strike':
                         self.strikes += 1
                         #Record an out if strike out
                         if self.strikes == 3:
                             self.outs += 1
-                elif pitch_result == 'ball':
+                elif event == 'ball':
                         self.balls += 1
                         #Record a walk if ball 4
                         if self.balls ==4:
                             self.move_bases('walk',batting_team)
                 else:
                     #Move bases if hit
-                    self.move_bases(pitch_result,batting_team)
+                    self.move_bases(event,batting_team)
                     hit = True
                 #After each pitch, update current game state
-                self.update_event_log(current_batter, current_pitcher,pitch_result)
+                self.update_event_log(current_batter, current_pitcher,event, pitch_result)
 
             #Update batter
             if batting_team.batter_index < batting_team.num_batters-1:
@@ -202,7 +205,7 @@ class Game:
             else:
                 batting_team.batter_index =0
         
-    def update_event_log(self,current_batter, current_pitcher, event):
+    def update_event_log(self,current_batter, current_pitcher, event, pitch_result):
         #Add all current information to the event log
         self.event_log['Inning'].append(self.inning)
         self.event_log['Inning Half'].append(self.inning_half)
@@ -214,12 +217,18 @@ class Game:
         self.event_log['Team 2 Score'].append(self.team2.score)
         self.event_log['Batter'].append(current_batter.name)
         self.event_log['Pitcher'].append(current_pitcher.name)
-        self.event_log['Event'].append(event)
+        self.event_log['Pitch Outcome'].append(pitch_result)
+        if self.strikes == 3:
+            self.event_log['Event'].append('strikeout')
+        elif self.balls == 4:
+            self.event_log['Event'].append('walk')
+        else:
+            self.event_log['Event'].append(event)
     
     def play_ball(self):
         #pdb.set_trace()
         #Loop through innings
-        while self.inning <= 9:
+        while self.inning <= 9 or (self.inning >=9 and team1.score == team2.score):
             self.outs = 0
             self.strikes = 0
             self.balls = 0
@@ -232,10 +241,14 @@ class Game:
                 
             else:
                 #If bottom of the inning, team2 is batting and team1 is pitching
-
-                self.simulate_inning_half(team2, team1) 
-                self.inning_half = 'top'
-                self.inning += 1
+                if self.inning == 9 and team2.score > team1.score:
+                    self.inning += 1
+                    pass
+                    
+                else:
+                    self.simulate_inning_half(team2, team1) 
+                    self.inning_half = 'top'
+                    self.inning += 1
             
         return self.event_log
     
@@ -270,9 +283,9 @@ if __name__ == '__main__':
     selected_batter_ids = random.sample(batter_ids, 18) # samples w/o replacement
     selected_pitcher_ids = random.sample(pitcher_ids, 2) # samples w/o replacemnet
     
-    base_outcome_prob = {'single': 0.175,
+    base_outcome_prob = {'single': 0.205,
                         'double': 0.1,
-                        'triple': 0.05,
+                        'triple': 0.02,
                         'home_run': 0.025,
                         'ground_out': 0.35,
                         'fly_out': 0.3}
