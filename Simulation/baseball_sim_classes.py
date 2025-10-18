@@ -6,6 +6,8 @@ import random
 
 import pdb
 
+# TODO do we want to track stats of what happen in the Batters and Pitchers themselves as well?
+
 class Batter:
     
     def __init__(self, batter_data):
@@ -68,8 +70,7 @@ class Game:
         self.strikes = 0
         self.balls = 0
         self.bases = [0,0,0]
-        # self.bases = {"First": False, "Second": False, "Third": False}
-        # TODO could also place the players on the bases, to track their stats?
+        self.baserunners = [0,0,0] # TODO something other than 0 when empty? Dict instead with bases named?
         self.team1_batter_index = 0
         self.team2_batter_index = 0
         self.team1_pitcher_index = 0
@@ -78,9 +79,10 @@ class Game:
         self.team1 = team1
         self.team2 = team2
         
-        self.event_log = {'Inning':[self.inning], 'Inning Half':[self.inning_half],'Event':['Init'], 'Pitch Outcome':['Init'],
-                          'Batter':['NA'], 'Bases':[self.bases], 'Balls':[self.balls],
-                          'Strikes':[self.strikes], 'Outs':[self.outs],'Team 1 Score':[0], 'Team 2 Score':[0], 'Pitcher':['NA'],
+        self.event_log = {'Inning':[self.inning], 'Inning Half':[self.inning_half],'Event':['Init'],
+                          'Pitch Outcome':['Init'], 'Batter':['NA'], 'Batter Number':['NA'], 'Bases':[self.bases],
+                          'Baserunners':[self.baserunners], 'Balls':[self.balls], 'Strikes':[self.strikes],
+                          'Outs':[self.outs],'Team 1 Score':[0], 'Team 2 Score':[0], 'Pitcher':['NA'],
                           }
     
     def pitch(self, batter, pitcher):
@@ -132,7 +134,7 @@ class Game:
         return result, pitch_result
         
     
-    def move_bases(self, action, batting_team):
+    def move_bases(self, action, batting_team, current_batter):
         #Put logic here for moving bases based on the action
      
         ## How do we determine whether a player already on base was out?
@@ -140,34 +142,62 @@ class Game:
         if action == 'home_run':
             batting_team.score += sum(self.bases) + 1
             self.bases = [0,0,0]
+            self.baserunners = [0,0,0]
         
         elif action == 'walk':
-            if self.bases == [1,1,1]:
-                batting_team.score += self.bases[2]
-            if self.bases[0] == 1 and self.bases[1] == 1:
-                self.bases[2] = 1
-            
-            self.bases[1] = 1 if self.bases[0] == 1 else self.bases[1]
-            self.bases[0] = 1
+            # First is empty, fill, no other advancing
+            if self.bases[0] == 0:
+                self.bases[0] = 1
+                self.baserunners[0] = current_batter.name
+            # Now always someone on first
+            # Bases loaded, advance all and score
+            elif self.bases == [1,1,1]:
+                batting_team.score += 1
+                self.baserunners[2] = self.baserunners[1]
+                self.baserunners[1] = self.baserunners[0]
+                self.baserunners[0] = current_batter.name
+            # Only First and Second, advance runners and fill First, no score
+            elif self.bases[0] == 1 and self.bases[1] == 1:
+                self.bases[2] = 1 # now a runner on Third
+                self.baserunners[2] = self.baserunners[1]
+                self.baserunners[1] = self.baserunners[0]
+                self.baserunners[0] = current_batter.name
+            # First and Third or just First, advance to Second and fill First, Third stays if there
+            else:
+                self.bases[1] = 1
+                self.baserunners[1] = self.baserunners[0]
+                self.baserunners[0] = current_batter.name
         
-        elif action == 'single':
+        elif action == 'single': # TODO update baserunning logic later
+            # Batter goes to First, any baserunners advance, score if on Third
             batting_team.score += self.bases[2]
             self.bases[2] = self.bases[1]
             self.bases[1] = self.bases[0]
             self.bases[0] = 1
+            self.baserunners[2] = self.baserunners[1]
+            self.baserunners[1] = self.baserunners[0]
+            self.baserunners[0] = current_batter.name
         
-        elif action == 'double':
-            
+        elif action == 'double': # TODO update baserunning logic later
+            # Batter goes to second, any baserunners advance two bases (for now), score if on Second or Third
             batting_team.score += self.bases[2] + self.bases[1]
             self.bases[2] = self.bases[0]
             self.bases[1] = 1
             self.bases[0] = 0
+            self.baserunners[2] = self.baserunners[0]
+            self.baserunners[1] = current_batter.name
+            self.baserunners[0] = 0        
         
         elif action == 'triple':
+            # All runners clear bases, score, batter goes to Third
             batting_team.score += sum(self.bases)
             self.bases = [0,0,1]
+            self.baserunners[2] = current_batter.name
+            self.baserunners[1] = 0
+            self.baserunners[0] = 0
         
         else:
+            # TODO add tag-up logic
             self.outs += 1
     
     def simulate_inning_half(self, batting_team, pitching_team):
@@ -193,21 +223,21 @@ class Game:
                         self.balls += 1
                         #Record a walk if ball 4
                         if self.balls ==4:
-                            self.move_bases('walk',batting_team)
+                            self.move_bases('walk', batting_team, current_batter)
                 else:
-                    #Move bases if hit
-                    self.move_bases(event,batting_team)
+                    #Move bases if a hit
+                    self.move_bases(event, batting_team, current_batter)
                     hit = True
                 #After each pitch, update current game state
-                self.update_event_log(current_batter, current_pitcher,event, pitch_result)
+                self.update_event_log(current_batter, batting_team.batter_index, current_pitcher, event, pitch_result)
 
             #Update batter
-            if batting_team.batter_index < batting_team.num_batters-1:
+            if batting_team.batter_index < batting_team.num_batters - 1:
                 batting_team.batter_index += 1
             else:
-                batting_team.batter_index =0
+                batting_team.batter_index = 0
         
-    def update_event_log(self,current_batter, current_pitcher, event, pitch_result):
+    def update_event_log(self, current_batter, batter_index, current_pitcher, event, pitch_result):
         #Add all current information to the event log
         self.event_log['Inning'].append(self.inning)
         self.event_log['Inning Half'].append(self.inning_half)
@@ -215,9 +245,11 @@ class Game:
         self.event_log['Strikes'].append(self.strikes)
         self.event_log['Balls'].append(self.balls)
         self.event_log['Bases'].append(self.bases[:])
+        self.event_log['Baserunners'].append(self.baserunners[:])
         self.event_log['Team 1 Score'].append(self.team1.score)
         self.event_log['Team 2 Score'].append(self.team2.score)
         self.event_log['Batter'].append(current_batter.name)
+        self.event_log['Batter Number'].append(batter_index + 1) # TODO maybe replace with an added current_batter.lineup_spot?
         self.event_log['Pitcher'].append(current_pitcher.name)
         self.event_log['Pitch Outcome'].append(pitch_result)
         if self.strikes == 3:
@@ -235,6 +267,7 @@ class Game:
             self.strikes = 0
             self.balls = 0
             self.bases = [0,0,0]
+            self.baserunners = [0,0,0]
             if self.inning_half == 'top':
                 #If top of the inning, team1 is batting and team2 is pitching
 
@@ -297,7 +330,7 @@ if __name__ == '__main__':
         
     batter_data = [
         (lambda row: 
-            {'name': row["Name"],
+            {'name': row["Name"], # TODO fix ASCII issues outputting to csv (see Jeremy Pena)
              'id': row["PlayerId"],
              'team': row["Team"],
              'swing_prob': {'strike': row["Z-Swing%"], 'ball': row["O-Swing%"]},
