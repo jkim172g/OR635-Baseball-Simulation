@@ -12,6 +12,7 @@ class Batter:
         
         #Save basic information about batter
         self.name = batter_data['name']
+        self.id = batter_data['id']
         self.team = batter_data['team']
         
         #Save this batter's probability of swinging, making contact, and result
@@ -28,6 +29,7 @@ class Pitcher:
         
         #Save basic information about pitcher
         self.name = pitcher_data['name']
+        self.id = pitcher_data['id']
         self.team = pitcher_data['team']
         
         #Save statistics about pitching probabilities
@@ -296,10 +298,11 @@ if __name__ == '__main__':
     batter_data = [
         (lambda row: 
             {'name': row["Name"],
-                'team': row["Team"],
-                'swing_prob': {'strike': row["Z-Swing%"], 'ball': row["O-Swing%"]},
-                'contact_prob': {'strike': row["Z-Contact%"], 'ball': row["O-Contact%"]},
-                'outcome_prob': perturb_values(base_outcome_prob, .05) # TODO replace with calculated %s, from power stats like SLG, LO, etc., still TBD
+             'id': row["PlayerId"],
+             'team': row["Team"],
+             'swing_prob': {'strike': row["Z-Swing%"], 'ball': row["O-Swing%"]},
+             'contact_prob': {'strike': row["Z-Contact%"], 'ball': row["O-Contact%"]},
+             'outcome_prob': perturb_values(base_outcome_prob, .05) # TODO replace with calculated %s, from power stats like SLG, LO, etc., still TBD
             }
         )(batter_df[batter_df["PlayerId"] == bid].iloc[0])
             for bid in selected_batter_ids
@@ -313,19 +316,20 @@ if __name__ == '__main__':
                         100:0.5}
     
     base_movement_prob = {'straight': 0.25,
-                                  'down': 0.25,
-                                  'side': 0.25,
-                                  'fade': 0.25}
+                          'down': 0.25,
+                          'side': 0.25,
+                          'fade': 0.25}
 
     pitcher_data = [
         (lambda row:
             {'name': row["Name"],
+             'id': row["PlayerId"],
              'team': row["Team"],
              'pitch_type_prob': {'fastball': row["FA%"] + row["FT%"], # Adding 4-seam, 2-seam, and unclassified tgr
-                                  'curveball': row["CU%"],
-                                  'slider': row["SL%"],
-                                  'changeup': row["CH%"]},
-                                  # TODO what to do if they don't add to 1, bc of other pitch types? Just expand categories handled in sim?
+                                 'curveball': row["CU%"],
+                                 'slider': row["SL%"],
+                                 'changeup': row["CH%"]},
+                                 # TODO what to do if they don't add to 1, bc of other pitch types? Just expand categories handled in sim?
              'velocity_dist': perturb_values(base_velocity_dist, 0.05), # TODO replace with params for some other RN pull on pitch
              'movement_prob': perturb_values(base_movement_prob, 0.05), # TODO replace with params for some other RN pull on pitch
              'strike_prob': row["Zone%"] # prob inside zone, not of being a strike bc of zone/swing/foul
