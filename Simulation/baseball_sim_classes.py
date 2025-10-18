@@ -307,10 +307,6 @@ if __name__ == '__main__':
         )(batter_df[batter_df["PlayerId"] == bid].iloc[0])
             for bid in selected_batter_ids
     ]
-    i = 1
-    for batter in batter_data:
-        batter['name'] = str(i)
-        i += 1
 
     base_velocity_dist = {95:0.5,
                         100:0.5}
