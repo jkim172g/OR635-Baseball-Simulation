@@ -1,8 +1,9 @@
 
 import pandas as pd
 import numpy as np
-import random
+import random # TODO should we shift entirely to np.random eventually, rather than split?
 
+# TODO set seed/stream stuff eventually
 
 import pdb
 
@@ -36,6 +37,8 @@ class Pitcher:
         
         #Save statistics about pitching probabilities
         self.pitch_type_prob = pitcher_data['pitch_type_prob']
+        self.swing_prob = pitcher_data['swing_prob']
+        self.contact_prob = pitcher_data['contact_prob']
         self.velocity_dist = pitcher_data['velocity_dist']
         self.movement_prob = pitcher_data['movement_prob']
         self.strike_prob = pitcher_data['strike_prob']
@@ -98,10 +101,14 @@ class Game:
         if strike:
             pitch_result = 'strike'
             #If strike, check if batter swings
-            swing = True if np.random.uniform() < batter.swing_prob['strike'] else False
+            swing_prob = np.random.uniform(min(pitcher.swing_prob['strike'], batter.swing_prob['strike']),
+                                           max(pitcher.swing_prob['strike'], batter.swing_prob['strike']))
+            swing = True if np.random.uniform() < swing_prob else False
             if swing:
                 #If batter swings, check if contact was made
-                contact = True if np.random.uniform() < batter.contact_prob['strike'] else False
+                contact_prob = np.random.uniform(min(pitcher.contact_prob['strike'], batter.contact_prob['strike']),
+                                                max(pitcher.contact_prob['strike'], batter.contact_prob['strike']))
+                contact = True if np.random.uniform() < contact_prob else False
                 #If contact was made, calculate result
                 if contact:
            
@@ -116,10 +123,14 @@ class Game:
         else:
             pitch_result= 'ball'
             #If ball was thrown, check if it was swung at
-            swing = True if np.random.uniform() < batter.swing_prob['ball'] else False
+            swing_prob = np.random.uniform(min(pitcher.swing_prob['ball'], batter.swing_prob['ball']),
+                                           max(pitcher.swing_prob['ball'], batter.swing_prob['ball']))
+            swing = True if np.random.uniform() < swing_prob else False
             if swing:
                 #If batter swings, check if contact was made
-                contact = True if np.random.uniform() < batter.contact_prob['ball'] else False
+                contact_prob = np.random.uniform(min(pitcher.contact_prob['ball'], batter.contact_prob['ball']),
+                                                max(pitcher.contact_prob['ball'], batter.contact_prob['ball']))
+                contact = True if np.random.uniform() < contact_prob else False
                 #If contact was made, calculate result
                 if contact:
                     result = random.choices(list(batter.outcome_prob.keys()), list(batter.outcome_prob.values()))[0]
@@ -358,7 +369,9 @@ if __name__ == '__main__':
                                  'curveball': row["CU%"],
                                  'slider': row["SL%"],
                                  'changeup': row["CH%"]},
-                                 # TODO what to do if they don't add to 1, bc of other pitch types? Just expand categories handled in sim?
+                                 # TODO the choice selection should automatically normalize to 1, but eventually will we expand categories handled in sim?
+             'swing_prob': {'strike': row["Z-Swing%"], 'ball': row["O-Swing%"]},
+             'contact_prob': {'strike': row["Z-Contact%"], 'ball': row["O-Contact%"]},
              'velocity_dist': perturb_values(base_velocity_dist, 0.05), # TODO replace with params for some other RN pull on pitch
              'movement_prob': perturb_values(base_movement_prob, 0.05), # TODO replace with params for some other RN pull on pitch
              'strike_prob': row["Zone%"] # prob inside zone, not of being a strike bc of zone/swing/foul
@@ -381,7 +394,7 @@ if __name__ == '__main__':
     
     event_log = pd.DataFrame(game.event_log)
     # TODO add batter to the game log
-    event_log.to_csv("event_log.csv")
+    event_log.to_csv("event_log.csv", encoding='utf-8-sig', index=False)
     
     ### Some code below to run 100 games and compute team record, average score
     # scores = {i:[] for i in range(1,10)}
