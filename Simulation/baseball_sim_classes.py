@@ -22,6 +22,7 @@ class Batter:
         self.swing_prob = batter_data['swing_prob']
         self.contact_prob = batter_data['contact_prob']
         self.outcome_prob = batter_data['outcome_prob']
+        self.foul_prob = batter_data['foul_prob']
         
     def __str__(self):
         return f"Batter: {self.name}, {self.team}"
@@ -102,8 +103,10 @@ class Game:
         if strike:
             pitch_result = 'strike'
             #If strike, check if batter swings
-            swing_prob = np.random.uniform(min(pitcher.swing_prob['strike'], batter.swing_prob['strike']),
-                                           max(pitcher.swing_prob['strike'], batter.swing_prob['strike']))
+            #Adjust swing prob by half if 3 balls and less than two strikes
+            adj_batter_swing_prob = batter.swing_prob['strike']/2 if self.balls == 3 and self.strikes < 2 else batter.swing_prob['strike']
+            swing_prob = np.random.uniform(min(pitcher.swing_prob['strike'], adj_batter_swing_prob),
+                                           max(pitcher.swing_prob['strike'], adj_batter_swing_prob))
             swing = True if np.random.uniform() < swing_prob else False
             if swing:
                 #If batter swings, check if contact was made
@@ -112,8 +115,12 @@ class Game:
                 contact = True if np.random.uniform() < contact_prob else False
                 #If contact was made, calculate result
                 if contact:
-           
-                    result = random.choices(list(batter.outcome_prob.keys()), list(batter.outcome_prob.values()))[0]
+                    # If contact was made, check if foul
+                    foul = True if np.random.uniform() < batter.foul_prob['strike'] else False
+                    if foul:
+                        result = 'foul'
+                    else:
+                        result = random.choices(list(batter.outcome_prob.keys()), list(batter.outcome_prob.values()))[0]
                 
                 else:
                     #If swung and missed, strike 
@@ -122,24 +129,33 @@ class Game:
                 #If strike not swung at, strike
                 result = 'strike'
         else:
-            pitch_result= 'ball'
+            
             #If ball was thrown, check if it was swung at
-            swing_prob = np.random.uniform(min(pitcher.swing_prob['ball'], batter.swing_prob['ball']),
-                                           max(pitcher.swing_prob['ball'], batter.swing_prob['ball']))
+            adj_batter_swing_prob = batter.swing_prob['ball']/2 if self.balls == 3 and self.strikes < 2 else batter.swing_prob['ball']
+            swing_prob = np.random.uniform(min(pitcher.swing_prob['ball'], adj_batter_swing_prob),
+                                           max(pitcher.swing_prob['ball'], adj_batter_swing_prob))
             swing = True if np.random.uniform() < swing_prob else False
             if swing:
+                pitch_result= 'strike'
                 #If batter swings, check if contact was made
                 contact_prob = np.random.uniform(min(pitcher.contact_prob['ball'], batter.contact_prob['ball']),
                                                 max(pitcher.contact_prob['ball'], batter.contact_prob['ball']))
                 contact = True if np.random.uniform() < contact_prob else False
                 #If contact was made, calculate result
                 if contact:
-                    result = random.choices(list(batter.outcome_prob.keys()), list(batter.outcome_prob.values()))[0]
+                    # If contact, check if foul
+                    foul = True if np.random.uniform() < batter.foul_prob['ball'] else False
+                    if foul:
+                        result = 'foul'
+                    else:
+                        result = random.choices(list(batter.outcome_prob.keys()), list(batter.outcome_prob.values()))[0]
+                
                 
                 else:
                     #If swung and missed, strike 
                     result = 'strike'
             else:
+                pitch_result= 'ball'
                 #if ball not swung at, result is a ball
                 result = 'ball'
                
@@ -216,7 +232,8 @@ class Game:
     
     def simulate_inning_half(self, batting_team, pitching_team):
         
-        while self.outs < 3:
+        end_game = False
+        while self.outs < 3 and not end_game:
             #Set batter and pitcher
             self.strikes = 0
             self.balls = 0
@@ -224,7 +241,7 @@ class Game:
             current_pitcher = pitching_team.pitchers[pitching_team.pitcher_index]
             #Run through a pitch and update outcomes
             hit = False
-            while self.strikes < 3 and self.balls < 4 and not hit:
+            while self.strikes < 3 and self.balls < 4 and not hit and not end_game:
                 #Get result of pitch
                 event, pitch_result = self.pitch(current_batter, current_pitcher)
                 #Update stats
@@ -238,13 +255,21 @@ class Game:
                         #Record a walk if ball 4
                         if self.balls == 4:
                             self.move_bases('walk', batting_team, current_batter)
+                elif event == 'foul':
+                    #Record a strike if foul and strikes < 2
+                    if self.strikes < 2:
+                        self.strikes += 1
                 else:
                     #Move bases if a hit
                     self.move_bases(event, batting_team, current_batter)
                     hit = True
                 #After each pitch, update current game state
+                
                 self.update_event_log(current_batter, batting_team.batter_index, current_pitcher, event, pitch_result)
-
+                
+                #If home team scored in the final inning to go ahead, end game
+                if self.inning >= 9 and self.inning_half == 'bottom' and batting_team.score > pitching_team.score:
+                    end_game = True
             #Update batter
             if batting_team.batter_index < batting_team.num_batters - 1:
                 batting_team.batter_index += 1
@@ -479,11 +504,12 @@ if __name__ == '__main__':
         
     batter_data = [
         (lambda row: 
-            {'name': row["Name"], # TODO fix ASCII issues outputting to csv (see Jeremy Pena)
+            {'name': row["Name"],
              'id': row["PlayerId"],
              'team': row["Team"],
              'swing_prob': {'strike': row["Z-Swing%"], 'ball': row["O-Swing%"]},
              'contact_prob': {'strike': row["Z-Contact%"], 'ball': row["O-Contact%"]},
+             'foul_prob' : {'strike': 0.22, 'ball': 0.22},
              'outcome_prob': perturb_values(base_outcome_prob, .05) # TODO replace with calculated %s, from power stats like SLG, LO, etc., still TBD
             }
         )(batter_df[batter_df["PlayerId"] == bid].iloc[0])
@@ -519,7 +545,7 @@ if __name__ == '__main__':
     ]
     
     
-    batters1 = [Batter(batter) for batter in batter_data[0:8]]
+    batters1 = [Batter(batter) for batter in batter_data[0:9]]
     batters2 = [Batter(batter) for batter in batter_data[9:]]
     
     pitcher1 = Pitcher(pitcher_data[0])
