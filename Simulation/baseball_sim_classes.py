@@ -366,7 +366,7 @@ if __name__ == '__main__':
         
     batter_data = [
         (lambda row: 
-            {'name': row["Name"], # TODO fix ASCII issues outputting to csv (see Jeremy Pena)
+            {'name': row["Name"],
              'id': row["PlayerId"],
              'team': row["Team"],
              'swing_prob': {'strike': row["Z-Swing%"], 'ball': row["O-Swing%"]},
@@ -407,7 +407,7 @@ if __name__ == '__main__':
     ]
     
     
-    batters1 = [Batter(batter) for batter in batter_data[0:8]]
+    batters1 = [Batter(batter) for batter in batter_data[0:9]]
     batters2 = [Batter(batter) for batter in batter_data[9:]]
     
     pitcher1 = Pitcher(pitcher_data[0])
