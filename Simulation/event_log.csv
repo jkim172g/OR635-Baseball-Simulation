@@ -1,248 +1,207 @@
 ﻿Inning,Inning Half,Event,Pitch Outcome,Batter,Batter Number,Bases,Baserunners,Balls,Strikes,Outs,Team 1 Score,Team 2 Score,Pitcher
 1,top,Init,Init,NA,NA,"[0, 0, 0]","[0, 0, 0]",0,0,0,0,0,NA
-1,top,ball,ball,Danny Jansen,1,"[0, 0, 0]","[0, 0, 0]",1,0,0,0,0,Yonny Chirinos
-1,top,strike,strike,Danny Jansen,1,"[0, 0, 0]","[0, 0, 0]",1,1,0,0,0,Yonny Chirinos
-1,top,single,strike,Danny Jansen,1,"[1, 0, 0]","['Danny Jansen', 0, 0]",1,1,0,0,0,Yonny Chirinos
-1,top,ball,ball,Riley Greene,2,"[1, 0, 0]","['Danny Jansen', 0, 0]",1,0,0,0,0,Yonny Chirinos
-1,top,strike,strike,Riley Greene,2,"[1, 0, 0]","['Danny Jansen', 0, 0]",1,1,0,0,0,Yonny Chirinos
-1,top,ball,ball,Riley Greene,2,"[1, 0, 0]","['Danny Jansen', 0, 0]",2,1,0,0,0,Yonny Chirinos
-1,top,ball,ball,Riley Greene,2,"[1, 0, 0]","['Danny Jansen', 0, 0]",3,1,0,0,0,Yonny Chirinos
-1,top,ground_out,strike,Riley Greene,2,"[1, 0, 0]","['Danny Jansen', 0, 0]",3,1,1,0,0,Yonny Chirinos
-1,top,ground_out,strike,Jean Segura,3,"[1, 0, 0]","['Danny Jansen', 0, 0]",0,0,2,0,0,Yonny Chirinos
-1,top,ball,ball,Yoán Moncada,4,"[1, 0, 0]","['Danny Jansen', 0, 0]",1,0,2,0,0,Yonny Chirinos
-1,top,double,strike,Yoán Moncada,4,"[0, 1, 1]","[0, 'Yoán Moncada', 'Danny Jansen']",1,0,2,0,0,Yonny Chirinos
-1,top,fly_out,strike,Jacob Young,5,"[0, 1, 1]","[0, 'Yoán Moncada', 'Danny Jansen']",0,0,3,0,0,Yonny Chirinos
-1,bottom,ground_out,ball,Tommy Edman,1,"[0, 0, 0]","[0, 0, 0]",0,0,1,0,0,Abner Uribe
-1,bottom,ball,ball,Jesse Winker,2,"[0, 0, 0]","[0, 0, 0]",1,0,1,0,0,Abner Uribe
-1,bottom,fly_out,strike,Jesse Winker,2,"[0, 0, 0]","[0, 0, 0]",1,0,2,0,0,Abner Uribe
-1,bottom,ball,ball,Austin Martin,3,"[0, 0, 0]","[0, 0, 0]",1,0,2,0,0,Abner Uribe
-1,bottom,ground_out,strike,Austin Martin,3,"[0, 0, 0]","[0, 0, 0]",1,0,3,0,0,Abner Uribe
-2,top,strike,ball,Joey Meneses,6,"[0, 0, 0]","[0, 0, 0]",0,1,0,0,0,Yonny Chirinos
-2,top,ground_out,strike,Joey Meneses,6,"[0, 0, 0]","[0, 0, 0]",0,1,1,0,0,Yonny Chirinos
-2,top,double,ball,Aaron Judge,7,"[0, 1, 0]","[0, 'Aaron Judge', 0]",0,0,1,0,0,Yonny Chirinos
-2,top,ground_out,strike,Yordan Alvarez,8,"[0, 1, 0]","[0, 'Aaron Judge', 0]",0,0,2,0,0,Yonny Chirinos
-2,top,ball,ball,Danny Jansen,1,"[0, 1, 0]","[0, 'Aaron Judge', 0]",1,0,2,0,0,Yonny Chirinos
-2,top,strike,strike,Danny Jansen,1,"[0, 1, 0]","[0, 'Aaron Judge', 0]",1,1,2,0,0,Yonny Chirinos
-2,top,single,ball,Danny Jansen,1,"[1, 0, 1]","['Danny Jansen', 0, 'Aaron Judge']",1,1,2,0,0,Yonny Chirinos
-2,top,strike,strike,Riley Greene,2,"[1, 0, 1]","['Danny Jansen', 0, 'Aaron Judge']",0,1,2,0,0,Yonny Chirinos
-2,top,ball,ball,Riley Greene,2,"[1, 0, 1]","['Danny Jansen', 0, 'Aaron Judge']",1,1,2,0,0,Yonny Chirinos
-2,top,strike,strike,Riley Greene,2,"[1, 0, 1]","['Danny Jansen', 0, 'Aaron Judge']",1,2,2,0,0,Yonny Chirinos
-2,top,ball,ball,Riley Greene,2,"[1, 0, 1]","['Danny Jansen', 0, 'Aaron Judge']",2,2,2,0,0,Yonny Chirinos
-2,top,ball,ball,Riley Greene,2,"[1, 0, 1]","['Danny Jansen', 0, 'Aaron Judge']",3,2,2,0,0,Yonny Chirinos
-2,top,fly_out,strike,Riley Greene,2,"[1, 0, 1]","['Danny Jansen', 0, 'Aaron Judge']",3,2,3,0,0,Yonny Chirinos
-2,bottom,ball,ball,Nicky Lopez,4,"[0, 0, 0]","[0, 0, 0]",1,0,0,0,0,Abner Uribe
-2,bottom,strike,strike,Nicky Lopez,4,"[0, 0, 0]","[0, 0, 0]",1,1,0,0,0,Abner Uribe
-2,bottom,ball,ball,Nicky Lopez,4,"[0, 0, 0]","[0, 0, 0]",2,1,0,0,0,Abner Uribe
-2,bottom,ground_out,strike,Nicky Lopez,4,"[0, 0, 0]","[0, 0, 0]",2,1,1,0,0,Abner Uribe
-2,bottom,fly_out,strike,Brooks Baldwin,5,"[0, 0, 0]","[0, 0, 0]",0,0,2,0,0,Abner Uribe
-2,bottom,ground_out,strike,Kyle Manzardo,6,"[0, 0, 0]","[0, 0, 0]",0,0,3,0,0,Abner Uribe
-3,top,fly_out,strike,Jean Segura,3,"[0, 0, 0]","[0, 0, 0]",0,0,1,0,0,Yonny Chirinos
-3,top,fly_out,strike,Yoán Moncada,4,"[0, 0, 0]","[0, 0, 0]",0,0,2,0,0,Yonny Chirinos
-3,top,ball,ball,Jacob Young,5,"[0, 0, 0]","[0, 0, 0]",1,0,2,0,0,Yonny Chirinos
-3,top,double,strike,Jacob Young,5,"[0, 1, 0]","[0, 'Jacob Young', 0]",1,0,2,0,0,Yonny Chirinos
-3,top,ground_out,strike,Joey Meneses,6,"[0, 1, 0]","[0, 'Jacob Young', 0]",0,0,3,0,0,Yonny Chirinos
-3,bottom,ball,ball,Daulton Varsho,7,"[0, 0, 0]","[0, 0, 0]",1,0,0,0,0,Abner Uribe
-3,bottom,single,strike,Daulton Varsho,7,"[1, 0, 0]","['Daulton Varsho', 0, 0]",1,0,0,0,0,Abner Uribe
-3,bottom,ball,ball,Austin Wells,8,"[1, 0, 0]","['Daulton Varsho', 0, 0]",1,0,0,0,0,Abner Uribe
-3,bottom,strike,strike,Austin Wells,8,"[1, 0, 0]","['Daulton Varsho', 0, 0]",1,1,0,0,0,Abner Uribe
-3,bottom,strike,strike,Austin Wells,8,"[1, 0, 0]","['Daulton Varsho', 0, 0]",1,2,0,0,0,Abner Uribe
-3,bottom,ball,ball,Austin Wells,8,"[1, 0, 0]","['Daulton Varsho', 0, 0]",2,2,0,0,0,Abner Uribe
-3,bottom,ball,ball,Austin Wells,8,"[1, 0, 0]","['Daulton Varsho', 0, 0]",3,2,0,0,0,Abner Uribe
-3,bottom,walk,ball,Austin Wells,8,"[1, 1, 0]","['Austin Wells', 'Daulton Varsho', 0]",4,2,0,0,0,Abner Uribe
-3,bottom,ground_out,strike,Jasson Domínguez,9,"[1, 1, 0]","['Austin Wells', 'Daulton Varsho', 0]",0,0,1,0,0,Abner Uribe
-3,bottom,ball,ball,Tommy Edman,1,"[1, 1, 0]","['Austin Wells', 'Daulton Varsho', 0]",1,0,1,0,0,Abner Uribe
-3,bottom,fly_out,strike,Tommy Edman,1,"[1, 1, 0]","['Austin Wells', 'Daulton Varsho', 0]",1,0,2,0,0,Abner Uribe
-3,bottom,strike,strike,Jesse Winker,2,"[1, 1, 0]","['Austin Wells', 'Daulton Varsho', 0]",0,1,2,0,0,Abner Uribe
-3,bottom,ball,ball,Jesse Winker,2,"[1, 1, 0]","['Austin Wells', 'Daulton Varsho', 0]",1,1,2,0,0,Abner Uribe
-3,bottom,ball,ball,Jesse Winker,2,"[1, 1, 0]","['Austin Wells', 'Daulton Varsho', 0]",2,1,2,0,0,Abner Uribe
-3,bottom,fly_out,strike,Jesse Winker,2,"[1, 1, 0]","['Austin Wells', 'Daulton Varsho', 0]",2,1,3,0,0,Abner Uribe
-4,top,ball,ball,Aaron Judge,7,"[0, 0, 0]","[0, 0, 0]",1,0,0,0,0,Yonny Chirinos
-4,top,fly_out,strike,Aaron Judge,7,"[0, 0, 0]","[0, 0, 0]",1,0,1,0,0,Yonny Chirinos
-4,top,ball,ball,Yordan Alvarez,8,"[0, 0, 0]","[0, 0, 0]",1,0,1,0,0,Yonny Chirinos
-4,top,ball,ball,Yordan Alvarez,8,"[0, 0, 0]","[0, 0, 0]",2,0,1,0,0,Yonny Chirinos
-4,top,ball,ball,Yordan Alvarez,8,"[0, 0, 0]","[0, 0, 0]",3,0,1,0,0,Yonny Chirinos
-4,top,strike,strike,Yordan Alvarez,8,"[0, 0, 0]","[0, 0, 0]",3,1,1,0,0,Yonny Chirinos
-4,top,walk,ball,Yordan Alvarez,8,"[1, 0, 0]","['Yordan Alvarez', 0, 0]",4,1,1,0,0,Yonny Chirinos
-4,top,ball,ball,Danny Jansen,1,"[1, 0, 0]","['Yordan Alvarez', 0, 0]",1,0,1,0,0,Yonny Chirinos
-4,top,strike,strike,Danny Jansen,1,"[1, 0, 0]","['Yordan Alvarez', 0, 0]",1,1,1,0,0,Yonny Chirinos
-4,top,ball,ball,Danny Jansen,1,"[1, 0, 0]","['Yordan Alvarez', 0, 0]",2,1,1,0,0,Yonny Chirinos
-4,top,ball,ball,Danny Jansen,1,"[1, 0, 0]","['Yordan Alvarez', 0, 0]",3,1,1,0,0,Yonny Chirinos
-4,top,double,ball,Danny Jansen,1,"[0, 1, 1]","[0, 'Danny Jansen', 'Yordan Alvarez']",3,1,1,0,0,Yonny Chirinos
-4,top,ball,ball,Riley Greene,2,"[0, 1, 1]","[0, 'Danny Jansen', 'Yordan Alvarez']",1,0,1,0,0,Yonny Chirinos
-4,top,ball,ball,Riley Greene,2,"[0, 1, 1]","[0, 'Danny Jansen', 'Yordan Alvarez']",2,0,1,0,0,Yonny Chirinos
-4,top,fly_out,ball,Riley Greene,2,"[0, 1, 1]","[0, 'Danny Jansen', 'Yordan Alvarez']",2,0,2,0,0,Yonny Chirinos
-4,top,ball,ball,Jean Segura,3,"[0, 1, 1]","[0, 'Danny Jansen', 'Yordan Alvarez']",1,0,2,0,0,Yonny Chirinos
-4,top,strike,strike,Jean Segura,3,"[0, 1, 1]","[0, 'Danny Jansen', 'Yordan Alvarez']",1,1,2,0,0,Yonny Chirinos
-4,top,double,strike,Jean Segura,3,"[0, 1, 0]","[0, 'Jean Segura', 0]",1,1,2,2,0,Yonny Chirinos
-4,top,ball,ball,Yoán Moncada,4,"[0, 1, 0]","[0, 'Jean Segura', 0]",1,0,2,2,0,Yonny Chirinos
-4,top,ground_out,strike,Yoán Moncada,4,"[0, 1, 0]","[0, 'Jean Segura', 0]",1,0,3,2,0,Yonny Chirinos
-4,bottom,ball,ball,Austin Martin,3,"[0, 0, 0]","[0, 0, 0]",1,0,0,2,0,Abner Uribe
-4,bottom,ball,ball,Austin Martin,3,"[0, 0, 0]","[0, 0, 0]",2,0,0,2,0,Abner Uribe
-4,bottom,ball,ball,Austin Martin,3,"[0, 0, 0]","[0, 0, 0]",3,0,0,2,0,Abner Uribe
-4,bottom,strike,strike,Austin Martin,3,"[0, 0, 0]","[0, 0, 0]",3,1,0,2,0,Abner Uribe
-4,bottom,ground_out,strike,Austin Martin,3,"[0, 0, 0]","[0, 0, 0]",3,1,1,2,0,Abner Uribe
-4,bottom,strike,strike,Nicky Lopez,4,"[0, 0, 0]","[0, 0, 0]",0,1,1,2,0,Abner Uribe
-4,bottom,ball,ball,Nicky Lopez,4,"[0, 0, 0]","[0, 0, 0]",1,1,1,2,0,Abner Uribe
-4,bottom,strike,strike,Nicky Lopez,4,"[0, 0, 0]","[0, 0, 0]",1,2,1,2,0,Abner Uribe
-4,bottom,ball,ball,Nicky Lopez,4,"[0, 0, 0]","[0, 0, 0]",2,2,1,2,0,Abner Uribe
-4,bottom,ball,ball,Nicky Lopez,4,"[0, 0, 0]","[0, 0, 0]",3,2,1,2,0,Abner Uribe
-4,bottom,walk,ball,Nicky Lopez,4,"[1, 0, 0]","['Nicky Lopez', 0, 0]",4,2,1,2,0,Abner Uribe
-4,bottom,ball,ball,Brooks Baldwin,5,"[1, 0, 0]","['Nicky Lopez', 0, 0]",1,0,1,2,0,Abner Uribe
-4,bottom,ball,ball,Brooks Baldwin,5,"[1, 0, 0]","['Nicky Lopez', 0, 0]",2,0,1,2,0,Abner Uribe
-4,bottom,single,strike,Brooks Baldwin,5,"[1, 1, 0]","['Brooks Baldwin', 'Nicky Lopez', 0]",2,0,1,2,0,Abner Uribe
-4,bottom,ball,ball,Kyle Manzardo,6,"[1, 1, 0]","['Brooks Baldwin', 'Nicky Lopez', 0]",1,0,1,2,0,Abner Uribe
-4,bottom,strike,ball,Kyle Manzardo,6,"[1, 1, 0]","['Brooks Baldwin', 'Nicky Lopez', 0]",1,1,1,2,0,Abner Uribe
-4,bottom,ball,ball,Kyle Manzardo,6,"[1, 1, 0]","['Brooks Baldwin', 'Nicky Lopez', 0]",2,1,1,2,0,Abner Uribe
-4,bottom,double,strike,Kyle Manzardo,6,"[0, 1, 1]","[0, 'Kyle Manzardo', 'Brooks Baldwin']",2,1,1,2,1,Abner Uribe
-4,bottom,strike,ball,Daulton Varsho,7,"[0, 1, 1]","[0, 'Kyle Manzardo', 'Brooks Baldwin']",0,1,1,2,1,Abner Uribe
-4,bottom,ball,ball,Daulton Varsho,7,"[0, 1, 1]","[0, 'Kyle Manzardo', 'Brooks Baldwin']",1,1,1,2,1,Abner Uribe
-4,bottom,fly_out,strike,Daulton Varsho,7,"[0, 1, 1]","[0, 'Kyle Manzardo', 'Brooks Baldwin']",1,1,2,2,1,Abner Uribe
-4,bottom,ball,ball,Austin Wells,8,"[0, 1, 1]","[0, 'Kyle Manzardo', 'Brooks Baldwin']",1,0,2,2,1,Abner Uribe
-4,bottom,ball,ball,Austin Wells,8,"[0, 1, 1]","[0, 'Kyle Manzardo', 'Brooks Baldwin']",2,0,2,2,1,Abner Uribe
-4,bottom,fly_out,strike,Austin Wells,8,"[0, 1, 1]","[0, 'Kyle Manzardo', 'Brooks Baldwin']",2,0,3,2,1,Abner Uribe
-5,top,ball,ball,Jacob Young,5,"[0, 0, 0]","[0, 0, 0]",1,0,0,2,1,Yonny Chirinos
-5,top,strike,strike,Jacob Young,5,"[0, 0, 0]","[0, 0, 0]",1,1,0,2,1,Yonny Chirinos
-5,top,strike,strike,Jacob Young,5,"[0, 0, 0]","[0, 0, 0]",1,2,0,2,1,Yonny Chirinos
-5,top,strikeout,strike,Jacob Young,5,"[0, 0, 0]","[0, 0, 0]",1,3,1,2,1,Yonny Chirinos
-5,top,triple,ball,Joey Meneses,6,"[0, 0, 1]","[0, 0, 'Joey Meneses']",0,0,1,2,1,Yonny Chirinos
-5,top,strike,strike,Aaron Judge,7,"[0, 0, 1]","[0, 0, 'Joey Meneses']",0,1,1,2,1,Yonny Chirinos
-5,top,ball,ball,Aaron Judge,7,"[0, 0, 1]","[0, 0, 'Joey Meneses']",1,1,1,2,1,Yonny Chirinos
-5,top,single,strike,Aaron Judge,7,"[1, 0, 0]","['Aaron Judge', 0, 0]",1,1,1,3,1,Yonny Chirinos
-5,top,single,strike,Yordan Alvarez,8,"[1, 1, 0]","['Yordan Alvarez', 'Aaron Judge', 0]",0,0,1,3,1,Yonny Chirinos
-5,top,strike,strike,Danny Jansen,1,"[1, 1, 0]","['Yordan Alvarez', 'Aaron Judge', 0]",0,1,1,3,1,Yonny Chirinos
-5,top,double,strike,Danny Jansen,1,"[0, 1, 1]","[0, 'Danny Jansen', 'Yordan Alvarez']",0,1,1,4,1,Yonny Chirinos
-5,top,single,strike,Riley Greene,2,"[1, 0, 1]","['Riley Greene', 0, 'Danny Jansen']",0,0,1,5,1,Yonny Chirinos
-5,top,ball,ball,Jean Segura,3,"[1, 0, 1]","['Riley Greene', 0, 'Danny Jansen']",1,0,1,5,1,Yonny Chirinos
-5,top,ball,ball,Jean Segura,3,"[1, 0, 1]","['Riley Greene', 0, 'Danny Jansen']",2,0,1,5,1,Yonny Chirinos
-5,top,ball,ball,Jean Segura,3,"[1, 0, 1]","['Riley Greene', 0, 'Danny Jansen']",3,0,1,5,1,Yonny Chirinos
-5,top,walk,ball,Jean Segura,3,"[1, 1, 1]","['Jean Segura', 'Riley Greene', 'Danny Jansen']",4,0,1,5,1,Yonny Chirinos
-5,top,fly_out,ball,Yoán Moncada,4,"[1, 1, 1]","['Jean Segura', 'Riley Greene', 'Danny Jansen']",0,0,2,5,1,Yonny Chirinos
-5,top,ball,ball,Jacob Young,5,"[1, 1, 1]","['Jean Segura', 'Riley Greene', 'Danny Jansen']",1,0,2,5,1,Yonny Chirinos
-5,top,strike,strike,Jacob Young,5,"[1, 1, 1]","['Jean Segura', 'Riley Greene', 'Danny Jansen']",1,1,2,5,1,Yonny Chirinos
-5,top,ball,ball,Jacob Young,5,"[1, 1, 1]","['Jean Segura', 'Riley Greene', 'Danny Jansen']",2,1,2,5,1,Yonny Chirinos
-5,top,ball,ball,Jacob Young,5,"[1, 1, 1]","['Jean Segura', 'Riley Greene', 'Danny Jansen']",3,1,2,5,1,Yonny Chirinos
-5,top,walk,ball,Jacob Young,5,"[1, 1, 1]","['Jacob Young', 'Jean Segura', 'Riley Greene']",4,1,2,6,1,Yonny Chirinos
-5,top,strike,strike,Joey Meneses,6,"[1, 1, 1]","['Jacob Young', 'Jean Segura', 'Riley Greene']",0,1,2,6,1,Yonny Chirinos
-5,top,ball,ball,Joey Meneses,6,"[1, 1, 1]","['Jacob Young', 'Jean Segura', 'Riley Greene']",1,1,2,6,1,Yonny Chirinos
-5,top,ball,ball,Joey Meneses,6,"[1, 1, 1]","['Jacob Young', 'Jean Segura', 'Riley Greene']",2,1,2,6,1,Yonny Chirinos
-5,top,ball,ball,Joey Meneses,6,"[1, 1, 1]","['Jacob Young', 'Jean Segura', 'Riley Greene']",3,1,2,6,1,Yonny Chirinos
-5,top,ground_out,strike,Joey Meneses,6,"[1, 1, 1]","['Jacob Young', 'Jean Segura', 'Riley Greene']",3,1,3,6,1,Yonny Chirinos
-5,bottom,ball,ball,Jasson Domínguez,9,"[0, 0, 0]","[0, 0, 0]",1,0,0,6,1,Abner Uribe
-5,bottom,ball,ball,Jasson Domínguez,9,"[0, 0, 0]","[0, 0, 0]",2,0,0,6,1,Abner Uribe
-5,bottom,ball,ball,Jasson Domínguez,9,"[0, 0, 0]","[0, 0, 0]",3,0,0,6,1,Abner Uribe
-5,bottom,walk,ball,Jasson Domínguez,9,"[1, 0, 0]","['Jasson Domínguez', 0, 0]",4,0,0,6,1,Abner Uribe
-5,bottom,strike,strike,Tommy Edman,1,"[1, 0, 0]","['Jasson Domínguez', 0, 0]",0,1,0,6,1,Abner Uribe
-5,bottom,strike,strike,Tommy Edman,1,"[1, 0, 0]","['Jasson Domínguez', 0, 0]",0,2,0,6,1,Abner Uribe
-5,bottom,ball,ball,Tommy Edman,1,"[1, 0, 0]","['Jasson Domínguez', 0, 0]",1,2,0,6,1,Abner Uribe
-5,bottom,ball,ball,Tommy Edman,1,"[1, 0, 0]","['Jasson Domínguez', 0, 0]",2,2,0,6,1,Abner Uribe
-5,bottom,fly_out,ball,Tommy Edman,1,"[1, 0, 0]","['Jasson Domínguez', 0, 0]",2,2,1,6,1,Abner Uribe
-5,bottom,ball,ball,Jesse Winker,2,"[1, 0, 0]","['Jasson Domínguez', 0, 0]",1,0,1,6,1,Abner Uribe
-5,bottom,strike,strike,Jesse Winker,2,"[1, 0, 0]","['Jasson Domínguez', 0, 0]",1,1,1,6,1,Abner Uribe
-5,bottom,ground_out,strike,Jesse Winker,2,"[1, 0, 0]","['Jasson Domínguez', 0, 0]",1,1,2,6,1,Abner Uribe
-5,bottom,ball,ball,Austin Martin,3,"[1, 0, 0]","['Jasson Domínguez', 0, 0]",1,0,2,6,1,Abner Uribe
-5,bottom,strike,strike,Austin Martin,3,"[1, 0, 0]","['Jasson Domínguez', 0, 0]",1,1,2,6,1,Abner Uribe
-5,bottom,ball,ball,Austin Martin,3,"[1, 0, 0]","['Jasson Domínguez', 0, 0]",2,1,2,6,1,Abner Uribe
-5,bottom,ground_out,strike,Austin Martin,3,"[1, 0, 0]","['Jasson Domínguez', 0, 0]",2,1,3,6,1,Abner Uribe
-6,top,strike,ball,Aaron Judge,7,"[0, 0, 0]","[0, 0, 0]",0,1,0,6,1,Yonny Chirinos
-6,top,ground_out,strike,Aaron Judge,7,"[0, 0, 0]","[0, 0, 0]",0,1,1,6,1,Yonny Chirinos
-6,top,ball,ball,Yordan Alvarez,8,"[0, 0, 0]","[0, 0, 0]",1,0,1,6,1,Yonny Chirinos
-6,top,strike,strike,Yordan Alvarez,8,"[0, 0, 0]","[0, 0, 0]",1,1,1,6,1,Yonny Chirinos
-6,top,ball,ball,Yordan Alvarez,8,"[0, 0, 0]","[0, 0, 0]",2,1,1,6,1,Yonny Chirinos
-6,top,strike,strike,Yordan Alvarez,8,"[0, 0, 0]","[0, 0, 0]",2,2,1,6,1,Yonny Chirinos
-6,top,fly_out,strike,Yordan Alvarez,8,"[0, 0, 0]","[0, 0, 0]",2,2,2,6,1,Yonny Chirinos
-6,top,ball,ball,Danny Jansen,1,"[0, 0, 0]","[0, 0, 0]",1,0,2,6,1,Yonny Chirinos
-6,top,strike,ball,Danny Jansen,1,"[0, 0, 0]","[0, 0, 0]",1,1,2,6,1,Yonny Chirinos
-6,top,ground_out,strike,Danny Jansen,1,"[0, 0, 0]","[0, 0, 0]",1,1,3,6,1,Yonny Chirinos
-6,bottom,fly_out,strike,Nicky Lopez,4,"[0, 0, 0]","[0, 0, 0]",0,0,1,6,1,Abner Uribe
-6,bottom,strike,ball,Brooks Baldwin,5,"[0, 0, 0]","[0, 0, 0]",0,1,1,6,1,Abner Uribe
-6,bottom,ball,ball,Brooks Baldwin,5,"[0, 0, 0]","[0, 0, 0]",1,1,1,6,1,Abner Uribe
-6,bottom,fly_out,strike,Brooks Baldwin,5,"[0, 0, 0]","[0, 0, 0]",1,1,2,6,1,Abner Uribe
-6,bottom,ball,ball,Kyle Manzardo,6,"[0, 0, 0]","[0, 0, 0]",1,0,2,6,1,Abner Uribe
-6,bottom,fly_out,ball,Kyle Manzardo,6,"[0, 0, 0]","[0, 0, 0]",1,0,3,6,1,Abner Uribe
-7,top,strike,strike,Riley Greene,2,"[0, 0, 0]","[0, 0, 0]",0,1,0,6,1,Yonny Chirinos
-7,top,single,strike,Riley Greene,2,"[1, 0, 0]","['Riley Greene', 0, 0]",0,1,0,6,1,Yonny Chirinos
-7,top,strike,strike,Jean Segura,3,"[1, 0, 0]","['Riley Greene', 0, 0]",0,1,0,6,1,Yonny Chirinos
-7,top,strike,ball,Jean Segura,3,"[1, 0, 0]","['Riley Greene', 0, 0]",0,2,0,6,1,Yonny Chirinos
-7,top,ball,ball,Jean Segura,3,"[1, 0, 0]","['Riley Greene', 0, 0]",1,2,0,6,1,Yonny Chirinos
-7,top,strikeout,strike,Jean Segura,3,"[1, 0, 0]","['Riley Greene', 0, 0]",1,3,1,6,1,Yonny Chirinos
-7,top,strike,strike,Yoán Moncada,4,"[1, 0, 0]","['Riley Greene', 0, 0]",0,1,1,6,1,Yonny Chirinos
-7,top,ball,ball,Yoán Moncada,4,"[1, 0, 0]","['Riley Greene', 0, 0]",1,1,1,6,1,Yonny Chirinos
-7,top,ball,ball,Yoán Moncada,4,"[1, 0, 0]","['Riley Greene', 0, 0]",2,1,1,6,1,Yonny Chirinos
-7,top,strike,strike,Yoán Moncada,4,"[1, 0, 0]","['Riley Greene', 0, 0]",2,2,1,6,1,Yonny Chirinos
-7,top,ground_out,strike,Yoán Moncada,4,"[1, 0, 0]","['Riley Greene', 0, 0]",2,2,2,6,1,Yonny Chirinos
-7,top,ball,ball,Jacob Young,5,"[1, 0, 0]","['Riley Greene', 0, 0]",1,0,2,6,1,Yonny Chirinos
-7,top,ball,ball,Jacob Young,5,"[1, 0, 0]","['Riley Greene', 0, 0]",2,0,2,6,1,Yonny Chirinos
-7,top,strike,strike,Jacob Young,5,"[1, 0, 0]","['Riley Greene', 0, 0]",2,1,2,6,1,Yonny Chirinos
-7,top,strike,strike,Jacob Young,5,"[1, 0, 0]","['Riley Greene', 0, 0]",2,2,2,6,1,Yonny Chirinos
-7,top,strikeout,strike,Jacob Young,5,"[1, 0, 0]","['Riley Greene', 0, 0]",2,3,3,6,1,Yonny Chirinos
-7,bottom,ground_out,strike,Daulton Varsho,7,"[0, 0, 0]","[0, 0, 0]",0,0,1,6,1,Abner Uribe
-7,bottom,strike,ball,Austin Wells,8,"[0, 0, 0]","[0, 0, 0]",0,1,1,6,1,Abner Uribe
-7,bottom,ball,ball,Austin Wells,8,"[0, 0, 0]","[0, 0, 0]",1,1,1,6,1,Abner Uribe
-7,bottom,strike,ball,Austin Wells,8,"[0, 0, 0]","[0, 0, 0]",1,2,1,6,1,Abner Uribe
-7,bottom,strikeout,strike,Austin Wells,8,"[0, 0, 0]","[0, 0, 0]",1,3,2,6,1,Abner Uribe
-7,bottom,ball,ball,Jasson Domínguez,9,"[0, 0, 0]","[0, 0, 0]",1,0,2,6,1,Abner Uribe
-7,bottom,strike,ball,Jasson Domínguez,9,"[0, 0, 0]","[0, 0, 0]",1,1,2,6,1,Abner Uribe
-7,bottom,single,ball,Jasson Domínguez,9,"[1, 0, 0]","['Jasson Domínguez', 0, 0]",1,1,2,6,1,Abner Uribe
-7,bottom,ball,ball,Tommy Edman,1,"[1, 0, 0]","['Jasson Domínguez', 0, 0]",1,0,2,6,1,Abner Uribe
-7,bottom,triple,ball,Tommy Edman,1,"[0, 0, 1]","[0, 0, 'Tommy Edman']",1,0,2,6,2,Abner Uribe
-7,bottom,strike,ball,Jesse Winker,2,"[0, 0, 1]","[0, 0, 'Tommy Edman']",0,1,2,6,2,Abner Uribe
-7,bottom,strike,strike,Jesse Winker,2,"[0, 0, 1]","[0, 0, 'Tommy Edman']",0,2,2,6,2,Abner Uribe
-7,bottom,strikeout,ball,Jesse Winker,2,"[0, 0, 1]","[0, 0, 'Tommy Edman']",0,3,3,6,2,Abner Uribe
-8,top,strike,strike,Joey Meneses,6,"[0, 0, 0]","[0, 0, 0]",0,1,0,6,2,Yonny Chirinos
-8,top,ground_out,strike,Joey Meneses,6,"[0, 0, 0]","[0, 0, 0]",0,1,1,6,2,Yonny Chirinos
-8,top,strike,strike,Aaron Judge,7,"[0, 0, 0]","[0, 0, 0]",0,1,1,6,2,Yonny Chirinos
-8,top,ground_out,strike,Aaron Judge,7,"[0, 0, 0]","[0, 0, 0]",0,1,2,6,2,Yonny Chirinos
-8,top,strike,strike,Yordan Alvarez,8,"[0, 0, 0]","[0, 0, 0]",0,1,2,6,2,Yonny Chirinos
-8,top,ball,ball,Yordan Alvarez,8,"[0, 0, 0]","[0, 0, 0]",1,1,2,6,2,Yonny Chirinos
-8,top,single,ball,Yordan Alvarez,8,"[1, 0, 0]","['Yordan Alvarez', 0, 0]",1,1,2,6,2,Yonny Chirinos
-8,top,ball,ball,Danny Jansen,1,"[1, 0, 0]","['Yordan Alvarez', 0, 0]",1,0,2,6,2,Yonny Chirinos
-8,top,ball,ball,Danny Jansen,1,"[1, 0, 0]","['Yordan Alvarez', 0, 0]",2,0,2,6,2,Yonny Chirinos
-8,top,fly_out,strike,Danny Jansen,1,"[1, 0, 0]","['Yordan Alvarez', 0, 0]",2,0,3,6,2,Yonny Chirinos
-8,bottom,ball,ball,Austin Martin,3,"[0, 0, 0]","[0, 0, 0]",1,0,0,6,2,Abner Uribe
-8,bottom,strike,ball,Austin Martin,3,"[0, 0, 0]","[0, 0, 0]",1,1,0,6,2,Abner Uribe
-8,bottom,ground_out,ball,Austin Martin,3,"[0, 0, 0]","[0, 0, 0]",1,1,1,6,2,Abner Uribe
-8,bottom,ball,ball,Nicky Lopez,4,"[0, 0, 0]","[0, 0, 0]",1,0,1,6,2,Abner Uribe
-8,bottom,strike,strike,Nicky Lopez,4,"[0, 0, 0]","[0, 0, 0]",1,1,1,6,2,Abner Uribe
-8,bottom,double,strike,Nicky Lopez,4,"[0, 1, 0]","[0, 'Nicky Lopez', 0]",1,1,1,6,2,Abner Uribe
-8,bottom,ball,ball,Brooks Baldwin,5,"[0, 1, 0]","[0, 'Nicky Lopez', 0]",1,0,1,6,2,Abner Uribe
-8,bottom,ball,ball,Brooks Baldwin,5,"[0, 1, 0]","[0, 'Nicky Lopez', 0]",2,0,1,6,2,Abner Uribe
-8,bottom,strike,strike,Brooks Baldwin,5,"[0, 1, 0]","[0, 'Nicky Lopez', 0]",2,1,1,6,2,Abner Uribe
-8,bottom,ground_out,ball,Brooks Baldwin,5,"[0, 1, 0]","[0, 'Nicky Lopez', 0]",2,1,2,6,2,Abner Uribe
-8,bottom,strike,strike,Kyle Manzardo,6,"[0, 1, 0]","[0, 'Nicky Lopez', 0]",0,1,2,6,2,Abner Uribe
-8,bottom,ball,ball,Kyle Manzardo,6,"[0, 1, 0]","[0, 'Nicky Lopez', 0]",1,1,2,6,2,Abner Uribe
-8,bottom,strike,strike,Kyle Manzardo,6,"[0, 1, 0]","[0, 'Nicky Lopez', 0]",1,2,2,6,2,Abner Uribe
-8,bottom,strikeout,strike,Kyle Manzardo,6,"[0, 1, 0]","[0, 'Nicky Lopez', 0]",1,3,3,6,2,Abner Uribe
-9,top,ball,ball,Riley Greene,2,"[0, 0, 0]","[0, 0, 0]",1,0,0,6,2,Yonny Chirinos
-9,top,ball,ball,Riley Greene,2,"[0, 0, 0]","[0, 0, 0]",2,0,0,6,2,Yonny Chirinos
-9,top,strike,ball,Riley Greene,2,"[0, 0, 0]","[0, 0, 0]",2,1,0,6,2,Yonny Chirinos
-9,top,strike,strike,Riley Greene,2,"[0, 0, 0]","[0, 0, 0]",2,2,0,6,2,Yonny Chirinos
-9,top,ball,ball,Riley Greene,2,"[0, 0, 0]","[0, 0, 0]",3,2,0,6,2,Yonny Chirinos
-9,top,double,ball,Riley Greene,2,"[0, 1, 0]","[0, 'Riley Greene', 0]",3,2,0,6,2,Yonny Chirinos
-9,top,ball,ball,Jean Segura,3,"[0, 1, 0]","[0, 'Riley Greene', 0]",1,0,0,6,2,Yonny Chirinos
-9,top,strike,strike,Jean Segura,3,"[0, 1, 0]","[0, 'Riley Greene', 0]",1,1,0,6,2,Yonny Chirinos
-9,top,ball,ball,Jean Segura,3,"[0, 1, 0]","[0, 'Riley Greene', 0]",2,1,0,6,2,Yonny Chirinos
-9,top,strike,strike,Jean Segura,3,"[0, 1, 0]","[0, 'Riley Greene', 0]",2,2,0,6,2,Yonny Chirinos
-9,top,strikeout,strike,Jean Segura,3,"[0, 1, 0]","[0, 'Riley Greene', 0]",2,3,1,6,2,Yonny Chirinos
-9,top,ball,ball,Yoán Moncada,4,"[0, 1, 0]","[0, 'Riley Greene', 0]",1,0,1,6,2,Yonny Chirinos
-9,top,ball,ball,Yoán Moncada,4,"[0, 1, 0]","[0, 'Riley Greene', 0]",2,0,1,6,2,Yonny Chirinos
-9,top,ball,ball,Yoán Moncada,4,"[0, 1, 0]","[0, 'Riley Greene', 0]",3,0,1,6,2,Yonny Chirinos
-9,top,single,ball,Yoán Moncada,4,"[1, 0, 1]","['Yoán Moncada', 0, 'Riley Greene']",3,0,1,6,2,Yonny Chirinos
-9,top,strike,strike,Jacob Young,5,"[1, 0, 1]","['Yoán Moncada', 0, 'Riley Greene']",0,1,1,6,2,Yonny Chirinos
-9,top,ball,ball,Jacob Young,5,"[1, 0, 1]","['Yoán Moncada', 0, 'Riley Greene']",1,1,1,6,2,Yonny Chirinos
-9,top,strike,strike,Jacob Young,5,"[1, 0, 1]","['Yoán Moncada', 0, 'Riley Greene']",1,2,1,6,2,Yonny Chirinos
-9,top,ball,ball,Jacob Young,5,"[1, 0, 1]","['Yoán Moncada', 0, 'Riley Greene']",2,2,1,6,2,Yonny Chirinos
-9,top,ball,ball,Jacob Young,5,"[1, 0, 1]","['Yoán Moncada', 0, 'Riley Greene']",3,2,1,6,2,Yonny Chirinos
-9,top,fly_out,ball,Jacob Young,5,"[1, 0, 1]","['Yoán Moncada', 0, 'Riley Greene']",3,2,2,6,2,Yonny Chirinos
-9,top,ball,ball,Joey Meneses,6,"[1, 0, 1]","['Yoán Moncada', 0, 'Riley Greene']",1,0,2,6,2,Yonny Chirinos
-9,top,ball,ball,Joey Meneses,6,"[1, 0, 1]","['Yoán Moncada', 0, 'Riley Greene']",2,0,2,6,2,Yonny Chirinos
-9,top,ground_out,strike,Joey Meneses,6,"[1, 0, 1]","['Yoán Moncada', 0, 'Riley Greene']",2,0,3,6,2,Yonny Chirinos
-9,bottom,strike,strike,Daulton Varsho,7,"[0, 0, 0]","[0, 0, 0]",0,1,0,6,2,Abner Uribe
-9,bottom,ball,ball,Daulton Varsho,7,"[0, 0, 0]","[0, 0, 0]",1,1,0,6,2,Abner Uribe
-9,bottom,single,strike,Daulton Varsho,7,"[1, 0, 0]","['Daulton Varsho', 0, 0]",1,1,0,6,2,Abner Uribe
-9,bottom,ball,ball,Austin Wells,8,"[1, 0, 0]","['Daulton Varsho', 0, 0]",1,0,0,6,2,Abner Uribe
-9,bottom,ground_out,strike,Austin Wells,8,"[1, 0, 0]","['Daulton Varsho', 0, 0]",1,0,1,6,2,Abner Uribe
-9,bottom,ball,ball,Jasson Domínguez,9,"[1, 0, 0]","['Daulton Varsho', 0, 0]",1,0,1,6,2,Abner Uribe
-9,bottom,strike,strike,Jasson Domínguez,9,"[1, 0, 0]","['Daulton Varsho', 0, 0]",1,1,1,6,2,Abner Uribe
-9,bottom,strike,strike,Jasson Domínguez,9,"[1, 0, 0]","['Daulton Varsho', 0, 0]",1,2,1,6,2,Abner Uribe
-9,bottom,ground_out,strike,Jasson Domínguez,9,"[1, 0, 0]","['Daulton Varsho', 0, 0]",1,2,2,6,2,Abner Uribe
-9,bottom,fly_out,strike,Tommy Edman,1,"[1, 0, 0]","['Daulton Varsho', 0, 0]",0,0,3,6,2,Abner Uribe
+1,top,ball,ball,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,0,0,0,0,Julian Merryweather
+1,top,strike,strike,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,1,0,0,0,Julian Merryweather
+1,top,ground_out,strike,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,1,1,0,0,Julian Merryweather
+1,top,strike,ball,Trevor Story,2,"[0, 0, 0]","[0, 0, 0]",0,1,1,0,0,Julian Merryweather
+1,top,ball,ball,Trevor Story,2,"[0, 0, 0]","[0, 0, 0]",1,1,1,0,0,Julian Merryweather
+1,top,ball,ball,Trevor Story,2,"[0, 0, 0]","[0, 0, 0]",2,1,1,0,0,Julian Merryweather
+1,top,double,strike,Trevor Story,2,"[0, 1, 0]","[0, 'Trevor Story', 0]",2,1,1,0,0,Julian Merryweather
+1,top,ball,ball,Josh Rojas,3,"[0, 1, 0]","[0, 'Trevor Story', 0]",1,0,1,0,0,Julian Merryweather
+1,top,home_run,ball,Josh Rojas,3,"[0, 0, 0]","[0, 0, 0]",1,0,1,2,0,Julian Merryweather
+1,top,ground_out,strike,Dane Myers,4,"[0, 0, 0]","[0, 0, 0]",0,0,2,2,0,Julian Merryweather
+1,top,strike,ball,James McCann,5,"[0, 0, 0]","[0, 0, 0]",0,1,2,2,0,Julian Merryweather
+1,top,strike,strike,James McCann,5,"[0, 0, 0]","[0, 0, 0]",0,2,2,2,0,Julian Merryweather
+1,top,ball,ball,James McCann,5,"[0, 0, 0]","[0, 0, 0]",1,2,2,2,0,Julian Merryweather
+1,top,ground_out,ball,James McCann,5,"[0, 0, 0]","[0, 0, 0]",1,2,3,2,0,Julian Merryweather
+1,bottom,ground_out,strike,Brandon Belt,1,"[0, 0, 0]","[0, 0, 0]",0,0,1,2,0,Seranthony Domínguez
+1,bottom,fly_out,ball,Randal Grichuk,2,"[0, 0, 0]","[0, 0, 0]",0,0,2,2,0,Seranthony Domínguez
+1,bottom,strike,ball,Shohei Ohtani,3,"[0, 0, 0]","[0, 0, 0]",0,1,2,2,0,Seranthony Domínguez
+1,bottom,fly_out,strike,Shohei Ohtani,3,"[0, 0, 0]","[0, 0, 0]",0,1,3,2,0,Seranthony Domínguez
+2,top,ball,ball,Edouard Julien,6,"[0, 0, 0]","[0, 0, 0]",1,0,0,2,0,Julian Merryweather
+2,top,ground_out,strike,Edouard Julien,6,"[0, 0, 0]","[0, 0, 0]",1,0,1,2,0,Julian Merryweather
+2,top,strike,strike,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",0,1,1,2,0,Julian Merryweather
+2,top,ball,ball,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",1,1,1,2,0,Julian Merryweather
+2,top,strike,strike,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",1,2,1,2,0,Julian Merryweather
+2,top,ball,ball,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",2,2,1,2,0,Julian Merryweather
+2,top,fly_out,strike,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",2,2,2,2,0,Julian Merryweather
+2,top,fly_out,ball,Zach McKinstry,8,"[0, 0, 0]","[0, 0, 0]",0,0,3,2,0,Julian Merryweather
+2,bottom,home_run,strike,Jasson Domínguez,4,"[0, 0, 0]","[0, 0, 0]",0,0,0,2,1,Seranthony Domínguez
+2,bottom,ball,ball,Abraham Toro,5,"[0, 0, 0]","[0, 0, 0]",1,0,0,2,1,Seranthony Domínguez
+2,bottom,ball,ball,Abraham Toro,5,"[0, 0, 0]","[0, 0, 0]",2,0,0,2,1,Seranthony Domínguez
+2,bottom,strike,strike,Abraham Toro,5,"[0, 0, 0]","[0, 0, 0]",2,1,0,2,1,Seranthony Domínguez
+2,bottom,ball,ball,Abraham Toro,5,"[0, 0, 0]","[0, 0, 0]",3,1,0,2,1,Seranthony Domínguez
+2,bottom,fly_out,strike,Abraham Toro,5,"[0, 0, 0]","[0, 0, 0]",3,1,1,2,1,Seranthony Domínguez
+2,bottom,strike,ball,Miles Mastrobuoni,6,"[0, 0, 0]","[0, 0, 0]",0,1,1,2,1,Seranthony Domínguez
+2,bottom,ball,ball,Miles Mastrobuoni,6,"[0, 0, 0]","[0, 0, 0]",1,1,1,2,1,Seranthony Domínguez
+2,bottom,ball,ball,Miles Mastrobuoni,6,"[0, 0, 0]","[0, 0, 0]",2,1,1,2,1,Seranthony Domínguez
+2,bottom,double,ball,Miles Mastrobuoni,6,"[0, 1, 0]","[0, 'Miles Mastrobuoni', 0]",2,1,1,2,1,Seranthony Domínguez
+2,bottom,strike,strike,Francisco Alvarez,7,"[0, 1, 0]","[0, 'Miles Mastrobuoni', 0]",0,1,1,2,1,Seranthony Domínguez
+2,bottom,ground_out,ball,Francisco Alvarez,7,"[0, 1, 0]","[0, 'Miles Mastrobuoni', 0]",0,1,2,2,1,Seranthony Domínguez
+2,bottom,strike,strike,Manny Machado,8,"[0, 1, 0]","[0, 'Miles Mastrobuoni', 0]",0,1,2,2,1,Seranthony Domínguez
+2,bottom,ball,ball,Manny Machado,8,"[0, 1, 0]","[0, 'Miles Mastrobuoni', 0]",1,1,2,2,1,Seranthony Domínguez
+2,bottom,fly_out,strike,Manny Machado,8,"[0, 1, 0]","[0, 'Miles Mastrobuoni', 0]",1,1,3,2,1,Seranthony Domínguez
+3,top,ball,ball,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,0,0,2,1,Julian Merryweather
+3,top,strike,strike,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,1,0,2,1,Julian Merryweather
+3,top,ground_out,ball,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,1,1,2,1,Julian Merryweather
+3,top,single,strike,Trevor Story,2,"[1, 0, 0]","['Trevor Story', 0, 0]",0,0,1,2,1,Julian Merryweather
+3,top,ball,ball,Josh Rojas,3,"[1, 0, 0]","['Trevor Story', 0, 0]",1,0,1,2,1,Julian Merryweather
+3,top,strike,strike,Josh Rojas,3,"[1, 0, 0]","['Trevor Story', 0, 0]",1,1,1,2,1,Julian Merryweather
+3,top,strike,strike,Josh Rojas,3,"[1, 0, 0]","['Trevor Story', 0, 0]",1,2,1,2,1,Julian Merryweather
+3,top,fly_out,ball,Josh Rojas,3,"[1, 0, 0]","['Trevor Story', 0, 0]",1,2,2,2,1,Julian Merryweather
+3,top,ball,ball,Dane Myers,4,"[1, 0, 0]","['Trevor Story', 0, 0]",1,0,2,2,1,Julian Merryweather
+3,top,fly_out,strike,Dane Myers,4,"[1, 0, 0]","['Trevor Story', 0, 0]",1,0,3,2,1,Julian Merryweather
+3,bottom,ball,ball,Seiya Suzuki,9,"[0, 0, 0]","[0, 0, 0]",1,0,0,2,1,Seranthony Domínguez
+3,bottom,single,strike,Seiya Suzuki,9,"[1, 0, 0]","['Seiya Suzuki', 0, 0]",1,0,0,2,1,Seranthony Domínguez
+3,bottom,strike,strike,Brandon Belt,1,"[1, 0, 0]","['Seiya Suzuki', 0, 0]",0,1,0,2,1,Seranthony Domínguez
+3,bottom,ball,ball,Brandon Belt,1,"[1, 0, 0]","['Seiya Suzuki', 0, 0]",1,1,0,2,1,Seranthony Domínguez
+3,bottom,ball,ball,Brandon Belt,1,"[1, 0, 0]","['Seiya Suzuki', 0, 0]",2,1,0,2,1,Seranthony Domínguez
+3,bottom,ball,ball,Brandon Belt,1,"[1, 0, 0]","['Seiya Suzuki', 0, 0]",3,1,0,2,1,Seranthony Domínguez
+3,bottom,strike,strike,Brandon Belt,1,"[1, 0, 0]","['Seiya Suzuki', 0, 0]",3,2,0,2,1,Seranthony Domínguez
+3,bottom,ground_out,ball,Brandon Belt,1,"[1, 0, 0]","['Seiya Suzuki', 0, 0]",3,2,1,2,1,Seranthony Domínguez
+3,bottom,single,strike,Randal Grichuk,2,"[1, 1, 0]","['Randal Grichuk', 'Seiya Suzuki', 0]",0,0,1,2,1,Seranthony Domínguez
+3,bottom,ball,ball,Shohei Ohtani,3,"[1, 1, 0]","['Randal Grichuk', 'Seiya Suzuki', 0]",1,0,1,2,1,Seranthony Domínguez
+3,bottom,strike,strike,Shohei Ohtani,3,"[1, 1, 0]","['Randal Grichuk', 'Seiya Suzuki', 0]",1,1,1,2,1,Seranthony Domínguez
+3,bottom,strike,ball,Shohei Ohtani,3,"[1, 1, 0]","['Randal Grichuk', 'Seiya Suzuki', 0]",1,2,1,2,1,Seranthony Domínguez
+3,bottom,fly_out,strike,Shohei Ohtani,3,"[1, 1, 0]","['Randal Grichuk', 'Seiya Suzuki', 0]",1,2,2,2,1,Seranthony Domínguez
+3,bottom,strike,strike,Jasson Domínguez,4,"[1, 1, 0]","['Randal Grichuk', 'Seiya Suzuki', 0]",0,1,2,2,1,Seranthony Domínguez
+3,bottom,ball,ball,Jasson Domínguez,4,"[1, 1, 0]","['Randal Grichuk', 'Seiya Suzuki', 0]",1,1,2,2,1,Seranthony Domínguez
+3,bottom,strike,strike,Jasson Domínguez,4,"[1, 1, 0]","['Randal Grichuk', 'Seiya Suzuki', 0]",1,2,2,2,1,Seranthony Domínguez
+3,bottom,home_run,ball,Jasson Domínguez,4,"[0, 0, 0]","[0, 0, 0]",1,2,2,2,4,Seranthony Domínguez
+3,bottom,ground_out,strike,Abraham Toro,5,"[0, 0, 0]","[0, 0, 0]",0,0,3,2,4,Seranthony Domínguez
+4,top,single,strike,James McCann,5,"[1, 0, 0]","['James McCann', 0, 0]",0,0,0,2,4,Julian Merryweather
+4,top,home_run,strike,Edouard Julien,6,"[0, 0, 0]","[0, 0, 0]",0,0,0,4,4,Julian Merryweather
+4,top,ball,ball,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",1,0,0,4,4,Julian Merryweather
+4,top,fly_out,strike,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",1,0,1,4,4,Julian Merryweather
+4,top,strike,strike,Zach McKinstry,8,"[0, 0, 0]","[0, 0, 0]",0,1,1,4,4,Julian Merryweather
+4,top,strike,strike,Zach McKinstry,8,"[0, 0, 0]","[0, 0, 0]",0,2,1,4,4,Julian Merryweather
+4,top,ground_out,strike,Zach McKinstry,8,"[0, 0, 0]","[0, 0, 0]",0,2,2,4,4,Julian Merryweather
+4,top,strike,ball,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",0,1,2,4,4,Julian Merryweather
+4,top,ball,ball,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,1,2,4,4,Julian Merryweather
+4,top,strike,ball,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,2,2,4,4,Julian Merryweather
+4,top,strikeout,ball,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,3,3,4,4,Julian Merryweather
+4,bottom,single,strike,Miles Mastrobuoni,6,"[1, 0, 0]","['Miles Mastrobuoni', 0, 0]",0,0,0,4,4,Seranthony Domínguez
+4,bottom,ball,ball,Francisco Alvarez,7,"[1, 0, 0]","['Miles Mastrobuoni', 0, 0]",1,0,0,4,4,Seranthony Domínguez
+4,bottom,strike,ball,Francisco Alvarez,7,"[1, 0, 0]","['Miles Mastrobuoni', 0, 0]",1,1,0,4,4,Seranthony Domínguez
+4,bottom,fly_out,ball,Francisco Alvarez,7,"[1, 0, 0]","['Miles Mastrobuoni', 0, 0]",1,1,1,4,4,Seranthony Domínguez
+4,bottom,fly_out,strike,Manny Machado,8,"[1, 0, 0]","['Miles Mastrobuoni', 0, 0]",0,0,2,4,4,Seranthony Domínguez
+4,bottom,single,strike,Seiya Suzuki,9,"[1, 1, 0]","['Seiya Suzuki', 'Miles Mastrobuoni', 0]",0,0,2,4,4,Seranthony Domínguez
+4,bottom,strike,strike,Brandon Belt,1,"[1, 1, 0]","['Seiya Suzuki', 'Miles Mastrobuoni', 0]",0,1,2,4,4,Seranthony Domínguez
+4,bottom,ground_out,strike,Brandon Belt,1,"[1, 1, 0]","['Seiya Suzuki', 'Miles Mastrobuoni', 0]",0,1,3,4,4,Seranthony Domínguez
+5,top,ball,ball,Trevor Story,2,"[0, 0, 0]","[0, 0, 0]",1,0,0,4,4,Julian Merryweather
+5,top,single,strike,Trevor Story,2,"[1, 0, 0]","['Trevor Story', 0, 0]",1,0,0,4,4,Julian Merryweather
+5,top,ball,ball,Josh Rojas,3,"[1, 0, 0]","['Trevor Story', 0, 0]",1,0,0,4,4,Julian Merryweather
+5,top,ground_out,strike,Josh Rojas,3,"[1, 0, 0]","['Trevor Story', 0, 0]",1,0,1,4,4,Julian Merryweather
+5,top,ball,ball,Dane Myers,4,"[1, 0, 0]","['Trevor Story', 0, 0]",1,0,1,4,4,Julian Merryweather
+5,top,ball,ball,Dane Myers,4,"[1, 0, 0]","['Trevor Story', 0, 0]",2,0,1,4,4,Julian Merryweather
+5,top,ball,ball,Dane Myers,4,"[1, 0, 0]","['Trevor Story', 0, 0]",3,0,1,4,4,Julian Merryweather
+5,top,fly_out,strike,Dane Myers,4,"[1, 0, 0]","['Trevor Story', 0, 0]",3,0,2,4,4,Julian Merryweather
+5,top,ground_out,strike,James McCann,5,"[1, 0, 0]","['Trevor Story', 0, 0]",0,0,3,4,4,Julian Merryweather
+5,bottom,double,ball,Randal Grichuk,2,"[0, 1, 0]","[0, 'Randal Grichuk', 0]",0,0,0,4,4,Seranthony Domínguez
+5,bottom,ground_out,ball,Shohei Ohtani,3,"[0, 1, 0]","[0, 'Randal Grichuk', 0]",0,0,1,4,4,Seranthony Domínguez
+5,bottom,ball,ball,Jasson Domínguez,4,"[0, 1, 0]","[0, 'Randal Grichuk', 0]",1,0,1,4,4,Seranthony Domínguez
+5,bottom,ball,ball,Jasson Domínguez,4,"[0, 1, 0]","[0, 'Randal Grichuk', 0]",2,0,1,4,4,Seranthony Domínguez
+5,bottom,ball,ball,Jasson Domínguez,4,"[0, 1, 0]","[0, 'Randal Grichuk', 0]",3,0,1,4,4,Seranthony Domínguez
+5,bottom,walk,ball,Jasson Domínguez,4,"[1, 1, 0]","['Jasson Domínguez', 'Randal Grichuk', 0]",4,0,1,4,4,Seranthony Domínguez
+5,bottom,ball,ball,Abraham Toro,5,"[1, 1, 0]","['Jasson Domínguez', 'Randal Grichuk', 0]",1,0,1,4,4,Seranthony Domínguez
+5,bottom,strike,ball,Abraham Toro,5,"[1, 1, 0]","['Jasson Domínguez', 'Randal Grichuk', 0]",1,1,1,4,4,Seranthony Domínguez
+5,bottom,fly_out,strike,Abraham Toro,5,"[1, 1, 0]","['Jasson Domínguez', 'Randal Grichuk', 0]",1,1,2,4,4,Seranthony Domínguez
+5,bottom,ball,ball,Miles Mastrobuoni,6,"[1, 1, 0]","['Jasson Domínguez', 'Randal Grichuk', 0]",1,0,2,4,4,Seranthony Domínguez
+5,bottom,strike,strike,Miles Mastrobuoni,6,"[1, 1, 0]","['Jasson Domínguez', 'Randal Grichuk', 0]",1,1,2,4,4,Seranthony Domínguez
+5,bottom,ground_out,strike,Miles Mastrobuoni,6,"[1, 1, 0]","['Jasson Domínguez', 'Randal Grichuk', 0]",1,1,3,4,4,Seranthony Domínguez
+6,top,ball,ball,Edouard Julien,6,"[0, 0, 0]","[0, 0, 0]",1,0,0,4,4,Julian Merryweather
+6,top,home_run,strike,Edouard Julien,6,"[0, 0, 0]","[0, 0, 0]",1,0,0,5,4,Julian Merryweather
+6,top,strike,strike,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",0,1,0,5,4,Julian Merryweather
+6,top,ball,ball,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",1,1,0,5,4,Julian Merryweather
+6,top,fly_out,strike,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",1,1,1,5,4,Julian Merryweather
+6,top,strike,strike,Zach McKinstry,8,"[0, 0, 0]","[0, 0, 0]",0,1,1,5,4,Julian Merryweather
+6,top,single,strike,Zach McKinstry,8,"[1, 0, 0]","['Zach McKinstry', 0, 0]",0,1,1,5,4,Julian Merryweather
+6,top,strike,strike,Otto Lopez,1,"[1, 0, 0]","['Zach McKinstry', 0, 0]",0,1,1,5,4,Julian Merryweather
+6,top,fly_out,strike,Otto Lopez,1,"[1, 0, 0]","['Zach McKinstry', 0, 0]",0,1,2,5,4,Julian Merryweather
+6,top,triple,strike,Trevor Story,2,"[0, 0, 1]","[0, 0, 'Trevor Story']",0,0,2,6,4,Julian Merryweather
+6,top,fly_out,strike,Josh Rojas,3,"[0, 0, 1]","[0, 0, 'Trevor Story']",0,0,3,6,4,Julian Merryweather
+6,bottom,ground_out,strike,Francisco Alvarez,7,"[0, 0, 0]","[0, 0, 0]",0,0,1,6,4,Seranthony Domínguez
+6,bottom,ball,ball,Manny Machado,8,"[0, 0, 0]","[0, 0, 0]",1,0,1,6,4,Seranthony Domínguez
+6,bottom,strike,strike,Manny Machado,8,"[0, 0, 0]","[0, 0, 0]",1,1,1,6,4,Seranthony Domínguez
+6,bottom,ball,ball,Manny Machado,8,"[0, 0, 0]","[0, 0, 0]",2,1,1,6,4,Seranthony Domínguez
+6,bottom,ground_out,ball,Manny Machado,8,"[0, 0, 0]","[0, 0, 0]",2,1,2,6,4,Seranthony Domínguez
+6,bottom,ball,ball,Seiya Suzuki,9,"[0, 0, 0]","[0, 0, 0]",1,0,2,6,4,Seranthony Domínguez
+6,bottom,ball,ball,Seiya Suzuki,9,"[0, 0, 0]","[0, 0, 0]",2,0,2,6,4,Seranthony Domínguez
+6,bottom,strike,strike,Seiya Suzuki,9,"[0, 0, 0]","[0, 0, 0]",2,1,2,6,4,Seranthony Domínguez
+6,bottom,ball,ball,Seiya Suzuki,9,"[0, 0, 0]","[0, 0, 0]",3,1,2,6,4,Seranthony Domínguez
+6,bottom,fly_out,strike,Seiya Suzuki,9,"[0, 0, 0]","[0, 0, 0]",3,1,3,6,4,Seranthony Domínguez
+7,top,strike,strike,Dane Myers,4,"[0, 0, 0]","[0, 0, 0]",0,1,0,6,4,Julian Merryweather
+7,top,ball,ball,Dane Myers,4,"[0, 0, 0]","[0, 0, 0]",1,1,0,6,4,Julian Merryweather
+7,top,ball,ball,Dane Myers,4,"[0, 0, 0]","[0, 0, 0]",2,1,0,6,4,Julian Merryweather
+7,top,ground_out,strike,Dane Myers,4,"[0, 0, 0]","[0, 0, 0]",2,1,1,6,4,Julian Merryweather
+7,top,ground_out,strike,James McCann,5,"[0, 0, 0]","[0, 0, 0]",0,0,2,6,4,Julian Merryweather
+7,top,ball,ball,Edouard Julien,6,"[0, 0, 0]","[0, 0, 0]",1,0,2,6,4,Julian Merryweather
+7,top,single,strike,Edouard Julien,6,"[1, 0, 0]","['Edouard Julien', 0, 0]",1,0,2,6,4,Julian Merryweather
+7,top,ball,ball,Oswaldo Cabrera,7,"[1, 0, 0]","['Edouard Julien', 0, 0]",1,0,2,6,4,Julian Merryweather
+7,top,fly_out,strike,Oswaldo Cabrera,7,"[1, 0, 0]","['Edouard Julien', 0, 0]",1,0,3,6,4,Julian Merryweather
+7,bottom,strike,ball,Brandon Belt,1,"[0, 0, 0]","[0, 0, 0]",0,1,0,6,4,Seranthony Domínguez
+7,bottom,double,strike,Brandon Belt,1,"[0, 1, 0]","[0, 'Brandon Belt', 0]",0,1,0,6,4,Seranthony Domínguez
+7,bottom,strike,ball,Randal Grichuk,2,"[0, 1, 0]","[0, 'Brandon Belt', 0]",0,1,0,6,4,Seranthony Domínguez
+7,bottom,single,strike,Randal Grichuk,2,"[1, 0, 1]","['Randal Grichuk', 0, 'Brandon Belt']",0,1,0,6,4,Seranthony Domínguez
+7,bottom,strike,strike,Shohei Ohtani,3,"[1, 0, 1]","['Randal Grichuk', 0, 'Brandon Belt']",0,1,0,6,4,Seranthony Domínguez
+7,bottom,strike,strike,Shohei Ohtani,3,"[1, 0, 1]","['Randal Grichuk', 0, 'Brandon Belt']",0,2,0,6,4,Seranthony Domínguez
+7,bottom,strikeout,strike,Shohei Ohtani,3,"[1, 0, 1]","['Randal Grichuk', 0, 'Brandon Belt']",0,3,1,6,4,Seranthony Domínguez
+7,bottom,ball,ball,Jasson Domínguez,4,"[1, 0, 1]","['Randal Grichuk', 0, 'Brandon Belt']",1,0,1,6,4,Seranthony Domínguez
+7,bottom,ball,ball,Jasson Domínguez,4,"[1, 0, 1]","['Randal Grichuk', 0, 'Brandon Belt']",2,0,1,6,4,Seranthony Domínguez
+7,bottom,fly_out,strike,Jasson Domínguez,4,"[1, 0, 1]","['Randal Grichuk', 0, 'Brandon Belt']",2,0,2,6,4,Seranthony Domínguez
+7,bottom,ball,ball,Abraham Toro,5,"[1, 0, 1]","['Randal Grichuk', 0, 'Brandon Belt']",1,0,2,6,4,Seranthony Domínguez
+7,bottom,double,strike,Abraham Toro,5,"[0, 1, 1]","[0, 'Abraham Toro', 'Randal Grichuk']",1,0,2,6,5,Seranthony Domínguez
+7,bottom,ball,ball,Miles Mastrobuoni,6,"[0, 1, 1]","[0, 'Abraham Toro', 'Randal Grichuk']",1,0,2,6,5,Seranthony Domínguez
+7,bottom,strike,strike,Miles Mastrobuoni,6,"[0, 1, 1]","[0, 'Abraham Toro', 'Randal Grichuk']",1,1,2,6,5,Seranthony Domínguez
+7,bottom,strike,strike,Miles Mastrobuoni,6,"[0, 1, 1]","[0, 'Abraham Toro', 'Randal Grichuk']",1,2,2,6,5,Seranthony Domínguez
+7,bottom,ball,ball,Miles Mastrobuoni,6,"[0, 1, 1]","[0, 'Abraham Toro', 'Randal Grichuk']",2,2,2,6,5,Seranthony Domínguez
+7,bottom,ball,ball,Miles Mastrobuoni,6,"[0, 1, 1]","[0, 'Abraham Toro', 'Randal Grichuk']",3,2,2,6,5,Seranthony Domínguez
+7,bottom,walk,ball,Miles Mastrobuoni,6,"[1, 1, 1]","['Miles Mastrobuoni', 'Abraham Toro', 'Randal Grichuk']",4,2,2,6,5,Seranthony Domínguez
+7,bottom,strike,strike,Francisco Alvarez,7,"[1, 1, 1]","['Miles Mastrobuoni', 'Abraham Toro', 'Randal Grichuk']",0,1,2,6,5,Seranthony Domínguez
+7,bottom,strike,strike,Francisco Alvarez,7,"[1, 1, 1]","['Miles Mastrobuoni', 'Abraham Toro', 'Randal Grichuk']",0,2,2,6,5,Seranthony Domínguez
+7,bottom,strikeout,strike,Francisco Alvarez,7,"[1, 1, 1]","['Miles Mastrobuoni', 'Abraham Toro', 'Randal Grichuk']",0,3,3,6,5,Seranthony Domínguez
+8,top,ball,ball,Zach McKinstry,8,"[0, 0, 0]","[0, 0, 0]",1,0,0,6,5,Julian Merryweather
+8,top,strike,ball,Zach McKinstry,8,"[0, 0, 0]","[0, 0, 0]",1,1,0,6,5,Julian Merryweather
+8,top,ground_out,strike,Zach McKinstry,8,"[0, 0, 0]","[0, 0, 0]",1,1,1,6,5,Julian Merryweather
+8,top,strike,strike,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",0,1,1,6,5,Julian Merryweather
+8,top,ball,ball,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,1,1,6,5,Julian Merryweather
+8,top,ground_out,ball,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,1,2,6,5,Julian Merryweather
+8,top,ball,ball,Trevor Story,2,"[0, 0, 0]","[0, 0, 0]",1,0,2,6,5,Julian Merryweather
+8,top,ball,ball,Trevor Story,2,"[0, 0, 0]","[0, 0, 0]",2,0,2,6,5,Julian Merryweather
+8,top,single,ball,Trevor Story,2,"[1, 0, 0]","['Trevor Story', 0, 0]",2,0,2,6,5,Julian Merryweather
+8,top,strike,ball,Josh Rojas,3,"[1, 0, 0]","['Trevor Story', 0, 0]",0,1,2,6,5,Julian Merryweather
+8,top,ground_out,strike,Josh Rojas,3,"[1, 0, 0]","['Trevor Story', 0, 0]",0,1,3,6,5,Julian Merryweather
+8,bottom,ground_out,strike,Manny Machado,8,"[0, 0, 0]","[0, 0, 0]",0,0,1,6,5,Seranthony Domínguez
+8,bottom,double,strike,Seiya Suzuki,9,"[0, 1, 0]","[0, 'Seiya Suzuki', 0]",0,0,1,6,5,Seranthony Domínguez
+8,bottom,ball,ball,Brandon Belt,1,"[0, 1, 0]","[0, 'Seiya Suzuki', 0]",1,0,1,6,5,Seranthony Domínguez
+8,bottom,ball,ball,Brandon Belt,1,"[0, 1, 0]","[0, 'Seiya Suzuki', 0]",2,0,1,6,5,Seranthony Domínguez
+8,bottom,ball,ball,Brandon Belt,1,"[0, 1, 0]","[0, 'Seiya Suzuki', 0]",3,0,1,6,5,Seranthony Domínguez
+8,bottom,walk,ball,Brandon Belt,1,"[1, 1, 0]","['Brandon Belt', 'Seiya Suzuki', 0]",4,0,1,6,5,Seranthony Domínguez
+8,bottom,ball,ball,Randal Grichuk,2,"[1, 1, 0]","['Brandon Belt', 'Seiya Suzuki', 0]",1,0,1,6,5,Seranthony Domínguez
+8,bottom,ground_out,strike,Randal Grichuk,2,"[1, 1, 0]","['Brandon Belt', 'Seiya Suzuki', 0]",1,0,2,6,5,Seranthony Domínguez
+8,bottom,ground_out,strike,Shohei Ohtani,3,"[1, 1, 0]","['Brandon Belt', 'Seiya Suzuki', 0]",0,0,3,6,5,Seranthony Domínguez
+9,top,ground_out,strike,Dane Myers,4,"[0, 0, 0]","[0, 0, 0]",0,0,1,6,5,Julian Merryweather
+9,top,ball,ball,James McCann,5,"[0, 0, 0]","[0, 0, 0]",1,0,1,6,5,Julian Merryweather
+9,top,fly_out,strike,James McCann,5,"[0, 0, 0]","[0, 0, 0]",1,0,2,6,5,Julian Merryweather
+9,top,strike,strike,Edouard Julien,6,"[0, 0, 0]","[0, 0, 0]",0,1,2,6,5,Julian Merryweather
+9,top,strike,strike,Edouard Julien,6,"[0, 0, 0]","[0, 0, 0]",0,2,2,6,5,Julian Merryweather
+9,top,ball,ball,Edouard Julien,6,"[0, 0, 0]","[0, 0, 0]",1,2,2,6,5,Julian Merryweather
+9,top,ground_out,strike,Edouard Julien,6,"[0, 0, 0]","[0, 0, 0]",1,2,3,6,5,Julian Merryweather
+9,bottom,ball,ball,Jasson Domínguez,4,"[0, 0, 0]","[0, 0, 0]",1,0,0,6,5,Seranthony Domínguez
+9,bottom,ball,ball,Jasson Domínguez,4,"[0, 0, 0]","[0, 0, 0]",2,0,0,6,5,Seranthony Domínguez
+9,bottom,ball,ball,Jasson Domínguez,4,"[0, 0, 0]","[0, 0, 0]",3,0,0,6,5,Seranthony Domínguez
+9,bottom,ground_out,ball,Jasson Domínguez,4,"[0, 0, 0]","[0, 0, 0]",3,0,1,6,5,Seranthony Domínguez
+9,bottom,home_run,strike,Abraham Toro,5,"[0, 0, 0]","[0, 0, 0]",0,0,1,6,6,Seranthony Domínguez
+9,bottom,ground_out,ball,Miles Mastrobuoni,6,"[0, 0, 0]","[0, 0, 0]",0,0,2,6,6,Seranthony Domínguez
+9,bottom,ball,ball,Francisco Alvarez,7,"[0, 0, 0]","[0, 0, 0]",1,0,2,6,6,Seranthony Domínguez
+9,bottom,ground_out,strike,Francisco Alvarez,7,"[0, 0, 0]","[0, 0, 0]",1,0,3,6,6,Seranthony Domínguez
+10,top,ground_out,ball,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",0,0,1,6,6,Julian Merryweather
+10,top,single,strike,Zach McKinstry,8,"[1, 0, 0]","['Zach McKinstry', 0, 0]",0,0,1,6,6,Julian Merryweather
+10,top,fly_out,strike,Otto Lopez,1,"[1, 0, 0]","['Zach McKinstry', 0, 0]",0,0,2,6,6,Julian Merryweather
+10,top,double,strike,Trevor Story,2,"[0, 1, 1]","[0, 'Trevor Story', 'Zach McKinstry']",0,0,2,6,6,Julian Merryweather
+10,top,ball,ball,Josh Rojas,3,"[0, 1, 1]","[0, 'Trevor Story', 'Zach McKinstry']",1,0,2,6,6,Julian Merryweather
+10,top,ball,ball,Josh Rojas,3,"[0, 1, 1]","[0, 'Trevor Story', 'Zach McKinstry']",2,0,2,6,6,Julian Merryweather
+10,top,ball,ball,Josh Rojas,3,"[0, 1, 1]","[0, 'Trevor Story', 'Zach McKinstry']",3,0,2,6,6,Julian Merryweather
+10,top,single,strike,Josh Rojas,3,"[1, 0, 1]","['Josh Rojas', 0, 'Trevor Story']",3,0,2,7,6,Julian Merryweather
+10,top,ball,ball,Dane Myers,4,"[1, 0, 1]","['Josh Rojas', 0, 'Trevor Story']",1,0,2,7,6,Julian Merryweather
+10,top,ground_out,ball,Dane Myers,4,"[1, 0, 1]","['Josh Rojas', 0, 'Trevor Story']",1,0,3,7,6,Julian Merryweather

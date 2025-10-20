@@ -35,6 +35,7 @@ class Pitcher:
         self.id = pitcher_data['id']
         self.team = pitcher_data['team']
         
+        
         #Save statistics about pitching probabilities
         self.pitch_type_prob = pitcher_data['pitch_type_prob']
         self.swing_prob = pitcher_data['swing_prob']
@@ -142,7 +143,9 @@ class Game:
                 #if ball not swung at, result is a ball
                 result = 'ball'
                
+        print(result)
         return result, pitch_result
+        
         
     
     def move_bases(self, action, batting_team, current_batter):
@@ -233,7 +236,7 @@ class Game:
                 elif event == 'ball':
                         self.balls += 1
                         #Record a walk if ball 4
-                        if self.balls ==4:
+                        if self.balls == 4:
                             self.move_bases('walk', batting_team, current_batter)
                 else:
                     #Move bases if a hit
@@ -269,6 +272,8 @@ class Game:
             self.event_log['Event'].append('walk')
         else:
             self.event_log['Event'].append(event)
+            
+        
     
     def play_ball(self):
         #pdb.set_trace()
@@ -315,6 +320,139 @@ def perturb_values(orig_val_dict, range):
         val_dict[k] = v*norm
 
     return val_dict
+
+def make_box_score(event_log):
+    batting_stats = {"Team1": {}, "Team2": {}}
+    pitching_stats = {"Team1": {}, "Team2": {}}
+
+    
+    for _, row in event_log.iterrows():
+        result = row["Event"]
+        if result in ["Init"]:  # ignore non-play events
+            continue
+        
+        pitch_outcome = row["Pitch Outcome"]  # "ball" or "strike"
+
+        is_strike = True if pitch_outcome == "strike" else False
+    
+        if row["Inning Half"] == "top":
+            # Team 1 is batting, Team 2 pitching
+            update_batter(batting_stats["Team1"], row["Batter"], result)
+            update_pitcher(pitching_stats["Team2"], row["Pitcher"], result, pitch_strike = is_strike)
+        elif row["Inning Half"] == "bottom":
+            # Team 2 is batting, Team 1 pitching
+            update_batter(batting_stats["Team2"], row["Batter"], result)
+            update_pitcher(pitching_stats["Team1"], row["Pitcher"], result, pitch_strike = is_strike)
+    
+    
+    team1_bat = make_batting_box(batting_stats["Team1"])
+    team2_bat = make_batting_box(batting_stats["Team2"])
+    
+    team1_bat["OBP"] = (team1_bat["H"] + team1_bat["BB"]) / team1_bat["PA"]
+    team1_bat["SLG"] = team1_bat["TB"] / team1_bat["AB"].replace(0, pd.NA)
+    
+    team2_bat["OBP"] = (team2_bat["H"] + team2_bat["BB"]) / team2_bat["PA"]
+    team2_bat["SLG"] = team2_bat["TB"] / team2_bat["AB"].replace(0, pd.NA)
+    
+    team1_bat = team1_bat.round({"OBP": 3, "SLG": 3})
+    team1_bat = team1_bat.fillna(0)
+    
+    team2_bat = team2_bat.round({"OBP": 3, "SLG": 3})
+    team2_bat = team2_bat.fillna(0)
+    
+    team1_pit = make_pitching_box(pitching_stats["Team1"])
+    team2_pit = make_pitching_box(pitching_stats["Team2"])
+    
+    print("Team 1 Batting:")
+    print(team1_bat)
+    print("\nTeam 2 Batting:")
+    print(team2_bat)
+    print("\nTeam 1 Pitching:")
+    print(team1_pit)
+    print("\nTeam 2 Pitching:")
+    print(team2_pit)
+
+
+
+    
+    
+    
+def update_batter(stats, player, result):
+        
+    if player not in stats:
+        stats[player] = {"AB": 0, "H": 0, "HR": 0, "BB": 0, "K": 0, "TB": 0, "PA": 0}
+        #at bats, hits, base on balls, strikeouts, total bases, plate appearances
+    
+    stats[player]["PA"] += 1  # every result counts as a plate appearance
+
+    if result in ["single", "double", "triple", "home_run"]:
+        stats[player]["AB"] += 1
+        stats[player]["H"] += 1
+        # assign total bases
+        bases = {"single": 1, "double": 2, "triple": 3, "home_run": 4}[result]
+        stats[player]["TB"] += bases
+        if result == "home_run":
+            stats[player]["HR"] += 1
+
+    elif result in ["ground_out", "fly_out", "strikeout"]:
+        stats[player]["AB"] += 1
+        if result == "strikeout":
+            stats[player]["K"] += 1
+
+    elif result == "walk":
+        stats[player]["BB"] += 1
+
+
+
+def update_pitcher(stats, player, result, pitch_strike=None):
+    if player not in stats:
+        stats[player] = {"IP":0.0, "H": 0, "R": 0, "ER": 0, "BB": 0, "K": 0, "HR": 0, "P": 0, "S": 0}
+        #innings pitched, hits, runs, earned runs, walks, strikeouts, home runs, total pitches, strikes
+    
+    stats[player]["P"] += 1
+    if pitch_strike is True:
+        stats[player]["S"] += 1
+    
+    # Event outcomes
+    if result in ["single", "double", "triple", "home_run"]:
+        stats[player]["H"] += 1
+        if result == "home_run":
+            stats[player]["HR"] += 1
+            stats[player]["R"] += 1
+
+    elif result == "walk":
+        stats[player]["BB"] += 1
+
+    elif result == "strikeout":
+        stats[player]["K"] += 1
+        stats[player]["IP"] += 1/3  # one out
+
+    elif result in ["ground_out", "fly_out"]:
+        stats[player]["IP"] += 1/3  # one out
+
+    elif result == "run_scored":
+        stats[player]["R"] += 1
+        
+def make_batting_box(team_dict):
+    df = pd.DataFrame.from_dict(team_dict, orient="index").reset_index()
+    df.rename(columns={"index": "Player"}, inplace=True)
+    df["AVG"] = (df["H"] / df["AB"]).replace([float('inf'), pd.NA], 0).fillna(0).round(3)
+    return df
+
+def make_pitching_box(team_dict):
+    df = pd.DataFrame.from_dict(team_dict, orient="index").reset_index()
+    df.rename(columns={"index": "Pitcher"}, inplace=True)
+
+
+    df["IP"] = df["IP"].round(1)
+
+
+    df["ERA"] = (df["ER"] * 9 / df["IP"].replace(0, pd.NA)).fillna(0).round(2)
+    df["PC-ST"] = df["P"].astype(str) + "-" + df["S"].astype(str)
+
+    return df
+
+
     
 
 if __name__ == '__main__':
@@ -396,6 +534,10 @@ if __name__ == '__main__':
     # TODO add batter to the game log
     event_log.to_csv("event_log.csv", encoding='utf-8-sig', index=False)
     
+    make_box_score(event_log)
+    
+    
+    
     ### Some code below to run 100 games and compute team record, average score
     # scores = {i:[] for i in range(1,10)}
     # team1_record = [0,0,0]
@@ -430,6 +572,10 @@ if __name__ == '__main__':
     # avg_scores_by_inning = {i:np.average(scores[i]) for i in range(1,10)}    
       
         
-        
+
+
+
+    
+    
         
         
