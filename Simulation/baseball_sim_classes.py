@@ -397,6 +397,11 @@ def make_box_score(event_log):
     print("\nTeam 2 Pitching:")
     print(team2_pit)
 
+    with pd.ExcelWriter("box_score.xlsx", engine="openpyxl") as writer:
+        team1_bat.to_excel(writer, sheet_name="Team1_Batting", index=False)
+        team2_bat.to_excel(writer, sheet_name="Team2_Batting", index=False)
+        team1_pit.to_excel(writer, sheet_name="Team1_Pitching", index=False)
+        team2_pit.to_excel(writer, sheet_name="Team2_Pitching", index=False)
 
 
     

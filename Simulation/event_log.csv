@@ -1,412 +1,225 @@
 ﻿Inning,Inning Half,Event,Pitch Outcome,Batter,Batter Number,Bases,Baserunners,Balls,Strikes,Outs,Team 1 Score,Team 2 Score,Pitcher
 1,top,Init,Init,NA,NA,"[0, 0, 0]","[0, 0, 0]",0,0,0,0,0,NA
-<<<<<<< HEAD
-1,top,ball,ball,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,0,0,0,0,Julian Merryweather
-1,top,strike,strike,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,1,0,0,0,Julian Merryweather
-1,top,ground_out,strike,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,1,1,0,0,Julian Merryweather
-1,top,strike,ball,Trevor Story,2,"[0, 0, 0]","[0, 0, 0]",0,1,1,0,0,Julian Merryweather
-1,top,ball,ball,Trevor Story,2,"[0, 0, 0]","[0, 0, 0]",1,1,1,0,0,Julian Merryweather
-1,top,ball,ball,Trevor Story,2,"[0, 0, 0]","[0, 0, 0]",2,1,1,0,0,Julian Merryweather
-1,top,double,strike,Trevor Story,2,"[0, 1, 0]","[0, 'Trevor Story', 0]",2,1,1,0,0,Julian Merryweather
-1,top,ball,ball,Josh Rojas,3,"[0, 1, 0]","[0, 'Trevor Story', 0]",1,0,1,0,0,Julian Merryweather
-1,top,home_run,ball,Josh Rojas,3,"[0, 0, 0]","[0, 0, 0]",1,0,1,2,0,Julian Merryweather
-1,top,ground_out,strike,Dane Myers,4,"[0, 0, 0]","[0, 0, 0]",0,0,2,2,0,Julian Merryweather
-1,top,strike,ball,James McCann,5,"[0, 0, 0]","[0, 0, 0]",0,1,2,2,0,Julian Merryweather
-1,top,strike,strike,James McCann,5,"[0, 0, 0]","[0, 0, 0]",0,2,2,2,0,Julian Merryweather
-1,top,ball,ball,James McCann,5,"[0, 0, 0]","[0, 0, 0]",1,2,2,2,0,Julian Merryweather
-1,top,ground_out,ball,James McCann,5,"[0, 0, 0]","[0, 0, 0]",1,2,3,2,0,Julian Merryweather
-1,bottom,ground_out,strike,Brandon Belt,1,"[0, 0, 0]","[0, 0, 0]",0,0,1,2,0,Seranthony Domínguez
-1,bottom,fly_out,ball,Randal Grichuk,2,"[0, 0, 0]","[0, 0, 0]",0,0,2,2,0,Seranthony Domínguez
-1,bottom,strike,ball,Shohei Ohtani,3,"[0, 0, 0]","[0, 0, 0]",0,1,2,2,0,Seranthony Domínguez
-1,bottom,fly_out,strike,Shohei Ohtani,3,"[0, 0, 0]","[0, 0, 0]",0,1,3,2,0,Seranthony Domínguez
-2,top,ball,ball,Edouard Julien,6,"[0, 0, 0]","[0, 0, 0]",1,0,0,2,0,Julian Merryweather
-2,top,ground_out,strike,Edouard Julien,6,"[0, 0, 0]","[0, 0, 0]",1,0,1,2,0,Julian Merryweather
-2,top,strike,strike,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",0,1,1,2,0,Julian Merryweather
-2,top,ball,ball,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",1,1,1,2,0,Julian Merryweather
-2,top,strike,strike,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",1,2,1,2,0,Julian Merryweather
-2,top,ball,ball,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",2,2,1,2,0,Julian Merryweather
-2,top,fly_out,strike,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",2,2,2,2,0,Julian Merryweather
-2,top,fly_out,ball,Zach McKinstry,8,"[0, 0, 0]","[0, 0, 0]",0,0,3,2,0,Julian Merryweather
-2,bottom,home_run,strike,Jasson Domínguez,4,"[0, 0, 0]","[0, 0, 0]",0,0,0,2,1,Seranthony Domínguez
-2,bottom,ball,ball,Abraham Toro,5,"[0, 0, 0]","[0, 0, 0]",1,0,0,2,1,Seranthony Domínguez
-2,bottom,ball,ball,Abraham Toro,5,"[0, 0, 0]","[0, 0, 0]",2,0,0,2,1,Seranthony Domínguez
-2,bottom,strike,strike,Abraham Toro,5,"[0, 0, 0]","[0, 0, 0]",2,1,0,2,1,Seranthony Domínguez
-2,bottom,ball,ball,Abraham Toro,5,"[0, 0, 0]","[0, 0, 0]",3,1,0,2,1,Seranthony Domínguez
-2,bottom,fly_out,strike,Abraham Toro,5,"[0, 0, 0]","[0, 0, 0]",3,1,1,2,1,Seranthony Domínguez
-2,bottom,strike,ball,Miles Mastrobuoni,6,"[0, 0, 0]","[0, 0, 0]",0,1,1,2,1,Seranthony Domínguez
-2,bottom,ball,ball,Miles Mastrobuoni,6,"[0, 0, 0]","[0, 0, 0]",1,1,1,2,1,Seranthony Domínguez
-2,bottom,ball,ball,Miles Mastrobuoni,6,"[0, 0, 0]","[0, 0, 0]",2,1,1,2,1,Seranthony Domínguez
-2,bottom,double,ball,Miles Mastrobuoni,6,"[0, 1, 0]","[0, 'Miles Mastrobuoni', 0]",2,1,1,2,1,Seranthony Domínguez
-2,bottom,strike,strike,Francisco Alvarez,7,"[0, 1, 0]","[0, 'Miles Mastrobuoni', 0]",0,1,1,2,1,Seranthony Domínguez
-2,bottom,ground_out,ball,Francisco Alvarez,7,"[0, 1, 0]","[0, 'Miles Mastrobuoni', 0]",0,1,2,2,1,Seranthony Domínguez
-2,bottom,strike,strike,Manny Machado,8,"[0, 1, 0]","[0, 'Miles Mastrobuoni', 0]",0,1,2,2,1,Seranthony Domínguez
-2,bottom,ball,ball,Manny Machado,8,"[0, 1, 0]","[0, 'Miles Mastrobuoni', 0]",1,1,2,2,1,Seranthony Domínguez
-2,bottom,fly_out,strike,Manny Machado,8,"[0, 1, 0]","[0, 'Miles Mastrobuoni', 0]",1,1,3,2,1,Seranthony Domínguez
-3,top,ball,ball,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,0,0,2,1,Julian Merryweather
-3,top,strike,strike,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,1,0,2,1,Julian Merryweather
-3,top,ground_out,ball,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,1,1,2,1,Julian Merryweather
-3,top,single,strike,Trevor Story,2,"[1, 0, 0]","['Trevor Story', 0, 0]",0,0,1,2,1,Julian Merryweather
-3,top,ball,ball,Josh Rojas,3,"[1, 0, 0]","['Trevor Story', 0, 0]",1,0,1,2,1,Julian Merryweather
-3,top,strike,strike,Josh Rojas,3,"[1, 0, 0]","['Trevor Story', 0, 0]",1,1,1,2,1,Julian Merryweather
-3,top,strike,strike,Josh Rojas,3,"[1, 0, 0]","['Trevor Story', 0, 0]",1,2,1,2,1,Julian Merryweather
-3,top,fly_out,ball,Josh Rojas,3,"[1, 0, 0]","['Trevor Story', 0, 0]",1,2,2,2,1,Julian Merryweather
-3,top,ball,ball,Dane Myers,4,"[1, 0, 0]","['Trevor Story', 0, 0]",1,0,2,2,1,Julian Merryweather
-3,top,fly_out,strike,Dane Myers,4,"[1, 0, 0]","['Trevor Story', 0, 0]",1,0,3,2,1,Julian Merryweather
-3,bottom,ball,ball,Seiya Suzuki,9,"[0, 0, 0]","[0, 0, 0]",1,0,0,2,1,Seranthony Domínguez
-3,bottom,single,strike,Seiya Suzuki,9,"[1, 0, 0]","['Seiya Suzuki', 0, 0]",1,0,0,2,1,Seranthony Domínguez
-3,bottom,strike,strike,Brandon Belt,1,"[1, 0, 0]","['Seiya Suzuki', 0, 0]",0,1,0,2,1,Seranthony Domínguez
-3,bottom,ball,ball,Brandon Belt,1,"[1, 0, 0]","['Seiya Suzuki', 0, 0]",1,1,0,2,1,Seranthony Domínguez
-3,bottom,ball,ball,Brandon Belt,1,"[1, 0, 0]","['Seiya Suzuki', 0, 0]",2,1,0,2,1,Seranthony Domínguez
-3,bottom,ball,ball,Brandon Belt,1,"[1, 0, 0]","['Seiya Suzuki', 0, 0]",3,1,0,2,1,Seranthony Domínguez
-3,bottom,strike,strike,Brandon Belt,1,"[1, 0, 0]","['Seiya Suzuki', 0, 0]",3,2,0,2,1,Seranthony Domínguez
-3,bottom,ground_out,ball,Brandon Belt,1,"[1, 0, 0]","['Seiya Suzuki', 0, 0]",3,2,1,2,1,Seranthony Domínguez
-3,bottom,single,strike,Randal Grichuk,2,"[1, 1, 0]","['Randal Grichuk', 'Seiya Suzuki', 0]",0,0,1,2,1,Seranthony Domínguez
-3,bottom,ball,ball,Shohei Ohtani,3,"[1, 1, 0]","['Randal Grichuk', 'Seiya Suzuki', 0]",1,0,1,2,1,Seranthony Domínguez
-3,bottom,strike,strike,Shohei Ohtani,3,"[1, 1, 0]","['Randal Grichuk', 'Seiya Suzuki', 0]",1,1,1,2,1,Seranthony Domínguez
-3,bottom,strike,ball,Shohei Ohtani,3,"[1, 1, 0]","['Randal Grichuk', 'Seiya Suzuki', 0]",1,2,1,2,1,Seranthony Domínguez
-3,bottom,fly_out,strike,Shohei Ohtani,3,"[1, 1, 0]","['Randal Grichuk', 'Seiya Suzuki', 0]",1,2,2,2,1,Seranthony Domínguez
-3,bottom,strike,strike,Jasson Domínguez,4,"[1, 1, 0]","['Randal Grichuk', 'Seiya Suzuki', 0]",0,1,2,2,1,Seranthony Domínguez
-3,bottom,ball,ball,Jasson Domínguez,4,"[1, 1, 0]","['Randal Grichuk', 'Seiya Suzuki', 0]",1,1,2,2,1,Seranthony Domínguez
-3,bottom,strike,strike,Jasson Domínguez,4,"[1, 1, 0]","['Randal Grichuk', 'Seiya Suzuki', 0]",1,2,2,2,1,Seranthony Domínguez
-3,bottom,home_run,ball,Jasson Domínguez,4,"[0, 0, 0]","[0, 0, 0]",1,2,2,2,4,Seranthony Domínguez
-3,bottom,ground_out,strike,Abraham Toro,5,"[0, 0, 0]","[0, 0, 0]",0,0,3,2,4,Seranthony Domínguez
-4,top,single,strike,James McCann,5,"[1, 0, 0]","['James McCann', 0, 0]",0,0,0,2,4,Julian Merryweather
-4,top,home_run,strike,Edouard Julien,6,"[0, 0, 0]","[0, 0, 0]",0,0,0,4,4,Julian Merryweather
-4,top,ball,ball,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",1,0,0,4,4,Julian Merryweather
-4,top,fly_out,strike,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",1,0,1,4,4,Julian Merryweather
-4,top,strike,strike,Zach McKinstry,8,"[0, 0, 0]","[0, 0, 0]",0,1,1,4,4,Julian Merryweather
-4,top,strike,strike,Zach McKinstry,8,"[0, 0, 0]","[0, 0, 0]",0,2,1,4,4,Julian Merryweather
-4,top,ground_out,strike,Zach McKinstry,8,"[0, 0, 0]","[0, 0, 0]",0,2,2,4,4,Julian Merryweather
-4,top,strike,ball,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",0,1,2,4,4,Julian Merryweather
-4,top,ball,ball,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,1,2,4,4,Julian Merryweather
-4,top,strike,ball,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,2,2,4,4,Julian Merryweather
-4,top,strikeout,ball,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,3,3,4,4,Julian Merryweather
-4,bottom,single,strike,Miles Mastrobuoni,6,"[1, 0, 0]","['Miles Mastrobuoni', 0, 0]",0,0,0,4,4,Seranthony Domínguez
-4,bottom,ball,ball,Francisco Alvarez,7,"[1, 0, 0]","['Miles Mastrobuoni', 0, 0]",1,0,0,4,4,Seranthony Domínguez
-4,bottom,strike,ball,Francisco Alvarez,7,"[1, 0, 0]","['Miles Mastrobuoni', 0, 0]",1,1,0,4,4,Seranthony Domínguez
-4,bottom,fly_out,ball,Francisco Alvarez,7,"[1, 0, 0]","['Miles Mastrobuoni', 0, 0]",1,1,1,4,4,Seranthony Domínguez
-4,bottom,fly_out,strike,Manny Machado,8,"[1, 0, 0]","['Miles Mastrobuoni', 0, 0]",0,0,2,4,4,Seranthony Domínguez
-4,bottom,single,strike,Seiya Suzuki,9,"[1, 1, 0]","['Seiya Suzuki', 'Miles Mastrobuoni', 0]",0,0,2,4,4,Seranthony Domínguez
-4,bottom,strike,strike,Brandon Belt,1,"[1, 1, 0]","['Seiya Suzuki', 'Miles Mastrobuoni', 0]",0,1,2,4,4,Seranthony Domínguez
-4,bottom,ground_out,strike,Brandon Belt,1,"[1, 1, 0]","['Seiya Suzuki', 'Miles Mastrobuoni', 0]",0,1,3,4,4,Seranthony Domínguez
-5,top,ball,ball,Trevor Story,2,"[0, 0, 0]","[0, 0, 0]",1,0,0,4,4,Julian Merryweather
-5,top,single,strike,Trevor Story,2,"[1, 0, 0]","['Trevor Story', 0, 0]",1,0,0,4,4,Julian Merryweather
-5,top,ball,ball,Josh Rojas,3,"[1, 0, 0]","['Trevor Story', 0, 0]",1,0,0,4,4,Julian Merryweather
-5,top,ground_out,strike,Josh Rojas,3,"[1, 0, 0]","['Trevor Story', 0, 0]",1,0,1,4,4,Julian Merryweather
-5,top,ball,ball,Dane Myers,4,"[1, 0, 0]","['Trevor Story', 0, 0]",1,0,1,4,4,Julian Merryweather
-5,top,ball,ball,Dane Myers,4,"[1, 0, 0]","['Trevor Story', 0, 0]",2,0,1,4,4,Julian Merryweather
-5,top,ball,ball,Dane Myers,4,"[1, 0, 0]","['Trevor Story', 0, 0]",3,0,1,4,4,Julian Merryweather
-5,top,fly_out,strike,Dane Myers,4,"[1, 0, 0]","['Trevor Story', 0, 0]",3,0,2,4,4,Julian Merryweather
-5,top,ground_out,strike,James McCann,5,"[1, 0, 0]","['Trevor Story', 0, 0]",0,0,3,4,4,Julian Merryweather
-5,bottom,double,ball,Randal Grichuk,2,"[0, 1, 0]","[0, 'Randal Grichuk', 0]",0,0,0,4,4,Seranthony Domínguez
-5,bottom,ground_out,ball,Shohei Ohtani,3,"[0, 1, 0]","[0, 'Randal Grichuk', 0]",0,0,1,4,4,Seranthony Domínguez
-5,bottom,ball,ball,Jasson Domínguez,4,"[0, 1, 0]","[0, 'Randal Grichuk', 0]",1,0,1,4,4,Seranthony Domínguez
-5,bottom,ball,ball,Jasson Domínguez,4,"[0, 1, 0]","[0, 'Randal Grichuk', 0]",2,0,1,4,4,Seranthony Domínguez
-5,bottom,ball,ball,Jasson Domínguez,4,"[0, 1, 0]","[0, 'Randal Grichuk', 0]",3,0,1,4,4,Seranthony Domínguez
-5,bottom,walk,ball,Jasson Domínguez,4,"[1, 1, 0]","['Jasson Domínguez', 'Randal Grichuk', 0]",4,0,1,4,4,Seranthony Domínguez
-5,bottom,ball,ball,Abraham Toro,5,"[1, 1, 0]","['Jasson Domínguez', 'Randal Grichuk', 0]",1,0,1,4,4,Seranthony Domínguez
-5,bottom,strike,ball,Abraham Toro,5,"[1, 1, 0]","['Jasson Domínguez', 'Randal Grichuk', 0]",1,1,1,4,4,Seranthony Domínguez
-5,bottom,fly_out,strike,Abraham Toro,5,"[1, 1, 0]","['Jasson Domínguez', 'Randal Grichuk', 0]",1,1,2,4,4,Seranthony Domínguez
-5,bottom,ball,ball,Miles Mastrobuoni,6,"[1, 1, 0]","['Jasson Domínguez', 'Randal Grichuk', 0]",1,0,2,4,4,Seranthony Domínguez
-5,bottom,strike,strike,Miles Mastrobuoni,6,"[1, 1, 0]","['Jasson Domínguez', 'Randal Grichuk', 0]",1,1,2,4,4,Seranthony Domínguez
-5,bottom,ground_out,strike,Miles Mastrobuoni,6,"[1, 1, 0]","['Jasson Domínguez', 'Randal Grichuk', 0]",1,1,3,4,4,Seranthony Domínguez
-6,top,ball,ball,Edouard Julien,6,"[0, 0, 0]","[0, 0, 0]",1,0,0,4,4,Julian Merryweather
-6,top,home_run,strike,Edouard Julien,6,"[0, 0, 0]","[0, 0, 0]",1,0,0,5,4,Julian Merryweather
-6,top,strike,strike,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",0,1,0,5,4,Julian Merryweather
-6,top,ball,ball,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",1,1,0,5,4,Julian Merryweather
-6,top,fly_out,strike,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",1,1,1,5,4,Julian Merryweather
-6,top,strike,strike,Zach McKinstry,8,"[0, 0, 0]","[0, 0, 0]",0,1,1,5,4,Julian Merryweather
-6,top,single,strike,Zach McKinstry,8,"[1, 0, 0]","['Zach McKinstry', 0, 0]",0,1,1,5,4,Julian Merryweather
-6,top,strike,strike,Otto Lopez,1,"[1, 0, 0]","['Zach McKinstry', 0, 0]",0,1,1,5,4,Julian Merryweather
-6,top,fly_out,strike,Otto Lopez,1,"[1, 0, 0]","['Zach McKinstry', 0, 0]",0,1,2,5,4,Julian Merryweather
-6,top,triple,strike,Trevor Story,2,"[0, 0, 1]","[0, 0, 'Trevor Story']",0,0,2,6,4,Julian Merryweather
-6,top,fly_out,strike,Josh Rojas,3,"[0, 0, 1]","[0, 0, 'Trevor Story']",0,0,3,6,4,Julian Merryweather
-6,bottom,ground_out,strike,Francisco Alvarez,7,"[0, 0, 0]","[0, 0, 0]",0,0,1,6,4,Seranthony Domínguez
-6,bottom,ball,ball,Manny Machado,8,"[0, 0, 0]","[0, 0, 0]",1,0,1,6,4,Seranthony Domínguez
-6,bottom,strike,strike,Manny Machado,8,"[0, 0, 0]","[0, 0, 0]",1,1,1,6,4,Seranthony Domínguez
-6,bottom,ball,ball,Manny Machado,8,"[0, 0, 0]","[0, 0, 0]",2,1,1,6,4,Seranthony Domínguez
-6,bottom,ground_out,ball,Manny Machado,8,"[0, 0, 0]","[0, 0, 0]",2,1,2,6,4,Seranthony Domínguez
-6,bottom,ball,ball,Seiya Suzuki,9,"[0, 0, 0]","[0, 0, 0]",1,0,2,6,4,Seranthony Domínguez
-6,bottom,ball,ball,Seiya Suzuki,9,"[0, 0, 0]","[0, 0, 0]",2,0,2,6,4,Seranthony Domínguez
-6,bottom,strike,strike,Seiya Suzuki,9,"[0, 0, 0]","[0, 0, 0]",2,1,2,6,4,Seranthony Domínguez
-6,bottom,ball,ball,Seiya Suzuki,9,"[0, 0, 0]","[0, 0, 0]",3,1,2,6,4,Seranthony Domínguez
-6,bottom,fly_out,strike,Seiya Suzuki,9,"[0, 0, 0]","[0, 0, 0]",3,1,3,6,4,Seranthony Domínguez
-7,top,strike,strike,Dane Myers,4,"[0, 0, 0]","[0, 0, 0]",0,1,0,6,4,Julian Merryweather
-7,top,ball,ball,Dane Myers,4,"[0, 0, 0]","[0, 0, 0]",1,1,0,6,4,Julian Merryweather
-7,top,ball,ball,Dane Myers,4,"[0, 0, 0]","[0, 0, 0]",2,1,0,6,4,Julian Merryweather
-7,top,ground_out,strike,Dane Myers,4,"[0, 0, 0]","[0, 0, 0]",2,1,1,6,4,Julian Merryweather
-7,top,ground_out,strike,James McCann,5,"[0, 0, 0]","[0, 0, 0]",0,0,2,6,4,Julian Merryweather
-7,top,ball,ball,Edouard Julien,6,"[0, 0, 0]","[0, 0, 0]",1,0,2,6,4,Julian Merryweather
-7,top,single,strike,Edouard Julien,6,"[1, 0, 0]","['Edouard Julien', 0, 0]",1,0,2,6,4,Julian Merryweather
-7,top,ball,ball,Oswaldo Cabrera,7,"[1, 0, 0]","['Edouard Julien', 0, 0]",1,0,2,6,4,Julian Merryweather
-7,top,fly_out,strike,Oswaldo Cabrera,7,"[1, 0, 0]","['Edouard Julien', 0, 0]",1,0,3,6,4,Julian Merryweather
-7,bottom,strike,ball,Brandon Belt,1,"[0, 0, 0]","[0, 0, 0]",0,1,0,6,4,Seranthony Domínguez
-7,bottom,double,strike,Brandon Belt,1,"[0, 1, 0]","[0, 'Brandon Belt', 0]",0,1,0,6,4,Seranthony Domínguez
-7,bottom,strike,ball,Randal Grichuk,2,"[0, 1, 0]","[0, 'Brandon Belt', 0]",0,1,0,6,4,Seranthony Domínguez
-7,bottom,single,strike,Randal Grichuk,2,"[1, 0, 1]","['Randal Grichuk', 0, 'Brandon Belt']",0,1,0,6,4,Seranthony Domínguez
-7,bottom,strike,strike,Shohei Ohtani,3,"[1, 0, 1]","['Randal Grichuk', 0, 'Brandon Belt']",0,1,0,6,4,Seranthony Domínguez
-7,bottom,strike,strike,Shohei Ohtani,3,"[1, 0, 1]","['Randal Grichuk', 0, 'Brandon Belt']",0,2,0,6,4,Seranthony Domínguez
-7,bottom,strikeout,strike,Shohei Ohtani,3,"[1, 0, 1]","['Randal Grichuk', 0, 'Brandon Belt']",0,3,1,6,4,Seranthony Domínguez
-7,bottom,ball,ball,Jasson Domínguez,4,"[1, 0, 1]","['Randal Grichuk', 0, 'Brandon Belt']",1,0,1,6,4,Seranthony Domínguez
-7,bottom,ball,ball,Jasson Domínguez,4,"[1, 0, 1]","['Randal Grichuk', 0, 'Brandon Belt']",2,0,1,6,4,Seranthony Domínguez
-7,bottom,fly_out,strike,Jasson Domínguez,4,"[1, 0, 1]","['Randal Grichuk', 0, 'Brandon Belt']",2,0,2,6,4,Seranthony Domínguez
-7,bottom,ball,ball,Abraham Toro,5,"[1, 0, 1]","['Randal Grichuk', 0, 'Brandon Belt']",1,0,2,6,4,Seranthony Domínguez
-7,bottom,double,strike,Abraham Toro,5,"[0, 1, 1]","[0, 'Abraham Toro', 'Randal Grichuk']",1,0,2,6,5,Seranthony Domínguez
-7,bottom,ball,ball,Miles Mastrobuoni,6,"[0, 1, 1]","[0, 'Abraham Toro', 'Randal Grichuk']",1,0,2,6,5,Seranthony Domínguez
-7,bottom,strike,strike,Miles Mastrobuoni,6,"[0, 1, 1]","[0, 'Abraham Toro', 'Randal Grichuk']",1,1,2,6,5,Seranthony Domínguez
-7,bottom,strike,strike,Miles Mastrobuoni,6,"[0, 1, 1]","[0, 'Abraham Toro', 'Randal Grichuk']",1,2,2,6,5,Seranthony Domínguez
-7,bottom,ball,ball,Miles Mastrobuoni,6,"[0, 1, 1]","[0, 'Abraham Toro', 'Randal Grichuk']",2,2,2,6,5,Seranthony Domínguez
-7,bottom,ball,ball,Miles Mastrobuoni,6,"[0, 1, 1]","[0, 'Abraham Toro', 'Randal Grichuk']",3,2,2,6,5,Seranthony Domínguez
-7,bottom,walk,ball,Miles Mastrobuoni,6,"[1, 1, 1]","['Miles Mastrobuoni', 'Abraham Toro', 'Randal Grichuk']",4,2,2,6,5,Seranthony Domínguez
-7,bottom,strike,strike,Francisco Alvarez,7,"[1, 1, 1]","['Miles Mastrobuoni', 'Abraham Toro', 'Randal Grichuk']",0,1,2,6,5,Seranthony Domínguez
-7,bottom,strike,strike,Francisco Alvarez,7,"[1, 1, 1]","['Miles Mastrobuoni', 'Abraham Toro', 'Randal Grichuk']",0,2,2,6,5,Seranthony Domínguez
-7,bottom,strikeout,strike,Francisco Alvarez,7,"[1, 1, 1]","['Miles Mastrobuoni', 'Abraham Toro', 'Randal Grichuk']",0,3,3,6,5,Seranthony Domínguez
-8,top,ball,ball,Zach McKinstry,8,"[0, 0, 0]","[0, 0, 0]",1,0,0,6,5,Julian Merryweather
-8,top,strike,ball,Zach McKinstry,8,"[0, 0, 0]","[0, 0, 0]",1,1,0,6,5,Julian Merryweather
-8,top,ground_out,strike,Zach McKinstry,8,"[0, 0, 0]","[0, 0, 0]",1,1,1,6,5,Julian Merryweather
-8,top,strike,strike,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",0,1,1,6,5,Julian Merryweather
-8,top,ball,ball,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,1,1,6,5,Julian Merryweather
-8,top,ground_out,ball,Otto Lopez,1,"[0, 0, 0]","[0, 0, 0]",1,1,2,6,5,Julian Merryweather
-8,top,ball,ball,Trevor Story,2,"[0, 0, 0]","[0, 0, 0]",1,0,2,6,5,Julian Merryweather
-8,top,ball,ball,Trevor Story,2,"[0, 0, 0]","[0, 0, 0]",2,0,2,6,5,Julian Merryweather
-8,top,single,ball,Trevor Story,2,"[1, 0, 0]","['Trevor Story', 0, 0]",2,0,2,6,5,Julian Merryweather
-8,top,strike,ball,Josh Rojas,3,"[1, 0, 0]","['Trevor Story', 0, 0]",0,1,2,6,5,Julian Merryweather
-8,top,ground_out,strike,Josh Rojas,3,"[1, 0, 0]","['Trevor Story', 0, 0]",0,1,3,6,5,Julian Merryweather
-8,bottom,ground_out,strike,Manny Machado,8,"[0, 0, 0]","[0, 0, 0]",0,0,1,6,5,Seranthony Domínguez
-8,bottom,double,strike,Seiya Suzuki,9,"[0, 1, 0]","[0, 'Seiya Suzuki', 0]",0,0,1,6,5,Seranthony Domínguez
-8,bottom,ball,ball,Brandon Belt,1,"[0, 1, 0]","[0, 'Seiya Suzuki', 0]",1,0,1,6,5,Seranthony Domínguez
-8,bottom,ball,ball,Brandon Belt,1,"[0, 1, 0]","[0, 'Seiya Suzuki', 0]",2,0,1,6,5,Seranthony Domínguez
-8,bottom,ball,ball,Brandon Belt,1,"[0, 1, 0]","[0, 'Seiya Suzuki', 0]",3,0,1,6,5,Seranthony Domínguez
-8,bottom,walk,ball,Brandon Belt,1,"[1, 1, 0]","['Brandon Belt', 'Seiya Suzuki', 0]",4,0,1,6,5,Seranthony Domínguez
-8,bottom,ball,ball,Randal Grichuk,2,"[1, 1, 0]","['Brandon Belt', 'Seiya Suzuki', 0]",1,0,1,6,5,Seranthony Domínguez
-8,bottom,ground_out,strike,Randal Grichuk,2,"[1, 1, 0]","['Brandon Belt', 'Seiya Suzuki', 0]",1,0,2,6,5,Seranthony Domínguez
-8,bottom,ground_out,strike,Shohei Ohtani,3,"[1, 1, 0]","['Brandon Belt', 'Seiya Suzuki', 0]",0,0,3,6,5,Seranthony Domínguez
-9,top,ground_out,strike,Dane Myers,4,"[0, 0, 0]","[0, 0, 0]",0,0,1,6,5,Julian Merryweather
-9,top,ball,ball,James McCann,5,"[0, 0, 0]","[0, 0, 0]",1,0,1,6,5,Julian Merryweather
-9,top,fly_out,strike,James McCann,5,"[0, 0, 0]","[0, 0, 0]",1,0,2,6,5,Julian Merryweather
-9,top,strike,strike,Edouard Julien,6,"[0, 0, 0]","[0, 0, 0]",0,1,2,6,5,Julian Merryweather
-9,top,strike,strike,Edouard Julien,6,"[0, 0, 0]","[0, 0, 0]",0,2,2,6,5,Julian Merryweather
-9,top,ball,ball,Edouard Julien,6,"[0, 0, 0]","[0, 0, 0]",1,2,2,6,5,Julian Merryweather
-9,top,ground_out,strike,Edouard Julien,6,"[0, 0, 0]","[0, 0, 0]",1,2,3,6,5,Julian Merryweather
-9,bottom,ball,ball,Jasson Domínguez,4,"[0, 0, 0]","[0, 0, 0]",1,0,0,6,5,Seranthony Domínguez
-9,bottom,ball,ball,Jasson Domínguez,4,"[0, 0, 0]","[0, 0, 0]",2,0,0,6,5,Seranthony Domínguez
-9,bottom,ball,ball,Jasson Domínguez,4,"[0, 0, 0]","[0, 0, 0]",3,0,0,6,5,Seranthony Domínguez
-9,bottom,ground_out,ball,Jasson Domínguez,4,"[0, 0, 0]","[0, 0, 0]",3,0,1,6,5,Seranthony Domínguez
-9,bottom,home_run,strike,Abraham Toro,5,"[0, 0, 0]","[0, 0, 0]",0,0,1,6,6,Seranthony Domínguez
-9,bottom,ground_out,ball,Miles Mastrobuoni,6,"[0, 0, 0]","[0, 0, 0]",0,0,2,6,6,Seranthony Domínguez
-9,bottom,ball,ball,Francisco Alvarez,7,"[0, 0, 0]","[0, 0, 0]",1,0,2,6,6,Seranthony Domínguez
-9,bottom,ground_out,strike,Francisco Alvarez,7,"[0, 0, 0]","[0, 0, 0]",1,0,3,6,6,Seranthony Domínguez
-10,top,ground_out,ball,Oswaldo Cabrera,7,"[0, 0, 0]","[0, 0, 0]",0,0,1,6,6,Julian Merryweather
-10,top,single,strike,Zach McKinstry,8,"[1, 0, 0]","['Zach McKinstry', 0, 0]",0,0,1,6,6,Julian Merryweather
-10,top,fly_out,strike,Otto Lopez,1,"[1, 0, 0]","['Zach McKinstry', 0, 0]",0,0,2,6,6,Julian Merryweather
-10,top,double,strike,Trevor Story,2,"[0, 1, 1]","[0, 'Trevor Story', 'Zach McKinstry']",0,0,2,6,6,Julian Merryweather
-10,top,ball,ball,Josh Rojas,3,"[0, 1, 1]","[0, 'Trevor Story', 'Zach McKinstry']",1,0,2,6,6,Julian Merryweather
-10,top,ball,ball,Josh Rojas,3,"[0, 1, 1]","[0, 'Trevor Story', 'Zach McKinstry']",2,0,2,6,6,Julian Merryweather
-10,top,ball,ball,Josh Rojas,3,"[0, 1, 1]","[0, 'Trevor Story', 'Zach McKinstry']",3,0,2,6,6,Julian Merryweather
-10,top,single,strike,Josh Rojas,3,"[1, 0, 1]","['Josh Rojas', 0, 'Trevor Story']",3,0,2,7,6,Julian Merryweather
-10,top,ball,ball,Dane Myers,4,"[1, 0, 1]","['Josh Rojas', 0, 'Trevor Story']",1,0,2,7,6,Julian Merryweather
-10,top,ground_out,ball,Dane Myers,4,"[1, 0, 1]","['Josh Rojas', 0, 'Trevor Story']",1,0,3,7,6,Julian Merryweather
-=======
-1,top,ball,ball,Elias Díaz,1,"[0, 0, 0]","[0, 0, 0]",1,0,0,0,0,Shane Baz
-1,top,strike,strike,Elias Díaz,1,"[0, 0, 0]","[0, 0, 0]",1,1,0,0,0,Shane Baz
-1,top,foul,strike,Elias Díaz,1,"[0, 0, 0]","[0, 0, 0]",1,2,0,0,0,Shane Baz
-1,top,ball,ball,Elias Díaz,1,"[0, 0, 0]","[0, 0, 0]",2,2,0,0,0,Shane Baz
-1,top,strikeout,strike,Elias Díaz,1,"[0, 0, 0]","[0, 0, 0]",2,3,1,0,0,Shane Baz
-1,top,ball,ball,Trent Grisham,2,"[0, 0, 0]","[0, 0, 0]",1,0,1,0,0,Shane Baz
-1,top,strike,strike,Trent Grisham,2,"[0, 0, 0]","[0, 0, 0]",1,1,1,0,0,Shane Baz
-1,top,ball,ball,Trent Grisham,2,"[0, 0, 0]","[0, 0, 0]",2,1,1,0,0,Shane Baz
-1,top,strike,strike,Trent Grisham,2,"[0, 0, 0]","[0, 0, 0]",2,2,1,0,0,Shane Baz
-1,top,strikeout,strike,Trent Grisham,2,"[0, 0, 0]","[0, 0, 0]",2,3,2,0,0,Shane Baz
-1,top,strike,strike,Luke Maile,3,"[0, 0, 0]","[0, 0, 0]",0,1,2,0,0,Shane Baz
-1,top,foul,strike,Luke Maile,3,"[0, 0, 0]","[0, 0, 0]",0,2,2,0,0,Shane Baz
-1,top,ball,ball,Luke Maile,3,"[0, 0, 0]","[0, 0, 0]",1,2,2,0,0,Shane Baz
-1,top,ball,ball,Luke Maile,3,"[0, 0, 0]","[0, 0, 0]",2,2,2,0,0,Shane Baz
-1,top,ground_out,strike,Luke Maile,3,"[0, 0, 0]","[0, 0, 0]",2,2,3,0,0,Shane Baz
-1,bottom,ground_out,strike,Jonah Bride,1,"[0, 0, 0]","[0, 0, 0]",0,0,1,0,0,Chris Sale
-1,bottom,ball,ball,Francisco Alvarez,2,"[0, 0, 0]","[0, 0, 0]",1,0,1,0,0,Chris Sale
-1,bottom,ball,ball,Francisco Alvarez,2,"[0, 0, 0]","[0, 0, 0]",2,0,1,0,0,Chris Sale
-1,bottom,strike,strike,Francisco Alvarez,2,"[0, 0, 0]","[0, 0, 0]",2,1,1,0,0,Chris Sale
-1,bottom,ball,ball,Francisco Alvarez,2,"[0, 0, 0]","[0, 0, 0]",3,1,1,0,0,Chris Sale
-1,bottom,walk,ball,Francisco Alvarez,2,"[1, 0, 0]","['Francisco Alvarez', 0, 0]",4,1,1,0,0,Chris Sale
-1,bottom,ball,ball,Seiya Suzuki,3,"[1, 0, 0]","['Francisco Alvarez', 0, 0]",1,0,1,0,0,Chris Sale
-1,bottom,triple,strike,Seiya Suzuki,3,"[0, 0, 1]","[0, 0, 'Seiya Suzuki']",1,0,1,0,1,Chris Sale
-1,bottom,ball,ball,Wilmer Flores,4,"[0, 0, 1]","[0, 0, 'Seiya Suzuki']",1,0,1,0,1,Chris Sale
-1,bottom,ground_out,strike,Wilmer Flores,4,"[0, 0, 1]","[0, 0, 'Seiya Suzuki']",1,0,2,0,1,Chris Sale
-1,bottom,ball,ball,Ozzie Albies,5,"[0, 0, 1]","[0, 0, 'Seiya Suzuki']",1,0,2,0,1,Chris Sale
-1,bottom,ground_out,strike,Ozzie Albies,5,"[0, 0, 1]","[0, 0, 'Seiya Suzuki']",1,0,3,0,1,Chris Sale
-2,top,foul,strike,Eugenio Suárez,4,"[0, 0, 0]","[0, 0, 0]",0,1,0,0,1,Shane Baz
-2,top,strike,strike,Eugenio Suárez,4,"[0, 0, 0]","[0, 0, 0]",0,2,0,0,1,Shane Baz
-2,top,strikeout,strike,Eugenio Suárez,4,"[0, 0, 0]","[0, 0, 0]",0,3,1,0,1,Shane Baz
-2,top,strike,strike,Jo Adell,5,"[0, 0, 0]","[0, 0, 0]",0,1,1,0,1,Shane Baz
-2,top,double,strike,Jo Adell,5,"[0, 1, 0]","[0, 'Jo Adell', 0]",0,1,1,0,1,Shane Baz
-2,top,foul,strike,Jordan Westburg,6,"[0, 1, 0]","[0, 'Jo Adell', 0]",0,1,1,0,1,Shane Baz
-2,top,strike,strike,Jordan Westburg,6,"[0, 1, 0]","[0, 'Jo Adell', 0]",0,2,1,0,1,Shane Baz
-2,top,strikeout,strike,Jordan Westburg,6,"[0, 1, 0]","[0, 'Jo Adell', 0]",0,3,2,0,1,Shane Baz
-2,top,single,strike,Dominic Fletcher,7,"[1, 0, 1]","['Dominic Fletcher', 0, 'Jo Adell']",0,0,2,0,1,Shane Baz
-2,top,strike,strike,Spencer Torkelson,8,"[1, 0, 1]","['Dominic Fletcher', 0, 'Jo Adell']",0,1,2,0,1,Shane Baz
-2,top,ball,ball,Spencer Torkelson,8,"[1, 0, 1]","['Dominic Fletcher', 0, 'Jo Adell']",1,1,2,0,1,Shane Baz
-2,top,ball,ball,Spencer Torkelson,8,"[1, 0, 1]","['Dominic Fletcher', 0, 'Jo Adell']",2,1,2,0,1,Shane Baz
-2,top,ball,ball,Spencer Torkelson,8,"[1, 0, 1]","['Dominic Fletcher', 0, 'Jo Adell']",3,1,2,0,1,Shane Baz
-2,top,ground_out,strike,Spencer Torkelson,8,"[1, 0, 1]","['Dominic Fletcher', 0, 'Jo Adell']",3,1,3,0,1,Shane Baz
-2,bottom,ball,ball,Reese McGuire,6,"[0, 0, 0]","[0, 0, 0]",1,0,0,0,1,Chris Sale
-2,bottom,strike,strike,Reese McGuire,6,"[0, 0, 0]","[0, 0, 0]",1,1,0,0,1,Chris Sale
-2,bottom,ball,ball,Reese McGuire,6,"[0, 0, 0]","[0, 0, 0]",2,1,0,0,1,Chris Sale
-2,bottom,strike,strike,Reese McGuire,6,"[0, 0, 0]","[0, 0, 0]",2,2,0,0,1,Chris Sale
-2,bottom,strikeout,strike,Reese McGuire,6,"[0, 0, 0]","[0, 0, 0]",2,3,1,0,1,Chris Sale
-2,bottom,ball,ball,Matt Shaw,7,"[0, 0, 0]","[0, 0, 0]",1,0,1,0,1,Chris Sale
-2,bottom,strike,strike,Matt Shaw,7,"[0, 0, 0]","[0, 0, 0]",1,1,1,0,1,Chris Sale
-2,bottom,strike,strike,Matt Shaw,7,"[0, 0, 0]","[0, 0, 0]",1,2,1,0,1,Chris Sale
-2,bottom,fly_out,strike,Matt Shaw,7,"[0, 0, 0]","[0, 0, 0]",1,2,2,0,1,Chris Sale
-2,bottom,ball,ball,Addison Barger,8,"[0, 0, 0]","[0, 0, 0]",1,0,2,0,1,Chris Sale
-2,bottom,foul,strike,Addison Barger,8,"[0, 0, 0]","[0, 0, 0]",1,1,2,0,1,Chris Sale
-2,bottom,ball,ball,Addison Barger,8,"[0, 0, 0]","[0, 0, 0]",2,1,2,0,1,Chris Sale
-2,bottom,ground_out,strike,Addison Barger,8,"[0, 0, 0]","[0, 0, 0]",2,1,3,0,1,Chris Sale
-3,top,foul,strike,Elias Díaz,1,"[0, 0, 0]","[0, 0, 0]",0,1,0,0,1,Shane Baz
-3,top,ball,ball,Elias Díaz,1,"[0, 0, 0]","[0, 0, 0]",1,1,0,0,1,Shane Baz
-3,top,strike,strike,Elias Díaz,1,"[0, 0, 0]","[0, 0, 0]",1,2,0,0,1,Shane Baz
-3,top,double,strike,Elias Díaz,1,"[0, 1, 0]","[0, 'Elias Díaz', 0]",1,2,0,0,1,Shane Baz
-3,top,foul,strike,Trent Grisham,2,"[0, 1, 0]","[0, 'Elias Díaz', 0]",0,1,0,0,1,Shane Baz
-3,top,ball,ball,Trent Grisham,2,"[0, 1, 0]","[0, 'Elias Díaz', 0]",1,1,0,0,1,Shane Baz
-3,top,ball,ball,Trent Grisham,2,"[0, 1, 0]","[0, 'Elias Díaz', 0]",2,1,0,0,1,Shane Baz
-3,top,ball,ball,Trent Grisham,2,"[0, 1, 0]","[0, 'Elias Díaz', 0]",3,1,0,0,1,Shane Baz
-3,top,walk,ball,Trent Grisham,2,"[1, 1, 0]","['Trent Grisham', 'Elias Díaz', 0]",4,1,0,0,1,Shane Baz
-3,top,ball,ball,Luke Maile,3,"[1, 1, 0]","['Trent Grisham', 'Elias Díaz', 0]",1,0,0,0,1,Shane Baz
-3,top,ground_out,strike,Luke Maile,3,"[1, 1, 0]","['Trent Grisham', 'Elias Díaz', 0]",1,0,1,0,1,Shane Baz
-3,top,strike,strike,Eugenio Suárez,4,"[1, 1, 0]","['Trent Grisham', 'Elias Díaz', 0]",0,1,1,0,1,Shane Baz
-3,top,strike,strike,Eugenio Suárez,4,"[1, 1, 0]","['Trent Grisham', 'Elias Díaz', 0]",0,2,1,0,1,Shane Baz
-3,top,ball,ball,Eugenio Suárez,4,"[1, 1, 0]","['Trent Grisham', 'Elias Díaz', 0]",1,2,1,0,1,Shane Baz
-3,top,ground_out,strike,Eugenio Suárez,4,"[1, 1, 0]","['Trent Grisham', 'Elias Díaz', 0]",1,2,2,0,1,Shane Baz
-3,top,ball,ball,Jo Adell,5,"[1, 1, 0]","['Trent Grisham', 'Elias Díaz', 0]",1,0,2,0,1,Shane Baz
-3,top,ball,ball,Jo Adell,5,"[1, 1, 0]","['Trent Grisham', 'Elias Díaz', 0]",2,0,2,0,1,Shane Baz
-3,top,strike,strike,Jo Adell,5,"[1, 1, 0]","['Trent Grisham', 'Elias Díaz', 0]",2,1,2,0,1,Shane Baz
-3,top,strike,strike,Jo Adell,5,"[1, 1, 0]","['Trent Grisham', 'Elias Díaz', 0]",2,2,2,0,1,Shane Baz
-3,top,strikeout,strike,Jo Adell,5,"[1, 1, 0]","['Trent Grisham', 'Elias Díaz', 0]",2,3,3,0,1,Shane Baz
-3,bottom,ball,ball,Tyler Fitzgerald,9,"[0, 0, 0]","[0, 0, 0]",1,0,0,0,1,Chris Sale
-3,bottom,strike,strike,Tyler Fitzgerald,9,"[0, 0, 0]","[0, 0, 0]",1,1,0,0,1,Chris Sale
-3,bottom,single,strike,Tyler Fitzgerald,9,"[1, 0, 0]","['Tyler Fitzgerald', 0, 0]",1,1,0,0,1,Chris Sale
-3,bottom,fly_out,strike,Jonah Bride,1,"[1, 0, 0]","['Tyler Fitzgerald', 0, 0]",0,0,1,0,1,Chris Sale
-3,bottom,triple,strike,Francisco Alvarez,2,"[0, 0, 1]","[0, 0, 'Francisco Alvarez']",0,0,1,0,2,Chris Sale
-3,bottom,ball,ball,Seiya Suzuki,3,"[0, 0, 1]","[0, 0, 'Francisco Alvarez']",1,0,1,0,2,Chris Sale
-3,bottom,strike,strike,Seiya Suzuki,3,"[0, 0, 1]","[0, 0, 'Francisco Alvarez']",1,1,1,0,2,Chris Sale
-3,bottom,ball,ball,Seiya Suzuki,3,"[0, 0, 1]","[0, 0, 'Francisco Alvarez']",2,1,1,0,2,Chris Sale
-3,bottom,ground_out,strike,Seiya Suzuki,3,"[0, 0, 1]","[0, 0, 'Francisco Alvarez']",2,1,2,0,2,Chris Sale
-3,bottom,strike,strike,Wilmer Flores,4,"[0, 0, 1]","[0, 0, 'Francisco Alvarez']",0,1,2,0,2,Chris Sale
-3,bottom,ground_out,strike,Wilmer Flores,4,"[0, 0, 1]","[0, 0, 'Francisco Alvarez']",0,1,3,0,2,Chris Sale
-4,top,ball,ball,Jordan Westburg,6,"[0, 0, 0]","[0, 0, 0]",1,0,0,0,2,Shane Baz
-4,top,ground_out,strike,Jordan Westburg,6,"[0, 0, 0]","[0, 0, 0]",1,0,1,0,2,Shane Baz
-4,top,strike,strike,Dominic Fletcher,7,"[0, 0, 0]","[0, 0, 0]",0,1,1,0,2,Shane Baz
-4,top,ball,ball,Dominic Fletcher,7,"[0, 0, 0]","[0, 0, 0]",1,1,1,0,2,Shane Baz
-4,top,strike,strike,Dominic Fletcher,7,"[0, 0, 0]","[0, 0, 0]",1,2,1,0,2,Shane Baz
-4,top,strikeout,strike,Dominic Fletcher,7,"[0, 0, 0]","[0, 0, 0]",1,3,2,0,2,Shane Baz
-4,top,foul,strike,Spencer Torkelson,8,"[0, 0, 0]","[0, 0, 0]",0,1,2,0,2,Shane Baz
-4,top,fly_out,strike,Spencer Torkelson,8,"[0, 0, 0]","[0, 0, 0]",0,1,3,0,2,Shane Baz
-4,bottom,single,strike,Ozzie Albies,5,"[1, 0, 0]","['Ozzie Albies', 0, 0]",0,0,0,0,2,Chris Sale
-4,bottom,ball,ball,Reese McGuire,6,"[1, 0, 0]","['Ozzie Albies', 0, 0]",1,0,0,0,2,Chris Sale
-4,bottom,fly_out,strike,Reese McGuire,6,"[1, 0, 0]","['Ozzie Albies', 0, 0]",1,0,1,0,2,Chris Sale
-4,bottom,ball,ball,Matt Shaw,7,"[1, 0, 0]","['Ozzie Albies', 0, 0]",1,0,1,0,2,Chris Sale
-4,bottom,strike,strike,Matt Shaw,7,"[1, 0, 0]","['Ozzie Albies', 0, 0]",1,1,1,0,2,Chris Sale
-4,bottom,strike,strike,Matt Shaw,7,"[1, 0, 0]","['Ozzie Albies', 0, 0]",1,2,1,0,2,Chris Sale
-4,bottom,ball,ball,Matt Shaw,7,"[1, 0, 0]","['Ozzie Albies', 0, 0]",2,2,1,0,2,Chris Sale
-4,bottom,fly_out,strike,Matt Shaw,7,"[1, 0, 0]","['Ozzie Albies', 0, 0]",2,2,2,0,2,Chris Sale
-4,bottom,fly_out,strike,Addison Barger,8,"[1, 0, 0]","['Ozzie Albies', 0, 0]",0,0,3,0,2,Chris Sale
-5,top,ground_out,strike,Elias Díaz,1,"[0, 0, 0]","[0, 0, 0]",0,0,1,0,2,Shane Baz
-5,top,ball,ball,Trent Grisham,2,"[0, 0, 0]","[0, 0, 0]",1,0,1,0,2,Shane Baz
-5,top,ball,ball,Trent Grisham,2,"[0, 0, 0]","[0, 0, 0]",2,0,1,0,2,Shane Baz
-5,top,foul,strike,Trent Grisham,2,"[0, 0, 0]","[0, 0, 0]",2,1,1,0,2,Shane Baz
-5,top,strike,strike,Trent Grisham,2,"[0, 0, 0]","[0, 0, 0]",2,2,1,0,2,Shane Baz
-5,top,strikeout,strike,Trent Grisham,2,"[0, 0, 0]","[0, 0, 0]",2,3,2,0,2,Shane Baz
-5,top,fly_out,strike,Luke Maile,3,"[0, 0, 0]","[0, 0, 0]",0,0,3,0,2,Shane Baz
-5,bottom,fly_out,strike,Tyler Fitzgerald,9,"[0, 0, 0]","[0, 0, 0]",0,0,1,0,2,Chris Sale
-5,bottom,strike,strike,Jonah Bride,1,"[0, 0, 0]","[0, 0, 0]",0,1,1,0,2,Chris Sale
-5,bottom,strike,strike,Jonah Bride,1,"[0, 0, 0]","[0, 0, 0]",0,2,1,0,2,Chris Sale
-5,bottom,fly_out,strike,Jonah Bride,1,"[0, 0, 0]","[0, 0, 0]",0,2,2,0,2,Chris Sale
-5,bottom,double,strike,Francisco Alvarez,2,"[0, 1, 0]","[0, 'Francisco Alvarez', 0]",0,0,2,0,2,Chris Sale
-5,bottom,single,strike,Seiya Suzuki,3,"[1, 0, 1]","['Seiya Suzuki', 0, 'Francisco Alvarez']",0,0,2,0,2,Chris Sale
-5,bottom,strike,strike,Wilmer Flores,4,"[1, 0, 1]","['Seiya Suzuki', 0, 'Francisco Alvarez']",0,1,2,0,2,Chris Sale
-5,bottom,ball,ball,Wilmer Flores,4,"[1, 0, 1]","['Seiya Suzuki', 0, 'Francisco Alvarez']",1,1,2,0,2,Chris Sale
-5,bottom,ball,ball,Wilmer Flores,4,"[1, 0, 1]","['Seiya Suzuki', 0, 'Francisco Alvarez']",2,1,2,0,2,Chris Sale
-5,bottom,ball,ball,Wilmer Flores,4,"[1, 0, 1]","['Seiya Suzuki', 0, 'Francisco Alvarez']",3,1,2,0,2,Chris Sale
-5,bottom,walk,ball,Wilmer Flores,4,"[1, 1, 1]","['Wilmer Flores', 'Seiya Suzuki', 'Francisco Alvarez']",4,1,2,0,2,Chris Sale
-5,bottom,fly_out,strike,Ozzie Albies,5,"[1, 1, 1]","['Wilmer Flores', 'Seiya Suzuki', 'Francisco Alvarez']",0,0,3,0,2,Chris Sale
-6,top,ball,ball,Eugenio Suárez,4,"[0, 0, 0]","[0, 0, 0]",1,0,0,0,2,Shane Baz
-6,top,strike,strike,Eugenio Suárez,4,"[0, 0, 0]","[0, 0, 0]",1,1,0,0,2,Shane Baz
-6,top,ball,ball,Eugenio Suárez,4,"[0, 0, 0]","[0, 0, 0]",2,1,0,0,2,Shane Baz
-6,top,ground_out,strike,Eugenio Suárez,4,"[0, 0, 0]","[0, 0, 0]",2,1,1,0,2,Shane Baz
-6,top,fly_out,strike,Jo Adell,5,"[0, 0, 0]","[0, 0, 0]",0,0,2,0,2,Shane Baz
-6,top,ball,ball,Jordan Westburg,6,"[0, 0, 0]","[0, 0, 0]",1,0,2,0,2,Shane Baz
-6,top,foul,strike,Jordan Westburg,6,"[0, 0, 0]","[0, 0, 0]",1,1,2,0,2,Shane Baz
-6,top,ball,ball,Jordan Westburg,6,"[0, 0, 0]","[0, 0, 0]",2,1,2,0,2,Shane Baz
-6,top,ball,ball,Jordan Westburg,6,"[0, 0, 0]","[0, 0, 0]",3,1,2,0,2,Shane Baz
-6,top,walk,ball,Jordan Westburg,6,"[1, 0, 0]","['Jordan Westburg', 0, 0]",4,1,2,0,2,Shane Baz
-6,top,strike,strike,Dominic Fletcher,7,"[1, 0, 0]","['Jordan Westburg', 0, 0]",0,1,2,0,2,Shane Baz
-6,top,ball,ball,Dominic Fletcher,7,"[1, 0, 0]","['Jordan Westburg', 0, 0]",1,1,2,0,2,Shane Baz
-6,top,strike,strike,Dominic Fletcher,7,"[1, 0, 0]","['Jordan Westburg', 0, 0]",1,2,2,0,2,Shane Baz
-6,top,strikeout,strike,Dominic Fletcher,7,"[1, 0, 0]","['Jordan Westburg', 0, 0]",1,3,3,0,2,Shane Baz
-6,bottom,foul,strike,Reese McGuire,6,"[0, 0, 0]","[0, 0, 0]",0,1,0,0,2,Chris Sale
-6,bottom,ball,ball,Reese McGuire,6,"[0, 0, 0]","[0, 0, 0]",1,1,0,0,2,Chris Sale
-6,bottom,ball,ball,Reese McGuire,6,"[0, 0, 0]","[0, 0, 0]",2,1,0,0,2,Chris Sale
-6,bottom,single,strike,Reese McGuire,6,"[1, 0, 0]","['Reese McGuire', 0, 0]",2,1,0,0,2,Chris Sale
-6,bottom,ball,ball,Matt Shaw,7,"[1, 0, 0]","['Reese McGuire', 0, 0]",1,0,0,0,2,Chris Sale
-6,bottom,ball,ball,Matt Shaw,7,"[1, 0, 0]","['Reese McGuire', 0, 0]",2,0,0,0,2,Chris Sale
-6,bottom,strike,strike,Matt Shaw,7,"[1, 0, 0]","['Reese McGuire', 0, 0]",2,1,0,0,2,Chris Sale
-6,bottom,strike,strike,Matt Shaw,7,"[1, 0, 0]","['Reese McGuire', 0, 0]",2,2,0,0,2,Chris Sale
-6,bottom,strikeout,strike,Matt Shaw,7,"[1, 0, 0]","['Reese McGuire', 0, 0]",2,3,1,0,2,Chris Sale
-6,bottom,ball,ball,Addison Barger,8,"[1, 0, 0]","['Reese McGuire', 0, 0]",1,0,1,0,2,Chris Sale
-6,bottom,foul,strike,Addison Barger,8,"[1, 0, 0]","['Reese McGuire', 0, 0]",1,1,1,0,2,Chris Sale
-6,bottom,strike,strike,Addison Barger,8,"[1, 0, 0]","['Reese McGuire', 0, 0]",1,2,1,0,2,Chris Sale
-6,bottom,strikeout,strike,Addison Barger,8,"[1, 0, 0]","['Reese McGuire', 0, 0]",1,3,2,0,2,Chris Sale
-6,bottom,ground_out,strike,Tyler Fitzgerald,9,"[1, 0, 0]","['Reese McGuire', 0, 0]",0,0,3,0,2,Chris Sale
-7,top,strike,strike,Spencer Torkelson,8,"[0, 0, 0]","[0, 0, 0]",0,1,0,0,2,Shane Baz
-7,top,ball,ball,Spencer Torkelson,8,"[0, 0, 0]","[0, 0, 0]",1,1,0,0,2,Shane Baz
-7,top,single,strike,Spencer Torkelson,8,"[1, 0, 0]","['Spencer Torkelson', 0, 0]",1,1,0,0,2,Shane Baz
-7,top,ball,ball,Elias Díaz,1,"[1, 0, 0]","['Spencer Torkelson', 0, 0]",1,0,0,0,2,Shane Baz
-7,top,ball,ball,Elias Díaz,1,"[1, 0, 0]","['Spencer Torkelson', 0, 0]",2,0,0,0,2,Shane Baz
-7,top,ball,ball,Elias Díaz,1,"[1, 0, 0]","['Spencer Torkelson', 0, 0]",3,0,0,0,2,Shane Baz
-7,top,walk,ball,Elias Díaz,1,"[1, 1, 0]","['Elias Díaz', 'Spencer Torkelson', 0]",4,0,0,0,2,Shane Baz
-7,top,ball,ball,Trent Grisham,2,"[1, 1, 0]","['Elias Díaz', 'Spencer Torkelson', 0]",1,0,0,0,2,Shane Baz
-7,top,ball,ball,Trent Grisham,2,"[1, 1, 0]","['Elias Díaz', 'Spencer Torkelson', 0]",2,0,0,0,2,Shane Baz
-7,top,foul,strike,Trent Grisham,2,"[1, 1, 0]","['Elias Díaz', 'Spencer Torkelson', 0]",2,1,0,0,2,Shane Baz
-7,top,ball,ball,Trent Grisham,2,"[1, 1, 0]","['Elias Díaz', 'Spencer Torkelson', 0]",3,1,0,0,2,Shane Baz
-7,top,strike,strike,Trent Grisham,2,"[1, 1, 0]","['Elias Díaz', 'Spencer Torkelson', 0]",3,2,0,0,2,Shane Baz
-7,top,strikeout,strike,Trent Grisham,2,"[1, 1, 0]","['Elias Díaz', 'Spencer Torkelson', 0]",3,3,1,0,2,Shane Baz
-7,top,foul,strike,Luke Maile,3,"[1, 1, 0]","['Elias Díaz', 'Spencer Torkelson', 0]",0,1,1,0,2,Shane Baz
-7,top,ball,ball,Luke Maile,3,"[1, 1, 0]","['Elias Díaz', 'Spencer Torkelson', 0]",1,1,1,0,2,Shane Baz
-7,top,strike,strike,Luke Maile,3,"[1, 1, 0]","['Elias Díaz', 'Spencer Torkelson', 0]",1,2,1,0,2,Shane Baz
-7,top,ground_out,strike,Luke Maile,3,"[1, 1, 0]","['Elias Díaz', 'Spencer Torkelson', 0]",1,2,2,0,2,Shane Baz
-7,top,strike,strike,Eugenio Suárez,4,"[1, 1, 0]","['Elias Díaz', 'Spencer Torkelson', 0]",0,1,2,0,2,Shane Baz
-7,top,strike,strike,Eugenio Suárez,4,"[1, 1, 0]","['Elias Díaz', 'Spencer Torkelson', 0]",0,2,2,0,2,Shane Baz
-7,top,foul,strike,Eugenio Suárez,4,"[1, 1, 0]","['Elias Díaz', 'Spencer Torkelson', 0]",0,2,2,0,2,Shane Baz
-7,top,strikeout,strike,Eugenio Suárez,4,"[1, 1, 0]","['Elias Díaz', 'Spencer Torkelson', 0]",0,3,3,0,2,Shane Baz
-7,bottom,single,strike,Jonah Bride,1,"[1, 0, 0]","['Jonah Bride', 0, 0]",0,0,0,0,2,Chris Sale
-7,bottom,strike,strike,Francisco Alvarez,2,"[1, 0, 0]","['Jonah Bride', 0, 0]",0,1,0,0,2,Chris Sale
-7,bottom,strike,strike,Francisco Alvarez,2,"[1, 0, 0]","['Jonah Bride', 0, 0]",0,2,0,0,2,Chris Sale
-7,bottom,ground_out,strike,Francisco Alvarez,2,"[1, 0, 0]","['Jonah Bride', 0, 0]",0,2,1,0,2,Chris Sale
-7,bottom,ball,ball,Seiya Suzuki,3,"[1, 0, 0]","['Jonah Bride', 0, 0]",1,0,1,0,2,Chris Sale
-7,bottom,strike,strike,Seiya Suzuki,3,"[1, 0, 0]","['Jonah Bride', 0, 0]",1,1,1,0,2,Chris Sale
-7,bottom,fly_out,strike,Seiya Suzuki,3,"[1, 0, 0]","['Jonah Bride', 0, 0]",1,1,2,0,2,Chris Sale
-7,bottom,foul,strike,Wilmer Flores,4,"[1, 0, 0]","['Jonah Bride', 0, 0]",0,1,2,0,2,Chris Sale
-7,bottom,foul,strike,Wilmer Flores,4,"[1, 0, 0]","['Jonah Bride', 0, 0]",0,2,2,0,2,Chris Sale
-7,bottom,strikeout,strike,Wilmer Flores,4,"[1, 0, 0]","['Jonah Bride', 0, 0]",0,3,3,0,2,Chris Sale
-8,top,strike,strike,Jo Adell,5,"[0, 0, 0]","[0, 0, 0]",0,1,0,0,2,Shane Baz
-8,top,foul,strike,Jo Adell,5,"[0, 0, 0]","[0, 0, 0]",0,2,0,0,2,Shane Baz
-8,top,double,strike,Jo Adell,5,"[0, 1, 0]","[0, 'Jo Adell', 0]",0,2,0,0,2,Shane Baz
-8,top,strike,strike,Jordan Westburg,6,"[0, 1, 0]","[0, 'Jo Adell', 0]",0,1,0,0,2,Shane Baz
-8,top,ground_out,strike,Jordan Westburg,6,"[0, 1, 0]","[0, 'Jo Adell', 0]",0,1,1,0,2,Shane Baz
-8,top,ground_out,strike,Dominic Fletcher,7,"[0, 1, 0]","[0, 'Jo Adell', 0]",0,0,2,0,2,Shane Baz
-8,top,fly_out,strike,Spencer Torkelson,8,"[0, 1, 0]","[0, 'Jo Adell', 0]",0,0,3,0,2,Shane Baz
-8,bottom,ball,ball,Ozzie Albies,5,"[0, 0, 0]","[0, 0, 0]",1,0,0,0,2,Chris Sale
-8,bottom,strike,strike,Ozzie Albies,5,"[0, 0, 0]","[0, 0, 0]",1,1,0,0,2,Chris Sale
-8,bottom,strike,strike,Ozzie Albies,5,"[0, 0, 0]","[0, 0, 0]",1,2,0,0,2,Chris Sale
-8,bottom,ground_out,strike,Ozzie Albies,5,"[0, 0, 0]","[0, 0, 0]",1,2,1,0,2,Chris Sale
-8,bottom,strike,strike,Reese McGuire,6,"[0, 0, 0]","[0, 0, 0]",0,1,1,0,2,Chris Sale
-8,bottom,single,strike,Reese McGuire,6,"[1, 0, 0]","['Reese McGuire', 0, 0]",0,1,1,0,2,Chris Sale
-8,bottom,foul,strike,Matt Shaw,7,"[1, 0, 0]","['Reese McGuire', 0, 0]",0,1,1,0,2,Chris Sale
-8,bottom,ground_out,strike,Matt Shaw,7,"[1, 0, 0]","['Reese McGuire', 0, 0]",0,1,2,0,2,Chris Sale
-8,bottom,ball,ball,Addison Barger,8,"[1, 0, 0]","['Reese McGuire', 0, 0]",1,0,2,0,2,Chris Sale
-8,bottom,strike,strike,Addison Barger,8,"[1, 0, 0]","['Reese McGuire', 0, 0]",1,1,2,0,2,Chris Sale
-8,bottom,fly_out,strike,Addison Barger,8,"[1, 0, 0]","['Reese McGuire', 0, 0]",1,1,3,0,2,Chris Sale
-9,top,ball,ball,Elias Díaz,1,"[0, 0, 0]","[0, 0, 0]",1,0,0,0,2,Shane Baz
-9,top,ground_out,strike,Elias Díaz,1,"[0, 0, 0]","[0, 0, 0]",1,0,1,0,2,Shane Baz
-9,top,ground_out,strike,Trent Grisham,2,"[0, 0, 0]","[0, 0, 0]",0,0,2,0,2,Shane Baz
-9,top,ground_out,strike,Luke Maile,3,"[0, 0, 0]","[0, 0, 0]",0,0,3,0,2,Shane Baz
->>>>>>> origin/main
+1,top,ball,ball,Andrew Knizner,1,"[0, 0, 0]","[0, 0, 0]",1,0,0,0,0,Ryne Stanek
+1,top,strike,strike,Andrew Knizner,1,"[0, 0, 0]","[0, 0, 0]",1,1,0,0,0,Ryne Stanek
+1,top,ball,ball,Andrew Knizner,1,"[0, 0, 0]","[0, 0, 0]",2,1,0,0,0,Ryne Stanek
+1,top,single,strike,Andrew Knizner,1,"[1, 0, 0]","['Andrew Knizner', 0, 0]",2,1,0,0,0,Ryne Stanek
+1,top,ball,ball,Nick Ahmed,2,"[1, 0, 0]","['Andrew Knizner', 0, 0]",1,0,0,0,0,Ryne Stanek
+1,top,strike,strike,Nick Ahmed,2,"[1, 0, 0]","['Andrew Knizner', 0, 0]",1,1,0,0,0,Ryne Stanek
+1,top,double,strike,Nick Ahmed,2,"[0, 1, 1]","[0, 'Nick Ahmed', 'Andrew Knizner']",1,1,0,0,0,Ryne Stanek
+1,top,ball,ball,CJ Abrams,3,"[0, 1, 1]","[0, 'Nick Ahmed', 'Andrew Knizner']",1,0,0,0,0,Ryne Stanek
+1,top,fly_out,strike,CJ Abrams,3,"[0, 1, 1]","[0, 'Nick Ahmed', 'Andrew Knizner']",1,0,1,0,0,Ryne Stanek
+1,top,ground_out,strike,Matt Chapman,4,"[0, 1, 1]","[0, 'Nick Ahmed', 'Andrew Knizner']",0,0,2,0,0,Ryne Stanek
+1,top,ball,ball,Victor Robles,5,"[0, 1, 1]","[0, 'Nick Ahmed', 'Andrew Knizner']",1,0,2,0,0,Ryne Stanek
+1,top,home_run,strike,Victor Robles,5,"[0, 0, 0]","[0, 0, 0]",1,0,2,3,0,Ryne Stanek
+1,top,double,strike,Ryan McMahon,6,"[0, 1, 0]","[0, 'Ryan McMahon', 0]",0,0,2,3,0,Ryne Stanek
+1,top,strike,strike,Josh Jung,7,"[0, 1, 0]","[0, 'Ryan McMahon', 0]",0,1,2,3,0,Ryne Stanek
+1,top,ground_out,strike,Josh Jung,7,"[0, 1, 0]","[0, 'Ryan McMahon', 0]",0,1,3,3,0,Ryne Stanek
+1,bottom,ball,ball,Jarred Kelenic,1,"[0, 0, 0]","[0, 0, 0]",1,0,0,3,0,Chris Sale
+1,bottom,ball,ball,Jarred Kelenic,1,"[0, 0, 0]","[0, 0, 0]",2,0,0,3,0,Chris Sale
+1,bottom,strike,strike,Jarred Kelenic,1,"[0, 0, 0]","[0, 0, 0]",2,1,0,3,0,Chris Sale
+1,bottom,ball,ball,Jarred Kelenic,1,"[0, 0, 0]","[0, 0, 0]",3,1,0,3,0,Chris Sale
+1,bottom,walk,ball,Jarred Kelenic,1,"[1, 0, 0]","['Jarred Kelenic', 0, 0]",4,1,0,3,0,Chris Sale
+1,bottom,ball,ball,Brendan Rodgers,2,"[1, 0, 0]","['Jarred Kelenic', 0, 0]",1,0,0,3,0,Chris Sale
+1,bottom,single,strike,Brendan Rodgers,2,"[1, 1, 0]","['Brendan Rodgers', 'Jarred Kelenic', 0]",1,0,0,3,0,Chris Sale
+1,bottom,ball,ball,Sam Haggerty,3,"[1, 1, 0]","['Brendan Rodgers', 'Jarred Kelenic', 0]",1,0,0,3,0,Chris Sale
+1,bottom,strike,strike,Sam Haggerty,3,"[1, 1, 0]","['Brendan Rodgers', 'Jarred Kelenic', 0]",1,1,0,3,0,Chris Sale
+1,bottom,ball,ball,Sam Haggerty,3,"[1, 1, 0]","['Brendan Rodgers', 'Jarred Kelenic', 0]",2,1,0,3,0,Chris Sale
+1,bottom,fly_out,strike,Sam Haggerty,3,"[1, 1, 0]","['Brendan Rodgers', 'Jarred Kelenic', 0]",2,1,1,3,0,Chris Sale
+1,bottom,ball,ball,Eduardo Escobar,4,"[1, 1, 0]","['Brendan Rodgers', 'Jarred Kelenic', 0]",1,0,1,3,0,Chris Sale
+1,bottom,single,strike,Eduardo Escobar,4,"[1, 1, 1]","['Eduardo Escobar', 'Brendan Rodgers', 'Jarred Kelenic']",1,0,1,3,0,Chris Sale
+1,bottom,ball,ball,Miguel Vargas,5,"[1, 1, 1]","['Eduardo Escobar', 'Brendan Rodgers', 'Jarred Kelenic']",1,0,1,3,0,Chris Sale
+1,bottom,foul,strike,Miguel Vargas,5,"[1, 1, 1]","['Eduardo Escobar', 'Brendan Rodgers', 'Jarred Kelenic']",1,1,1,3,0,Chris Sale
+1,bottom,triple,strike,Miguel Vargas,5,"[0, 0, 1]","[0, 0, 'Miguel Vargas']",1,1,1,3,3,Chris Sale
+1,bottom,ball,ball,Luis Torrens,6,"[0, 0, 1]","[0, 0, 'Miguel Vargas']",1,0,1,3,3,Chris Sale
+1,bottom,ball,ball,Luis Torrens,6,"[0, 0, 1]","[0, 0, 'Miguel Vargas']",2,0,1,3,3,Chris Sale
+1,bottom,single,strike,Luis Torrens,6,"[1, 0, 0]","['Luis Torrens', 0, 0]",2,0,1,3,4,Chris Sale
+1,bottom,strike,strike,Dane Myers,7,"[1, 0, 0]","['Luis Torrens', 0, 0]",0,1,1,3,4,Chris Sale
+1,bottom,strike,strike,Dane Myers,7,"[1, 0, 0]","['Luis Torrens', 0, 0]",0,2,1,3,4,Chris Sale
+1,bottom,ball,ball,Dane Myers,7,"[1, 0, 0]","['Luis Torrens', 0, 0]",1,2,1,3,4,Chris Sale
+1,bottom,foul,strike,Dane Myers,7,"[1, 0, 0]","['Luis Torrens', 0, 0]",1,2,1,3,4,Chris Sale
+1,bottom,strikeout,strike,Dane Myers,7,"[1, 0, 0]","['Luis Torrens', 0, 0]",1,3,2,3,4,Chris Sale
+1,bottom,ball,ball,Colt Keith,8,"[1, 0, 0]","['Luis Torrens', 0, 0]",1,0,2,3,4,Chris Sale
+1,bottom,strike,strike,Colt Keith,8,"[1, 0, 0]","['Luis Torrens', 0, 0]",1,1,2,3,4,Chris Sale
+1,bottom,foul,strike,Colt Keith,8,"[1, 0, 0]","['Luis Torrens', 0, 0]",1,2,2,3,4,Chris Sale
+1,bottom,ball,ball,Colt Keith,8,"[1, 0, 0]","['Luis Torrens', 0, 0]",2,2,2,3,4,Chris Sale
+1,bottom,foul,strike,Colt Keith,8,"[1, 0, 0]","['Luis Torrens', 0, 0]",2,2,2,3,4,Chris Sale
+1,bottom,strikeout,strike,Colt Keith,8,"[1, 0, 0]","['Luis Torrens', 0, 0]",2,3,3,3,4,Chris Sale
+2,top,ball,ball,Christian Yelich,8,"[0, 0, 0]","[0, 0, 0]",1,0,0,3,4,Ryne Stanek
+2,top,ground_out,strike,Christian Yelich,8,"[0, 0, 0]","[0, 0, 0]",1,0,1,3,4,Ryne Stanek
+2,top,ball,ball,Ronald Acuña Jr.,9,"[0, 0, 0]","[0, 0, 0]",1,0,1,3,4,Ryne Stanek
+2,top,strike,strike,Ronald Acuña Jr.,9,"[0, 0, 0]","[0, 0, 0]",1,1,1,3,4,Ryne Stanek
+2,top,ball,ball,Ronald Acuña Jr.,9,"[0, 0, 0]","[0, 0, 0]",2,1,1,3,4,Ryne Stanek
+2,top,home_run,strike,Ronald Acuña Jr.,9,"[0, 0, 0]","[0, 0, 0]",2,1,1,4,4,Ryne Stanek
+2,top,ball,ball,Andrew Knizner,1,"[0, 0, 0]","[0, 0, 0]",1,0,1,4,4,Ryne Stanek
+2,top,strike,strike,Andrew Knizner,1,"[0, 0, 0]","[0, 0, 0]",1,1,1,4,4,Ryne Stanek
+2,top,strike,strike,Andrew Knizner,1,"[0, 0, 0]","[0, 0, 0]",1,2,1,4,4,Ryne Stanek
+2,top,foul,strike,Andrew Knizner,1,"[0, 0, 0]","[0, 0, 0]",1,2,1,4,4,Ryne Stanek
+2,top,foul,strike,Andrew Knizner,1,"[0, 0, 0]","[0, 0, 0]",1,2,1,4,4,Ryne Stanek
+2,top,foul,strike,Andrew Knizner,1,"[0, 0, 0]","[0, 0, 0]",1,2,1,4,4,Ryne Stanek
+2,top,fly_out,strike,Andrew Knizner,1,"[0, 0, 0]","[0, 0, 0]",1,2,2,4,4,Ryne Stanek
+2,top,foul,strike,Nick Ahmed,2,"[0, 0, 0]","[0, 0, 0]",0,1,2,4,4,Ryne Stanek
+2,top,ball,ball,Nick Ahmed,2,"[0, 0, 0]","[0, 0, 0]",1,1,2,4,4,Ryne Stanek
+2,top,ball,ball,Nick Ahmed,2,"[0, 0, 0]","[0, 0, 0]",2,1,2,4,4,Ryne Stanek
+2,top,fly_out,strike,Nick Ahmed,2,"[0, 0, 0]","[0, 0, 0]",2,1,3,4,4,Ryne Stanek
+2,bottom,foul,strike,Matt Shaw,9,"[0, 0, 0]","[0, 0, 0]",0,1,0,4,4,Chris Sale
+2,bottom,ball,ball,Matt Shaw,9,"[0, 0, 0]","[0, 0, 0]",1,1,0,4,4,Chris Sale
+2,bottom,strike,strike,Matt Shaw,9,"[0, 0, 0]","[0, 0, 0]",1,2,0,4,4,Chris Sale
+2,bottom,strikeout,strike,Matt Shaw,9,"[0, 0, 0]","[0, 0, 0]",1,3,1,4,4,Chris Sale
+2,bottom,strike,strike,Jarred Kelenic,1,"[0, 0, 0]","[0, 0, 0]",0,1,1,4,4,Chris Sale
+2,bottom,strike,strike,Jarred Kelenic,1,"[0, 0, 0]","[0, 0, 0]",0,2,1,4,4,Chris Sale
+2,bottom,strikeout,strike,Jarred Kelenic,1,"[0, 0, 0]","[0, 0, 0]",0,3,2,4,4,Chris Sale
+2,bottom,strike,strike,Brendan Rodgers,2,"[0, 0, 0]","[0, 0, 0]",0,1,2,4,4,Chris Sale
+2,bottom,strike,strike,Brendan Rodgers,2,"[0, 0, 0]","[0, 0, 0]",0,2,2,4,4,Chris Sale
+2,bottom,strikeout,strike,Brendan Rodgers,2,"[0, 0, 0]","[0, 0, 0]",0,3,3,4,4,Chris Sale
+3,top,strike,strike,CJ Abrams,3,"[0, 0, 0]","[0, 0, 0]",0,1,0,4,4,Ryne Stanek
+3,top,strike,strike,CJ Abrams,3,"[0, 0, 0]","[0, 0, 0]",0,2,0,4,4,Ryne Stanek
+3,top,strikeout,strike,CJ Abrams,3,"[0, 0, 0]","[0, 0, 0]",0,3,1,4,4,Ryne Stanek
+3,top,foul,strike,Matt Chapman,4,"[0, 0, 0]","[0, 0, 0]",0,1,1,4,4,Ryne Stanek
+3,top,ball,ball,Matt Chapman,4,"[0, 0, 0]","[0, 0, 0]",1,1,1,4,4,Ryne Stanek
+3,top,double,strike,Matt Chapman,4,"[0, 1, 0]","[0, 'Matt Chapman', 0]",1,1,1,4,4,Ryne Stanek
+3,top,ball,ball,Victor Robles,5,"[0, 1, 0]","[0, 'Matt Chapman', 0]",1,0,1,4,4,Ryne Stanek
+3,top,ground_out,strike,Victor Robles,5,"[0, 1, 0]","[0, 'Matt Chapman', 0]",1,0,2,4,4,Ryne Stanek
+3,top,single,strike,Ryan McMahon,6,"[1, 0, 1]","['Ryan McMahon', 0, 'Matt Chapman']",0,0,2,4,4,Ryne Stanek
+3,top,double,strike,Josh Jung,7,"[0, 1, 1]","[0, 'Josh Jung', 'Ryan McMahon']",0,0,2,5,4,Ryne Stanek
+3,top,ball,ball,Christian Yelich,8,"[0, 1, 1]","[0, 'Josh Jung', 'Ryan McMahon']",1,0,2,5,4,Ryne Stanek
+3,top,ball,ball,Christian Yelich,8,"[0, 1, 1]","[0, 'Josh Jung', 'Ryan McMahon']",2,0,2,5,4,Ryne Stanek
+3,top,ball,ball,Christian Yelich,8,"[0, 1, 1]","[0, 'Josh Jung', 'Ryan McMahon']",3,0,2,5,4,Ryne Stanek
+3,top,walk,ball,Christian Yelich,8,"[1, 1, 1]","['Christian Yelich', 'Josh Jung', 'Ryan McMahon']",4,0,2,5,4,Ryne Stanek
+3,top,ground_out,strike,Ronald Acuña Jr.,9,"[1, 1, 1]","['Christian Yelich', 'Josh Jung', 'Ryan McMahon']",0,0,3,5,4,Ryne Stanek
+3,bottom,strike,strike,Sam Haggerty,3,"[0, 0, 0]","[0, 0, 0]",0,1,0,5,4,Chris Sale
+3,bottom,ground_out,strike,Sam Haggerty,3,"[0, 0, 0]","[0, 0, 0]",0,1,1,5,4,Chris Sale
+3,bottom,home_run,strike,Eduardo Escobar,4,"[0, 0, 0]","[0, 0, 0]",0,0,1,5,5,Chris Sale
+3,bottom,double,strike,Miguel Vargas,5,"[0, 1, 0]","[0, 'Miguel Vargas', 0]",0,0,1,5,5,Chris Sale
+3,bottom,fly_out,strike,Luis Torrens,6,"[0, 1, 0]","[0, 'Miguel Vargas', 0]",0,0,2,5,5,Chris Sale
+3,bottom,ball,ball,Dane Myers,7,"[0, 1, 0]","[0, 'Miguel Vargas', 0]",1,0,2,5,5,Chris Sale
+3,bottom,ground_out,strike,Dane Myers,7,"[0, 1, 0]","[0, 'Miguel Vargas', 0]",1,0,3,5,5,Chris Sale
+4,top,ball,ball,Andrew Knizner,1,"[0, 0, 0]","[0, 0, 0]",1,0,0,5,5,Ryne Stanek
+4,top,strike,strike,Andrew Knizner,1,"[0, 0, 0]","[0, 0, 0]",1,1,0,5,5,Ryne Stanek
+4,top,single,strike,Andrew Knizner,1,"[1, 0, 0]","['Andrew Knizner', 0, 0]",1,1,0,5,5,Ryne Stanek
+4,top,ball,ball,Nick Ahmed,2,"[1, 0, 0]","['Andrew Knizner', 0, 0]",1,0,0,5,5,Ryne Stanek
+4,top,ground_out,strike,Nick Ahmed,2,"[1, 0, 0]","['Andrew Knizner', 0, 0]",1,0,1,5,5,Ryne Stanek
+4,top,ground_out,strike,CJ Abrams,3,"[1, 0, 0]","['Andrew Knizner', 0, 0]",0,0,2,5,5,Ryne Stanek
+4,top,fly_out,strike,Matt Chapman,4,"[1, 0, 0]","['Andrew Knizner', 0, 0]",0,0,3,5,5,Ryne Stanek
+4,bottom,foul,strike,Colt Keith,8,"[0, 0, 0]","[0, 0, 0]",0,1,0,5,5,Chris Sale
+4,bottom,strike,strike,Colt Keith,8,"[0, 0, 0]","[0, 0, 0]",0,2,0,5,5,Chris Sale
+4,bottom,ball,ball,Colt Keith,8,"[0, 0, 0]","[0, 0, 0]",1,2,0,5,5,Chris Sale
+4,bottom,strikeout,strike,Colt Keith,8,"[0, 0, 0]","[0, 0, 0]",1,3,1,5,5,Chris Sale
+4,bottom,ball,ball,Matt Shaw,9,"[0, 0, 0]","[0, 0, 0]",1,0,1,5,5,Chris Sale
+4,bottom,strike,strike,Matt Shaw,9,"[0, 0, 0]","[0, 0, 0]",1,1,1,5,5,Chris Sale
+4,bottom,ball,ball,Matt Shaw,9,"[0, 0, 0]","[0, 0, 0]",2,1,1,5,5,Chris Sale
+4,bottom,foul,strike,Matt Shaw,9,"[0, 0, 0]","[0, 0, 0]",2,2,1,5,5,Chris Sale
+4,bottom,strikeout,strike,Matt Shaw,9,"[0, 0, 0]","[0, 0, 0]",2,3,2,5,5,Chris Sale
+4,bottom,strike,strike,Jarred Kelenic,1,"[0, 0, 0]","[0, 0, 0]",0,1,2,5,5,Chris Sale
+4,bottom,strike,strike,Jarred Kelenic,1,"[0, 0, 0]","[0, 0, 0]",0,2,2,5,5,Chris Sale
+4,bottom,strikeout,strike,Jarred Kelenic,1,"[0, 0, 0]","[0, 0, 0]",0,3,3,5,5,Chris Sale
+5,top,ground_out,strike,Victor Robles,5,"[0, 0, 0]","[0, 0, 0]",0,0,1,5,5,Ryne Stanek
+5,top,strike,strike,Ryan McMahon,6,"[0, 0, 0]","[0, 0, 0]",0,1,1,5,5,Ryne Stanek
+5,top,strike,strike,Ryan McMahon,6,"[0, 0, 0]","[0, 0, 0]",0,2,1,5,5,Ryne Stanek
+5,top,strikeout,strike,Ryan McMahon,6,"[0, 0, 0]","[0, 0, 0]",0,3,2,5,5,Ryne Stanek
+5,top,ground_out,strike,Josh Jung,7,"[0, 0, 0]","[0, 0, 0]",0,0,3,5,5,Ryne Stanek
+5,bottom,foul,strike,Brendan Rodgers,2,"[0, 0, 0]","[0, 0, 0]",0,1,0,5,5,Chris Sale
+5,bottom,strike,strike,Brendan Rodgers,2,"[0, 0, 0]","[0, 0, 0]",0,2,0,5,5,Chris Sale
+5,bottom,strikeout,strike,Brendan Rodgers,2,"[0, 0, 0]","[0, 0, 0]",0,3,1,5,5,Chris Sale
+5,bottom,ball,ball,Sam Haggerty,3,"[0, 0, 0]","[0, 0, 0]",1,0,1,5,5,Chris Sale
+5,bottom,ball,ball,Sam Haggerty,3,"[0, 0, 0]","[0, 0, 0]",2,0,1,5,5,Chris Sale
+5,bottom,fly_out,strike,Sam Haggerty,3,"[0, 0, 0]","[0, 0, 0]",2,0,2,5,5,Chris Sale
+5,bottom,fly_out,strike,Eduardo Escobar,4,"[0, 0, 0]","[0, 0, 0]",0,0,3,5,5,Chris Sale
+6,top,strike,strike,Christian Yelich,8,"[0, 0, 0]","[0, 0, 0]",0,1,0,5,5,Ryne Stanek
+6,top,fly_out,strike,Christian Yelich,8,"[0, 0, 0]","[0, 0, 0]",0,1,1,5,5,Ryne Stanek
+6,top,ground_out,strike,Ronald Acuña Jr.,9,"[0, 0, 0]","[0, 0, 0]",0,0,2,5,5,Ryne Stanek
+6,top,strike,strike,Andrew Knizner,1,"[0, 0, 0]","[0, 0, 0]",0,1,2,5,5,Ryne Stanek
+6,top,strike,strike,Andrew Knizner,1,"[0, 0, 0]","[0, 0, 0]",0,2,2,5,5,Ryne Stanek
+6,top,foul,strike,Andrew Knizner,1,"[0, 0, 0]","[0, 0, 0]",0,2,2,5,5,Ryne Stanek
+6,top,strikeout,strike,Andrew Knizner,1,"[0, 0, 0]","[0, 0, 0]",0,3,3,5,5,Ryne Stanek
+6,bottom,fly_out,strike,Miguel Vargas,5,"[0, 0, 0]","[0, 0, 0]",0,0,1,5,5,Chris Sale
+6,bottom,strike,strike,Luis Torrens,6,"[0, 0, 0]","[0, 0, 0]",0,1,1,5,5,Chris Sale
+6,bottom,ball,ball,Luis Torrens,6,"[0, 0, 0]","[0, 0, 0]",1,1,1,5,5,Chris Sale
+6,bottom,ball,ball,Luis Torrens,6,"[0, 0, 0]","[0, 0, 0]",2,1,1,5,5,Chris Sale
+6,bottom,strike,strike,Luis Torrens,6,"[0, 0, 0]","[0, 0, 0]",2,2,1,5,5,Chris Sale
+6,bottom,ball,ball,Luis Torrens,6,"[0, 0, 0]","[0, 0, 0]",3,2,1,5,5,Chris Sale
+6,bottom,strikeout,strike,Luis Torrens,6,"[0, 0, 0]","[0, 0, 0]",3,3,2,5,5,Chris Sale
+6,bottom,single,strike,Dane Myers,7,"[1, 0, 0]","['Dane Myers', 0, 0]",0,0,2,5,5,Chris Sale
+6,bottom,strike,strike,Colt Keith,8,"[1, 0, 0]","['Dane Myers', 0, 0]",0,1,2,5,5,Chris Sale
+6,bottom,ball,ball,Colt Keith,8,"[1, 0, 0]","['Dane Myers', 0, 0]",1,1,2,5,5,Chris Sale
+6,bottom,single,strike,Colt Keith,8,"[1, 1, 0]","['Colt Keith', 'Dane Myers', 0]",1,1,2,5,5,Chris Sale
+6,bottom,strike,strike,Matt Shaw,9,"[1, 1, 0]","['Colt Keith', 'Dane Myers', 0]",0,1,2,5,5,Chris Sale
+6,bottom,ball,ball,Matt Shaw,9,"[1, 1, 0]","['Colt Keith', 'Dane Myers', 0]",1,1,2,5,5,Chris Sale
+6,bottom,strike,strike,Matt Shaw,9,"[1, 1, 0]","['Colt Keith', 'Dane Myers', 0]",1,2,2,5,5,Chris Sale
+6,bottom,double,strike,Matt Shaw,9,"[0, 1, 1]","[0, 'Matt Shaw', 'Colt Keith']",1,2,2,5,6,Chris Sale
+6,bottom,foul,strike,Jarred Kelenic,1,"[0, 1, 1]","[0, 'Matt Shaw', 'Colt Keith']",0,1,2,5,6,Chris Sale
+6,bottom,strike,strike,Jarred Kelenic,1,"[0, 1, 1]","[0, 'Matt Shaw', 'Colt Keith']",0,2,2,5,6,Chris Sale
+6,bottom,double,strike,Jarred Kelenic,1,"[0, 1, 0]","[0, 'Jarred Kelenic', 0]",0,2,2,5,8,Chris Sale
+6,bottom,ground_out,strike,Brendan Rodgers,2,"[0, 1, 0]","[0, 'Jarred Kelenic', 0]",0,0,3,5,8,Chris Sale
+7,top,ball,ball,Nick Ahmed,2,"[0, 0, 0]","[0, 0, 0]",1,0,0,5,8,Ryne Stanek
+7,top,strike,strike,Nick Ahmed,2,"[0, 0, 0]","[0, 0, 0]",1,1,0,5,8,Ryne Stanek
+7,top,strike,strike,Nick Ahmed,2,"[0, 0, 0]","[0, 0, 0]",1,2,0,5,8,Ryne Stanek
+7,top,ball,ball,Nick Ahmed,2,"[0, 0, 0]","[0, 0, 0]",2,2,0,5,8,Ryne Stanek
+7,top,ball,ball,Nick Ahmed,2,"[0, 0, 0]","[0, 0, 0]",3,2,0,5,8,Ryne Stanek
+7,top,single,strike,Nick Ahmed,2,"[1, 0, 0]","['Nick Ahmed', 0, 0]",3,2,0,5,8,Ryne Stanek
+7,top,fly_out,strike,CJ Abrams,3,"[1, 0, 0]","['Nick Ahmed', 0, 0]",0,0,1,5,8,Ryne Stanek
+7,top,ball,ball,Matt Chapman,4,"[1, 0, 0]","['Nick Ahmed', 0, 0]",1,0,1,5,8,Ryne Stanek
+7,top,fly_out,strike,Matt Chapman,4,"[1, 0, 0]","['Nick Ahmed', 0, 0]",1,0,2,5,8,Ryne Stanek
+7,top,ball,ball,Victor Robles,5,"[1, 0, 0]","['Nick Ahmed', 0, 0]",1,0,2,5,8,Ryne Stanek
+7,top,ball,ball,Victor Robles,5,"[1, 0, 0]","['Nick Ahmed', 0, 0]",2,0,2,5,8,Ryne Stanek
+7,top,strike,strike,Victor Robles,5,"[1, 0, 0]","['Nick Ahmed', 0, 0]",2,1,2,5,8,Ryne Stanek
+7,top,foul,strike,Victor Robles,5,"[1, 0, 0]","['Nick Ahmed', 0, 0]",2,2,2,5,8,Ryne Stanek
+7,top,ball,ball,Victor Robles,5,"[1, 0, 0]","['Nick Ahmed', 0, 0]",3,2,2,5,8,Ryne Stanek
+7,top,walk,ball,Victor Robles,5,"[1, 1, 0]","['Victor Robles', 'Nick Ahmed', 0]",4,2,2,5,8,Ryne Stanek
+7,top,foul,strike,Ryan McMahon,6,"[1, 1, 0]","['Victor Robles', 'Nick Ahmed', 0]",0,1,2,5,8,Ryne Stanek
+7,top,strike,strike,Ryan McMahon,6,"[1, 1, 0]","['Victor Robles', 'Nick Ahmed', 0]",0,2,2,5,8,Ryne Stanek
+7,top,double,strike,Ryan McMahon,6,"[0, 1, 1]","[0, 'Ryan McMahon', 'Victor Robles']",0,2,2,6,8,Ryne Stanek
+7,top,strike,strike,Josh Jung,7,"[0, 1, 1]","[0, 'Ryan McMahon', 'Victor Robles']",0,1,2,6,8,Ryne Stanek
+7,top,ball,ball,Josh Jung,7,"[0, 1, 1]","[0, 'Ryan McMahon', 'Victor Robles']",1,1,2,6,8,Ryne Stanek
+7,top,ball,ball,Josh Jung,7,"[0, 1, 1]","[0, 'Ryan McMahon', 'Victor Robles']",2,1,2,6,8,Ryne Stanek
+7,top,foul,strike,Josh Jung,7,"[0, 1, 1]","[0, 'Ryan McMahon', 'Victor Robles']",2,2,2,6,8,Ryne Stanek
+7,top,strikeout,strike,Josh Jung,7,"[0, 1, 1]","[0, 'Ryan McMahon', 'Victor Robles']",2,3,3,6,8,Ryne Stanek
+7,bottom,strike,strike,Sam Haggerty,3,"[0, 0, 0]","[0, 0, 0]",0,1,0,6,8,Chris Sale
+7,bottom,ball,ball,Sam Haggerty,3,"[0, 0, 0]","[0, 0, 0]",1,1,0,6,8,Chris Sale
+7,bottom,fly_out,strike,Sam Haggerty,3,"[0, 0, 0]","[0, 0, 0]",1,1,1,6,8,Chris Sale
+7,bottom,ball,ball,Eduardo Escobar,4,"[0, 0, 0]","[0, 0, 0]",1,0,1,6,8,Chris Sale
+7,bottom,foul,strike,Eduardo Escobar,4,"[0, 0, 0]","[0, 0, 0]",1,1,1,6,8,Chris Sale
+7,bottom,ball,ball,Eduardo Escobar,4,"[0, 0, 0]","[0, 0, 0]",2,1,1,6,8,Chris Sale
+7,bottom,strike,strike,Eduardo Escobar,4,"[0, 0, 0]","[0, 0, 0]",2,2,1,6,8,Chris Sale
+7,bottom,ball,ball,Eduardo Escobar,4,"[0, 0, 0]","[0, 0, 0]",3,2,1,6,8,Chris Sale
+7,bottom,single,strike,Eduardo Escobar,4,"[1, 0, 0]","['Eduardo Escobar', 0, 0]",3,2,1,6,8,Chris Sale
+7,bottom,single,strike,Miguel Vargas,5,"[1, 1, 0]","['Miguel Vargas', 'Eduardo Escobar', 0]",0,0,1,6,8,Chris Sale
+7,bottom,ground_out,strike,Luis Torrens,6,"[1, 1, 0]","['Miguel Vargas', 'Eduardo Escobar', 0]",0,0,2,6,8,Chris Sale
+7,bottom,fly_out,strike,Dane Myers,7,"[1, 1, 0]","['Miguel Vargas', 'Eduardo Escobar', 0]",0,0,3,6,8,Chris Sale
+8,top,ground_out,strike,Christian Yelich,8,"[0, 0, 0]","[0, 0, 0]",0,0,1,6,8,Ryne Stanek
+8,top,strike,strike,Ronald Acuña Jr.,9,"[0, 0, 0]","[0, 0, 0]",0,1,1,6,8,Ryne Stanek
+8,top,ball,ball,Ronald Acuña Jr.,9,"[0, 0, 0]","[0, 0, 0]",1,1,1,6,8,Ryne Stanek
+8,top,foul,strike,Ronald Acuña Jr.,9,"[0, 0, 0]","[0, 0, 0]",1,2,1,6,8,Ryne Stanek
+8,top,ball,ball,Ronald Acuña Jr.,9,"[0, 0, 0]","[0, 0, 0]",2,2,1,6,8,Ryne Stanek
+8,top,ball,ball,Ronald Acuña Jr.,9,"[0, 0, 0]","[0, 0, 0]",3,2,1,6,8,Ryne Stanek
+8,top,double,strike,Ronald Acuña Jr.,9,"[0, 1, 0]","[0, 'Ronald Acuña Jr.', 0]",3,2,1,6,8,Ryne Stanek
+8,top,strike,strike,Andrew Knizner,1,"[0, 1, 0]","[0, 'Ronald Acuña Jr.', 0]",0,1,1,6,8,Ryne Stanek
+8,top,strike,strike,Andrew Knizner,1,"[0, 1, 0]","[0, 'Ronald Acuña Jr.', 0]",0,2,1,6,8,Ryne Stanek
+8,top,strikeout,strike,Andrew Knizner,1,"[0, 1, 0]","[0, 'Ronald Acuña Jr.', 0]",0,3,2,6,8,Ryne Stanek
+8,top,ball,ball,Nick Ahmed,2,"[0, 1, 0]","[0, 'Ronald Acuña Jr.', 0]",1,0,2,6,8,Ryne Stanek
+8,top,strike,strike,Nick Ahmed,2,"[0, 1, 0]","[0, 'Ronald Acuña Jr.', 0]",1,1,2,6,8,Ryne Stanek
+8,top,strike,strike,Nick Ahmed,2,"[0, 1, 0]","[0, 'Ronald Acuña Jr.', 0]",1,2,2,6,8,Ryne Stanek
+8,top,ball,ball,Nick Ahmed,2,"[0, 1, 0]","[0, 'Ronald Acuña Jr.', 0]",2,2,2,6,8,Ryne Stanek
+8,top,fly_out,strike,Nick Ahmed,2,"[0, 1, 0]","[0, 'Ronald Acuña Jr.', 0]",2,2,3,6,8,Ryne Stanek
+8,bottom,ball,ball,Colt Keith,8,"[0, 0, 0]","[0, 0, 0]",1,0,0,6,8,Chris Sale
+8,bottom,strike,strike,Colt Keith,8,"[0, 0, 0]","[0, 0, 0]",1,1,0,6,8,Chris Sale
+8,bottom,ball,ball,Colt Keith,8,"[0, 0, 0]","[0, 0, 0]",2,1,0,6,8,Chris Sale
+8,bottom,fly_out,strike,Colt Keith,8,"[0, 0, 0]","[0, 0, 0]",2,1,1,6,8,Chris Sale
+8,bottom,ball,ball,Matt Shaw,9,"[0, 0, 0]","[0, 0, 0]",1,0,1,6,8,Chris Sale
+8,bottom,strike,strike,Matt Shaw,9,"[0, 0, 0]","[0, 0, 0]",1,1,1,6,8,Chris Sale
+8,bottom,ball,ball,Matt Shaw,9,"[0, 0, 0]","[0, 0, 0]",2,1,1,6,8,Chris Sale
+8,bottom,ball,ball,Matt Shaw,9,"[0, 0, 0]","[0, 0, 0]",3,1,1,6,8,Chris Sale
+8,bottom,strike,strike,Matt Shaw,9,"[0, 0, 0]","[0, 0, 0]",3,2,1,6,8,Chris Sale
+8,bottom,foul,strike,Matt Shaw,9,"[0, 0, 0]","[0, 0, 0]",3,2,1,6,8,Chris Sale
+8,bottom,strikeout,strike,Matt Shaw,9,"[0, 0, 0]","[0, 0, 0]",3,3,2,6,8,Chris Sale
+8,bottom,strike,strike,Jarred Kelenic,1,"[0, 0, 0]","[0, 0, 0]",0,1,2,6,8,Chris Sale
+8,bottom,strike,strike,Jarred Kelenic,1,"[0, 0, 0]","[0, 0, 0]",0,2,2,6,8,Chris Sale
+8,bottom,strikeout,strike,Jarred Kelenic,1,"[0, 0, 0]","[0, 0, 0]",0,3,3,6,8,Chris Sale
+9,top,foul,strike,CJ Abrams,3,"[0, 0, 0]","[0, 0, 0]",0,1,0,6,8,Ryne Stanek
+9,top,ball,ball,CJ Abrams,3,"[0, 0, 0]","[0, 0, 0]",1,1,0,6,8,Ryne Stanek
+9,top,ground_out,strike,CJ Abrams,3,"[0, 0, 0]","[0, 0, 0]",1,1,1,6,8,Ryne Stanek
+9,top,ball,ball,Matt Chapman,4,"[0, 0, 0]","[0, 0, 0]",1,0,1,6,8,Ryne Stanek
+9,top,strike,strike,Matt Chapman,4,"[0, 0, 0]","[0, 0, 0]",1,1,1,6,8,Ryne Stanek
+9,top,strike,strike,Matt Chapman,4,"[0, 0, 0]","[0, 0, 0]",1,2,1,6,8,Ryne Stanek
+9,top,strikeout,strike,Matt Chapman,4,"[0, 0, 0]","[0, 0, 0]",1,3,2,6,8,Ryne Stanek
+9,top,ground_out,strike,Victor Robles,5,"[0, 0, 0]","[0, 0, 0]",0,0,3,6,8,Ryne Stanek
