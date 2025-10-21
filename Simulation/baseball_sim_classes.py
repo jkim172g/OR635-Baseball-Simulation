@@ -1,7 +1,6 @@
 
 import pandas as pd
 import numpy as np
-import random # TODO should we shift entirely to np.random eventually, rather than split?
 
 # TODO set seed/stream stuff eventually
 
@@ -35,7 +34,6 @@ class Pitcher:
         self.name = pitcher_data['name']
         self.id = pitcher_data['id']
         self.team = pitcher_data['team']
-        
         
         #Save statistics about pitching probabilities
         self.pitch_type_prob = pitcher_data['pitch_type_prob']
@@ -92,24 +90,24 @@ class Game:
     
     def pitch(self, batter, pitcher):
         # Get pitch details
-        pitch_type = random.choices(list(pitcher.pitch_type_prob.keys()), list(pitcher.pitch_type_prob.values()))[0]
-        pitch_velocity = random.choices(list(pitcher.velocity_dist.keys()), list(pitcher.velocity_dist.values()))[0]
-        pitch_movement = random.choices(list(pitcher.movement_prob.keys()), list(pitcher.movement_prob.values()))[0]
-        
+        pitch_type = np.random.choice(list(pitcher.pitch_type_prob.keys()), p=list(pitcher.pitch_type_prob.values()))
+        pitch_velocity = np.random.choice(list(pitcher.velocity_dist.keys()), list(pitcher.velocity_dist.values()))
+        pitch_movement = np.random.choice(list(pitcher.movement_prob.keys()), list(pitcher.movement_prob.values()))
         
         #Calculate result
-        
-        strike = True if np.random.uniform() < pitcher.strike_prob else False
+        strike = True if np.random.uniform() < pitcher.strike_prob else False # Uses Zone%
         if strike:
             pitch_result = 'strike'
             #If strike, check if batter swings
             #Adjust swing prob by half if 3 balls and less than two strikes
+            # Uses Z-Swing%
             adj_batter_swing_prob = batter.swing_prob['strike']/2 if self.balls == 3 and self.strikes < 2 else batter.swing_prob['strike']
             swing_prob = np.random.uniform(min(pitcher.swing_prob['strike'], adj_batter_swing_prob),
                                            max(pitcher.swing_prob['strike'], adj_batter_swing_prob))
             swing = True if np.random.uniform() < swing_prob else False
             if swing:
                 #If batter swings, check if contact was made
+                # Uses Z-Contact%
                 contact_prob = np.random.uniform(min(pitcher.contact_prob['strike'], batter.contact_prob['strike']),
                                                 max(pitcher.contact_prob['strike'], batter.contact_prob['strike']))
                 contact = True if np.random.uniform() < contact_prob else False
@@ -120,8 +118,7 @@ class Game:
                     if foul:
                         result = 'foul'
                     else:
-                        result = random.choices(list(batter.outcome_prob.keys()), list(batter.outcome_prob.values()))[0]
-                
+                        result = np.random.choice(list(batter.outcome_prob.keys()), p=list(batter.outcome_prob.values()))
                 else:
                     #If swung and missed, strike 
                     result = 'strike'
@@ -129,15 +126,17 @@ class Game:
                 #If strike not swung at, strike
                 result = 'strike'
         else:
-            
             #If ball was thrown, check if it was swung at
+            # Uses O-Swing%
             adj_batter_swing_prob = batter.swing_prob['ball']/2 if self.balls == 3 and self.strikes < 2 else batter.swing_prob['ball']
             swing_prob = np.random.uniform(min(pitcher.swing_prob['ball'], adj_batter_swing_prob),
                                            max(pitcher.swing_prob['ball'], adj_batter_swing_prob))
             swing = True if np.random.uniform() < swing_prob else False
             if swing:
+                # Pitch now considered a strike regardless of outcome
                 pitch_result= 'strike'
                 #If batter swings, check if contact was made
+                # Uses O-Contact%
                 contact_prob = np.random.uniform(min(pitcher.contact_prob['ball'], batter.contact_prob['ball']),
                                                 max(pitcher.contact_prob['ball'], batter.contact_prob['ball']))
                 contact = True if np.random.uniform() < contact_prob else False
@@ -148,9 +147,7 @@ class Game:
                     if foul:
                         result = 'foul'
                     else:
-                        result = random.choices(list(batter.outcome_prob.keys()), list(batter.outcome_prob.values()))[0]
-                
-                
+                        result = np.random.choice(list(batter.outcome_prob.keys()), p=list(batter.outcome_prob.values()))
                 else:
                     #If swung and missed, strike 
                     result = 'strike'
@@ -162,8 +159,7 @@ class Game:
         print(result)
         return result, pitch_result
         
-        
-    
+
     def move_bases(self, action, batting_team, current_batter):
         #Put logic here for moving bases based on the action
      
@@ -173,7 +169,6 @@ class Game:
             batting_team.score += sum(self.bases) + 1
             self.bases = [0,0,0]
             self.baserunners = [0,0,0]
-        
         elif action == 'walk':
             # First is empty, fill, no other advancing
             if self.bases[0] == 0:
@@ -197,7 +192,6 @@ class Game:
                 self.bases[1] = 1
                 self.baserunners[1] = self.baserunners[0]
                 self.baserunners[0] = current_batter.name
-        
         elif action == 'single': # TODO update baserunning logic later
             # Batter goes to First, any baserunners advance, score if on Third
             batting_team.score += self.bases[2]
@@ -207,7 +201,6 @@ class Game:
             self.baserunners[2] = self.baserunners[1]
             self.baserunners[1] = self.baserunners[0]
             self.baserunners[0] = current_batter.name
-        
         elif action == 'double': # TODO update baserunning logic later
             # Batter goes to second, any baserunners advance two bases (for now), score if on Second or Third
             batting_team.score += self.bases[2] + self.bases[1]
@@ -217,7 +210,6 @@ class Game:
             self.baserunners[2] = self.baserunners[0]
             self.baserunners[1] = current_batter.name
             self.baserunners[0] = 0        
-        
         elif action == 'triple':
             # All runners clear bases, score, batter goes to Third
             batting_team.score += sum(self.bases)
@@ -225,13 +217,12 @@ class Game:
             self.baserunners[2] = current_batter.name
             self.baserunners[1] = 0
             self.baserunners[0] = 0
-        
         else:
             # TODO add tag-up logic
             self.outs += 1
     
+
     def simulate_inning_half(self, batting_team, pitching_team):
-        
         end_game = False
         while self.outs < 3 and not end_game:
             #Set batter and pitcher
@@ -298,7 +289,6 @@ class Game:
         else:
             self.event_log['Event'].append(event)
             
-        
     
     def play_ball(self):
         #pdb.set_trace()
@@ -311,16 +301,13 @@ class Game:
             self.baserunners = [0,0,0]
             if self.inning_half == 'top':
                 #If top of the inning, team1 is batting and team2 is pitching
-
                 self.simulate_inning_half(team1, team2)    
                 self.inning_half = 'bottom'
-                
             else:
                 #If bottom of the inning, team2 is batting and team1 is pitching
                 if self.inning == 9 and team2.score > team1.score:
                     self.inning += 1
                     pass
-                    
                 else:
                     self.simulate_inning_half(team2, team1) 
                     self.inning_half = 'top'
@@ -333,8 +320,8 @@ def perturb_values(orig_val_dict, range):
     val_dict = orig_val_dict.copy()
     # perturb
     for k, v in val_dict.items():
-        direction = random.choice([-1, 1])
-        scale = random.random()
+        direction = np.random.choice([-1, 1])
+        scale = np.random.uniform()
         perturb = scale * direction * range
         val_dict[k] = v + perturb
 
@@ -350,7 +337,6 @@ def make_box_score(event_log):
     batting_stats = {"Team1": {}, "Team2": {}}
     pitching_stats = {"Team1": {}, "Team2": {}}
 
-    
     for _, row in event_log.iterrows():
         result = row["Event"]
         if result in ["Init"]:  # ignore non-play events
@@ -403,9 +389,6 @@ def make_box_score(event_log):
         team1_pit.to_excel(writer, sheet_name="Team1_Pitching", index=False)
         team2_pit.to_excel(writer, sheet_name="Team2_Pitching", index=False)
 
-
-    
-    
     
 def update_batter(stats, player, result):
         
@@ -433,7 +416,6 @@ def update_batter(stats, player, result):
         stats[player]["BB"] += 1
 
 
-
 def update_pitcher(stats, player, result, pitch_strike=None):
     if player not in stats:
         stats[player] = {"IP":0.0, "H": 0, "R": 0, "ER": 0, "BB": 0, "K": 0, "HR": 0, "P": 0, "S": 0}
@@ -449,17 +431,13 @@ def update_pitcher(stats, player, result, pitch_strike=None):
         if result == "home_run":
             stats[player]["HR"] += 1
             stats[player]["R"] += 1
-
     elif result == "walk":
         stats[player]["BB"] += 1
-
     elif result == "strikeout":
         stats[player]["K"] += 1
         stats[player]["IP"] += 1/3  # one out
-
     elif result in ["ground_out", "fly_out"]:
         stats[player]["IP"] += 1/3  # one out
-
     elif result == "run_scored":
         stats[player]["R"] += 1
         
@@ -473,16 +451,11 @@ def make_pitching_box(team_dict):
     df = pd.DataFrame.from_dict(team_dict, orient="index").reset_index()
     df.rename(columns={"index": "Pitcher"}, inplace=True)
 
-
     df["IP"] = df["IP"].round(1)
-
-
     df["ERA"] = (df["ER"] * 9 / df["IP"].replace(0, pd.NA)).fillna(0).round(2)
     df["PC-ST"] = df["P"].astype(str) + "-" + df["S"].astype(str)
 
     return df
-
-
     
 
 if __name__ == '__main__':
@@ -492,13 +465,12 @@ if __name__ == '__main__':
     pitcher_df.fillna(0, inplace=True) # TODO is this ok? Or need to be more selective like below?
     # pitcher_df[["FA%", "FT%", "FC%", "FS%", "FO%", "SI%", "SL%", "CU%", "KC%", "EP%", "CH%", "SC%", "KN%", "UN%"]] = pitcher_df[["FA%", "FT%", "FC%", "FS%", "FO%", "SI%", "SL%", "CU%", "KC%", "EP%", "CH%", "SC%", "KN%", "UN%"]].fillna(0)
 
-
     batter_ids = list(batter_df["PlayerId"])
     pitcher_ids = list(pitcher_df["PlayerId"])
     # TODO add pitching changes, relief pitching. Currently just selecting a starting pitcher for each side to pitch the whole game
 
-    selected_batter_ids = random.sample(batter_ids, 18) # samples w/o replacement
-    selected_pitcher_ids = random.sample(pitcher_ids, 2) # samples w/o replacemnet
+    selected_batter_ids = np.random.choice(batter_ids, 18, replace=False) # samples w/o replacement
+    selected_pitcher_ids = np.random.choice(pitcher_ids, 2, replace=False) # samples w/o replacemnet
     
     base_outcome_prob = {'single': 0.205,
                         'double': 0.1,
@@ -506,7 +478,6 @@ if __name__ == '__main__':
                         'home_run': 0.025,
                         'ground_out': 0.35,
                         'fly_out': 0.3}
-        
     batter_data = [
         (lambda row: 
             {'name': row["Name"],
@@ -523,12 +494,10 @@ if __name__ == '__main__':
 
     base_velocity_dist = {95:0.5,
                         100:0.5}
-    
     base_movement_prob = {'straight': 0.25,
                           'down': 0.25,
                           'side': 0.25,
                           'fade': 0.25}
-
     pitcher_data = [
         (lambda row:
             {'name': row["Name"],
@@ -549,7 +518,6 @@ if __name__ == '__main__':
             for pid in selected_pitcher_ids
     ]
     
-    
     batters1 = [Batter(batter) for batter in batter_data[0:9]]
     batters2 = [Batter(batter) for batter in batter_data[9:]]
     
@@ -562,12 +530,10 @@ if __name__ == '__main__':
     game.play_ball()
     
     event_log = pd.DataFrame(game.event_log)
-    # TODO add batter to the game log
     event_log.to_csv("event_log.csv", encoding='utf-8-sig', index=False)
     
     make_box_score(event_log)
-    
-    
+        
     
     ### Some code below to run 100 games and compute team record, average score
     # scores = {i:[] for i in range(1,10)}
@@ -601,12 +567,3 @@ if __name__ == '__main__':
     #         scores[j].append(event_log.at[max_index, 'Team 2 Score'])
             
     # avg_scores_by_inning = {i:np.average(scores[i]) for i in range(1,10)}    
-      
-        
-
-
-
-    
-    
-        
-        
