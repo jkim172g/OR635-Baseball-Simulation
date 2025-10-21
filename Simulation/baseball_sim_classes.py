@@ -1,10 +1,11 @@
+## Project for GMU OR 635: Discrete System Simulation
+## Authors: Jacob Kim, Noah Mecikalski, Bennett Miller, W.J. Moretz
 
 import pandas as pd
 import numpy as np
-
-# TODO set seed/stream stuff eventually
-
 import pdb
+
+np.random.seed(17) # TODO need to set any random streams/substreams?
 
 # TODO do we want to track stats of what happen in the Batters and Pitchers themselves as well?
 
