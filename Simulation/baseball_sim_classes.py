@@ -91,9 +91,12 @@ class Game:
     
     def pitch(self, batter, pitcher):
         # Get pitch details
-        pitch_type = np.random.choice(list(pitcher.pitch_type_prob.keys()), p=list(pitcher.pitch_type_prob.values()))
-        pitch_velocity = np.random.choice(list(pitcher.velocity_dist.keys()), list(pitcher.velocity_dist.values()))
-        pitch_movement = np.random.choice(list(pitcher.movement_prob.keys()), list(pitcher.movement_prob.values()))
+        pitch_type_prob = np.array(list(pitcher.pitch_type_prob.values()), dtype=float)
+        pitch_type = np.random.choice(list(pitcher.pitch_type_prob.keys()), p=pitch_type_prob/np.sum(pitch_type_prob))
+        pitch_velo_dist = np.array(list(pitcher.velocity_dist.values()), dtype=float)
+        pitch_velocity = np.random.choice(list(pitcher.velocity_dist.keys()), p=pitch_velo_dist/np.sum(pitch_velo_dist))
+        pitch_movement_prob = np.array(list(pitcher.movement_prob.values()), dtype=float)
+        pitch_movement = np.random.choice(list(pitcher.movement_prob.keys()), p=pitch_movement_prob/np.sum(pitch_movement_prob))
         
         #Calculate result
         strike = True if np.random.uniform() < pitcher.strike_prob else False # Uses Zone%
@@ -119,7 +122,8 @@ class Game:
                     if foul:
                         result = 'foul'
                     else:
-                        result = np.random.choice(list(batter.outcome_prob.keys()), p=list(batter.outcome_prob.values()))
+                        outcome_prob = np.array(list(batter.outcome_prob.values()), dtype=float)
+                        result = np.random.choice(list(batter.outcome_prob.keys()), p=outcome_prob/np.sum(outcome_prob))
                 else:
                     #If swung and missed, strike 
                     result = 'strike'
@@ -148,7 +152,8 @@ class Game:
                     if foul:
                         result = 'foul'
                     else:
-                        result = np.random.choice(list(batter.outcome_prob.keys()), p=list(batter.outcome_prob.values()))
+                        outcome_prob = np.array(list(batter.outcome_prob.values()), dtype=float)
+                        result = np.random.choice(list(batter.outcome_prob.keys()), p=outcome_prob/np.sum(outcome_prob))
                 else:
                     #If swung and missed, strike 
                     result = 'strike'
@@ -318,13 +323,14 @@ class Game:
     
 
 def perturb_values(orig_val_dict, range):
+    # Perturb each value by up to 5% of its value
+    # Note this will never return any values below 0, but can above 1,
+        # thus normalization (outside the method) will return valid probabilities
     val_dict = orig_val_dict.copy()
     # perturb
     for k, v in val_dict.items():
-        direction = np.random.choice([-1, 1])
-        scale = np.random.uniform()
-        perturb = scale * direction * range
-        val_dict[k] = v + perturb
+        perturbed_val = np.random.uniform(v * (1 - range), v * (1 + range))
+        val_dict[k] = perturbed_val
 
     # normalize back to 1
     denom = sum(val_dict.values())
