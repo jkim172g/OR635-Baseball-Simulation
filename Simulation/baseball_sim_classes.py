@@ -49,6 +49,8 @@ class Pitcher:
         self.velocity_dist = pitcher_data['velocity_dist']
         self.movement_prob = pitcher_data['movement_prob']
         self.strike_prob = pitcher_data['strike_prob']
+        self.num_pitch = 0
+        self.starter = pitcher_data['starter']
         
         def __str__(self):
             return f"Pitcher: {self.name}, {self.team}"
@@ -98,6 +100,7 @@ class Game:
     
     def pitch(self, batter, pitcher):
         # Get pitch details
+        pitcher.num_pitch += 1
         pitch_type = np.random.choice(list(pitcher.pitch_type_prob.keys()), p=normalize_values(pitcher.pitch_type_prob.values(), 1))
         pitch_velocity = np.random.choice(list(pitcher.velocity_dist.keys()), p=normalize_values(pitcher.velocity_dist.values(), 1))
         pitch_movement = np.random.choice(list(pitcher.movement_prob.keys()), p=normalize_values(pitcher.movement_prob.values(), 1))
@@ -161,7 +164,7 @@ class Game:
                 #if ball not swung at, result is a ball
                 result = 'ball'
                
-        print(result)
+        
         return result, pitch_result
         
 
@@ -226,9 +229,42 @@ class Game:
             # TODO add tag-up logic
             self.outs += 1
     
+    def determine_pitch_change(self, pitching_team, batting_team, pitcher, prev_pitches, prev_batting_score, starter):
+        replace = False
+        if starter:
+            
+            if pitcher.num_pitch > np.random.uniform(105,5)-3:
+                if not (self.inning >= 9 and pitching_team.score > batting_team.score):
+                    replace = True
+            elif prev_pitches - pitcher.num_pitch >= 35:
+                replace = True
+            elif self.inning < 4 and batting_team.score - prev_batting_score > 5:
+                replace = True
+            elif 4 <= self.inning <= 6 and batting_team.score - prev_batting_score > 3:
+                replace = True
+            elif self.inning > 6 and batting_team.score - prev_batting_score > 2:
+                replace = True
+        else:
+            if pitcher.num_pitch > np.random.uniform(25,5)-3:
+                if self.outs < 2:
+                    replace = True
+            elif prev_pitches - pitcher.num_pitch >= 35:
+                replace = True
+            elif batting_team.score - prev_batting_score > 3:
+                replace = True
+            elif pitching_team.score - batting_team.score < 3 and batting_team.score - prev_batting_score > 2:
+                replace = True
+            elif 4 <= self.inning <= 6 and batting_team.score - prev_batting_score > 2:
+                replace = True
+            elif self.inning > 6 and batting_team.score - prev_batting_score > 1:
+                replace = True
+                    
+        return replace
 
     def simulate_inning_half(self, batting_team, pitching_team):
         end_game = False
+        prev_pitches =  [pitching_team.pitchers[pitching_team.pitcher_index].num_pitch][0]
+        prev_batting_score = [batting_team.score][0]
         while self.outs < 3 and not end_game:
             #Set batter and pitcher
             self.strikes = 0
@@ -271,6 +307,18 @@ class Game:
                 batting_team.batter_index += 1
             else:
                 batting_team.batter_index = 0
+            #Update pitcher
+            result = self.determine_pitch_change(pitching_team, batting_team, current_pitcher, prev_pitches, 
+                                                 prev_batting_score, current_pitcher.starter)
+            if result:
+                if pitching_team.pitcher_index < pitching_team.num_pitchers - 1:
+                    pitching_team.batter_index += 1
+                else:
+                    #TODO: We shouldn't cycle back to the first pitcher, but this is to avoid an error
+                    pitching_team.batter_index = 0
+                #Reset previous number of pitches and previous score
+                prev_pitches =  [pitching_team.pitchers[pitching_team.pitcher_index].num_pitch][0]
+                prev_batting_score = [batting_team.score][0]
         
     def update_event_log(self, current_batter, batter_index, current_pitcher, event, pitch_result):
         #Add all current information to the event log
