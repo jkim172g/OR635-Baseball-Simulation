@@ -106,10 +106,9 @@ class Game:
         # Get pitch details
 
         pitcher.num_pitch += 1
-        pitch_type = np.random.choice(list(pitcher.pitch_type_prob.keys()), p=normalize_values(pitcher.pitch_type_prob.values(), 1))
-        pitch_velocity = np.random.choice(list(pitcher.velocity_dist.keys()), p=normalize_values(pitcher.velocity_dist.values(), 1))
-        pitch_movement = np.random.choice(list(pitcher.movement_prob.keys()), p=normalize_values(pitcher.movement_prob.values(), 1))
-
+        #pitch_type = np.random.choice(list(pitcher.pitch_type_prob.keys()), p=normalize_values(pitcher.pitch_type_prob.values(), 1))
+        #pitch_velocity = np.random.choice(list(pitcher.velocity_dist.keys()), p=normalize_values(pitcher.velocity_dist.values(), 1))
+        #pitch_movement = np.random.choice(list(pitcher.movement_prob.keys()), p=normalize_values(pitcher.movement_prob.values(), 1))
         
         #Calculate result
         strike_prob = get_aligned_value(pitcher.strike_prob, batter.zone_prob) # Uses Zone% for each
@@ -330,10 +329,10 @@ class Game:
                                                  prev_batting_score, current_pitcher.starter)
             if result:
                 if pitching_team.pitcher_index < pitching_team.num_pitchers - 1:
-                    pitching_team.batter_index += 1
+                    pitching_team.pitcher_index += 1
                 else:
                     #TODO: We shouldn't cycle back to the first pitcher, but this is to avoid an error
-                    pitching_team.batter_index = 0
+                    pitching_team.pitcher_index = 0
                 #Reset previous number of pitches and previous score
                 prev_pitches =  [pitching_team.pitchers[pitching_team.pitcher_index].num_pitch][0]
                 prev_batting_score = [batting_team.score][0]
@@ -599,7 +598,7 @@ if __name__ == '__main__':
     pitcher_ids = list(pitcher_df["PlayerId"])
     # TODO add pitching changes, relief pitching. Currently just selecting a starting pitcher for each side to pitch the whole game
     selected_batter_ids = np.random.choice(batter_ids, 18, replace=False) # samples w/o replacement
-    selected_pitcher_ids = np.random.choice(pitcher_ids, 2, replace=False) # samples w/o replacemnet
+    selected_pitcher_ids = np.random.choice(pitcher_ids, 10, replace=False) # samples w/o replacemnet
     
     # TODO update decision logic for new GB/LD/FB then 1B/2B/3B/HR/Out rates
     # TODO integrate new decision logic for other outcomes (IBB, HBP, SF, SH, BO)
@@ -697,7 +696,8 @@ if __name__ == '__main__':
                               },
              'velocity_dist': perturb_values(base_velocity_dist, 0.05), # TODO replace with params for some other RN pull on pitch
              'movement_prob': perturb_values(base_movement_prob, 0.05), # TODO replace with params for some other RN pull on pitch
-             'strike_prob': row["Zone%"] # prob inside zone, not of being a strike bc of zone/swing/foul
+             'strike_prob': row["Zone%"], # prob inside zone, not of being a strike bc of zone/swing/foul
+             'starter': False # Whether this pitcher is a starter, is updated after assigned to teams
             }
         )(pitcher_df[pitcher_df["PlayerId"] == pid].iloc[0])
             for pid in selected_pitcher_ids
@@ -705,11 +705,20 @@ if __name__ == '__main__':
     
     batters1 = [Batter(batter) for batter in batter_data[0:9]]
     batters2 = [Batter(batter) for batter in batter_data[9:]]
+
     
-    pitcher1 = Pitcher(pitcher_data[0])
-    pitcher2 = Pitcher(pitcher_data[1])
-    team1 = Team(batters1,[pitcher1])
-    team2 = Team(batters2,[pitcher2])
+    pitchers1 = [Pitcher(pitcher) for pitcher in pitcher_data[0:5]]
+    #Label first pitcher as the starter
+    pitchers1[0].starter = True
+
+    
+    pitchers2 = [Pitcher(pitcher) for pitcher in pitcher_data[5:]]
+    #Label first pitcher as the starter
+    pitchers2[0].starter = True
+
+        
+    team1 = Team(batters1,pitchers1)
+    team2 = Team(batters2,pitchers2)
     
     game = Game(team1, team2)
     game.play_ball()
