@@ -24,6 +24,7 @@ class Batter:
         self.contact_prob = batter_data['contact_prob']
         self.contact_cat_prob = batter_data['contact_cat_prob']
         self.outcome_prob = batter_data['outcome_prob']
+        self.outcome_power_prob = batter_data['outcome_power_prob']
         self.foul_prob = batter_data['foul_prob']
         # self.int_walk_prob = batter_data['int_walk_prob']
         # self.hit_by_pitch_prob = batter_data['hit_by_pitch_prob']
@@ -48,6 +49,7 @@ class Pitcher:
         self.swing_prob = pitcher_data['swing_prob']
         self.contact_prob = pitcher_data['contact_prob']
         self.contact_cat_prob = pitcher_data['contact_cat_prob']
+        self.outcome_power_prob = pitcher_data['outcome_power_prob']
         self.velocity_dist = pitcher_data['velocity_dist']
         self.movement_prob = pitcher_data['movement_prob']
         self.strike_prob = pitcher_data['strike_prob']
@@ -601,7 +603,12 @@ if __name__ == '__main__':
                             #                 "home_run": hit_traj_df.loc["Bunts", "HR%"], # this should always be 0
                             #                 "out": hit_traj_df.loc["Bunts", "Out%"] # this should always be 0
                             #                 }
-                            }
+                            },
+             'outcome_power_prob': {
+                                "soft": row["Soft%"],
+                                "medium": row["Med%"],
+                                "hard": row["Hard%"]
+                              },
             # TODO add stolen bases, wild pitches, errors?
             # TODO pull from distribution for distance of a ball hit, or power, for chances of tagging up or multiple bases?
             })
@@ -633,6 +640,11 @@ if __name__ == '__main__':
                             "fly_ball": row["FB%"],
                             # TODO eventually, add Bunts?
                             },
+             'outcome_power_prob': {
+                                "soft": row["Soft%"],
+                                "medium": row["Med%"],
+                                "hard": row["Hard%"]
+                              },
              'velocity_dist': perturb_values(base_velocity_dist, 0.05), # TODO replace with params for some other RN pull on pitch
              'movement_prob': perturb_values(base_movement_prob, 0.05), # TODO replace with params for some other RN pull on pitch
              'strike_prob': row["Zone%"] # prob inside zone, not of being a strike bc of zone/swing/foul
