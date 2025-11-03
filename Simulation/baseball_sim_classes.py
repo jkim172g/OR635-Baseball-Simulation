@@ -490,18 +490,21 @@ def get_aligned_value(pitcher_val, batter_val):
     return (pitcher_val + batter_val) / 2
     
 
-
 def read_data():
     # Read and prep data, returning dataframes
-    batter_df = pd.read_excel("../Data/Merged_Data_b.xlsx", sheet_name="Batting Data")
-    pitcher_df = pd.read_excel("../Data/Merged_Data_b.xlsx", sheet_name="Pitching Data")
+    batter_df = pd.read_excel("../Data/Merged_Data_C.xlsx", sheet_name="Batting Data")
+    pitcher_df = pd.read_excel("../Data/Merged_Data_C.xlsx", sheet_name="Pitching Data")
     hit_traj_df = pd.read_excel("../Data/hit_trajectory.xlsx", sheet_name="Worksheet", index_col=0)
 
     pitcher_df.fillna(0, inplace=True) # TODO is this ok? Or need to be more selective like below?
     # pitcher_df[["FA%", "FT%", "FC%", "FS%", "FO%", "SI%", "SL%", "CU%", "KC%", "EP%", "CH%", "SC%", "KN%", "UN%"]] = pitcher_df[["FA%", "FT%", "FC%", "FS%", "FO%", "SI%", "SL%", "CU%", "KC%", "EP%", "CH%", "SC%", "KN%", "UN%"]].fillna(0)
-    hit_traj_df["Outs"] = hit_traj_df["AB"] - hit_traj_df["H"]
-    total_ab = sum(hit_traj_df["AB"])
-    hit_traj_df["Out_Rate"] = hit_traj_df["Outs"] / total_ab
+    hit_traj_df["1B"] = hit_traj_df["H"] - hit_traj_df["2B"] - hit_traj_df["3B"] - hit_traj_df["HR"]
+    hit_traj_df["Out"] = hit_traj_df["AB"] - hit_traj_df["H"]
+    hit_traj_df["1B%"] = hit_traj_df["1B"] / hit_traj_df["AB"]
+    hit_traj_df["2B%"] = hit_traj_df["2B"] / hit_traj_df["AB"]
+    hit_traj_df["3B%"] = hit_traj_df["3B"] / hit_traj_df["AB"]
+    hit_traj_df["HR%"] = hit_traj_df["HR"] / hit_traj_df["AB"]
+    hit_traj_df["Out%"] = hit_traj_df["Out"] / hit_traj_df["AB"]
     
     return batter_df, pitcher_df, hit_traj_df
 
@@ -517,17 +520,11 @@ if __name__ == '__main__':
     # TODO add pitching changes, relief pitching. Currently just selecting a starting pitcher for each side to pitch the whole game
     selected_batter_ids = np.random.choice(batter_ids, 18, replace=False) # samples w/o replacement
     selected_pitcher_ids = np.random.choice(pitcher_ids, 2, replace=False) # samples w/o replacemnet
-
-    out_dists = {i: row["Out_Rate"] for i, row in hit_traj_df.iterrows()}
     
-    # AB = PA - BB - HBP - SF - SH (- interference)
-    # Assuming other outcomes on contact -- various outs -- comprise AB minus those outcomes (1B, 2B, 3B, HR)
-        # look at AB - other outcomes  = SO + GO + FO + LO + GDP + foul out
+    # TODO update decision logic for new GB/LD/FB then 1B/2B/3B/HR/Out rates
     # TODO integrate new decision logic for other outcomes (IBB, HBP, SF, SH, BO)
     batter_data = [ 
         (lambda row:
-            (normed_outs := normalize_values(out_dists, 
-                                            1 - ((row["1B"] + row["2B"] + row["3B"] + row["HR"]) / row["AB"])),
             {'name': row["Name"],
              'id': row["PlayerId"],
              'team': row["Team"],
@@ -539,19 +536,45 @@ if __name__ == '__main__':
              'hit_by_pitch_prob': row["HBP"] / row["PA"],
              'sac_fly_prob': row["SF"] / row["PA"],
              'sac_bunt_prob': row["SH"] / row["PA"],
-             'outcome_prob': { # 'bunt': row["BUH"] / row["AB"] # TODO, and also add to the subtraction in normed_outs
-                              'single': row["1B"] / row["AB"],
-                              'double': row["2B"] / row["AB"],
-                              'triple': row["3B"] / row["AB"],
-                              'home_run': row["HR"] / row["AB"],
-                              'ground_out': normed_outs["Ground Balls"], # TODO chance of being a double play
-                              'fly_out': normed_outs["Fly Balls"], # TODO chance of tagging up
-                              'line_out': normed_outs["Line Drives"],
-                              'bunt_out': normed_outs["Bunts"]} # TODO should bunt be in here? It's in the data, & can get a hit on a successful bunt, w/o sac or fielder's choice
+             # TODO add GDP rate/logic
+             'outcome_prob': {
+                            "ground_ball": row["GB%"],
+                            "line_drive": row["LD%"],
+                            "fly_ball": row["FB"],
+                            # TODO eventually, add Bunts?
+                            },
+             'gb_outcomes': {
+                            "1B": hit_traj_df.loc["Ground Balls", "1B%"],
+                            "2B": hit_traj_df.loc["Ground Balls", "2B%"],
+                            "3B": hit_traj_df.loc["Ground Balls", "3B%"],
+                            "HR": hit_traj_df.loc["Ground Balls", "HR%"], # this should always be 0
+                            "out": hit_traj_df.loc["Ground Balls", "Out%"]
+                            },
+             'ld_outcomes': {
+                            "1B": hit_traj_df.loc["Line Drives", "1B%"],
+                            "2B": hit_traj_df.loc["Line Drives", "2B%"],
+                            "3B": hit_traj_df.loc["Line Drives", "3B%"],
+                            "HR": hit_traj_df.loc["Line Drives", "HR%"],
+                            "out": hit_traj_df.loc["Line Drives", "Out%"]
+                            },
+             'fb_outcomes': {
+                            "1B": hit_traj_df.loc["Fly Balls", "1B%"],
+                            "2B": hit_traj_df.loc["Fly Balls", "2B%"],
+                            "3B": hit_traj_df.loc["Fly Balls", "3B%"],
+                            "HR": hit_traj_df.loc["Fly Balls", "HR%"],
+                            "out": hit_traj_df.loc["Fly Balls", "Out%"]
+                            },
+            #  'bu_outcomes': {
+            #                 "1B": hit_traj_df.loc["Bunts", "1B%"],
+            #                 "2B": hit_traj_df.loc["Bunts", "2B%"],
+            #                 "3B": hit_traj_df.loc["Bunts", "3B%"],
+            #                 "HR": hit_traj_df.loc["Bunts", "HR%"], # this should always be 0
+            #                 "out": hit_traj_df.loc["Bunts", "Out%"] # this should always be 0
+            #                 },
             # TODO add stolen bases, wild pitches, errors?
             # TODO pull from distribution for distance of a ball hit, or power, for chances of tagging up or multiple bases?
             })[1]
-        )(batter_df[batter_df["PlayerId"] == bid].iloc[0])
+        (batter_df[batter_df["PlayerId"] == bid].iloc[0])
             for bid in selected_batter_ids
     ]
 
