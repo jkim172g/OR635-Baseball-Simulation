@@ -22,12 +22,14 @@ class Batter:
         self.zone_prob = batter_data['zone_prob']
         self.swing_prob = batter_data['swing_prob']
         self.contact_prob = batter_data['contact_prob']
+        self.contact_cat_prob = batter_data['contact_cat_prob']
         self.outcome_prob = batter_data['outcome_prob']
+        self.outcome_power_prob = batter_data['outcome_power_prob']
         self.foul_prob = batter_data['foul_prob']
-        self.int_walk_prob = batter_data['int_walk_prob']
-        self.hit_by_pitch_prob = batter_data['hit_by_pitch_prob']
-        self.sac_fly_prob = batter_data['sac_fly_prob']
-        self.sac_bunt_prob = batter_data['sac_bunt_prob']             
+        # self.int_walk_prob = batter_data['int_walk_prob']
+        # self.hit_by_pitch_prob = batter_data['hit_by_pitch_prob']
+        # self.sac_fly_prob = batter_data['sac_fly_prob']
+        # self.sac_bunt_prob = batter_data['sac_bunt_prob']             
         
     def __str__(self):
         return f"Batter: {self.name}, {self.team}"
@@ -46,6 +48,8 @@ class Pitcher:
         self.pitch_type_prob = pitcher_data['pitch_type_prob']
         self.swing_prob = pitcher_data['swing_prob']
         self.contact_prob = pitcher_data['contact_prob']
+        self.contact_cat_prob = pitcher_data['contact_cat_prob']
+        self.outcome_power_prob = pitcher_data['outcome_power_prob']
         self.velocity_dist = pitcher_data['velocity_dist']
         self.movement_prob = pitcher_data['movement_prob']
         self.strike_prob = pitcher_data['strike_prob']
@@ -100,10 +104,12 @@ class Game:
     
     def pitch(self, batter, pitcher):
         # Get pitch details
+
         pitcher.num_pitch += 1
         pitch_type = np.random.choice(list(pitcher.pitch_type_prob.keys()), p=normalize_values(pitcher.pitch_type_prob.values(), 1))
         pitch_velocity = np.random.choice(list(pitcher.velocity_dist.keys()), p=normalize_values(pitcher.velocity_dist.values(), 1))
         pitch_movement = np.random.choice(list(pitcher.movement_prob.keys()), p=normalize_values(pitcher.movement_prob.values(), 1))
+
         
         #Calculate result
         strike_prob = get_aligned_value(pitcher.strike_prob, batter.zone_prob) # Uses Zone% for each
@@ -127,8 +133,14 @@ class Game:
                     foul = True if np.random.uniform() < batter.foul_prob['strike'] else False
                     if foul:
                         result = 'foul'
-                    else:                      
-                        result = np.random.choice(list(batter.outcome_prob.keys()), p=normalize_values(batter.outcome_prob.values(), 1))
+                    else:
+                        contact_cat_prob = get_aligned_value(
+                            normalize_values(list(pitcher.contact_cat_prob.values()), 1),
+                            normalize_values(list(batter.contact_cat_prob.values()), 1)
+                            )
+                        contact_cat = np.random.choice(list(batter.contact_cat_prob.keys()), p=normalize_values(contact_cat_prob, 1))
+                        outcome_prob = batter.outcome_prob[contact_cat]                        
+                        result = np.random.choice(list(outcome_prob.keys()), p=normalize_values(list(outcome_prob.values()), 1))
                 else:
                     #If swung and missed, strike 
                     result = 'strike'
@@ -155,7 +167,13 @@ class Game:
                     if foul:
                         result = 'foul'
                     else:
-                        result = np.random.choice(list(batter.outcome_prob.keys()), p=normalize_values(batter.outcome_prob.values(), 1))
+                        contact_cat_prob = get_aligned_value(
+                            normalize_values(list(pitcher.contact_cat_prob.values()), 1),
+                            normalize_values(list(batter.contact_cat_prob.values()), 1)
+                            )
+                        contact_cat = np.random.choice(list(batter.contact_cat_prob.keys()), p=normalize_values(contact_cat_prob, 1))
+                        outcome_prob = batter.outcome_prob[contact_cat]                        
+                        result = np.random.choice(list(outcome_prob.keys()), p=normalize_values(list(outcome_prob.values()), 1))
                 else:
                     #If swung and missed, strike 
                     result = 'strike'
@@ -520,12 +538,15 @@ def normalize_values(values, scale=1):
     if isinstance(values, list):
         value_array = np.array(list(values), dtype=float)
         total = np.sum(value_array)
-        return (value_array / total) * scale
+        new_values = (value_array / total) * scale
+        return list(new_values)
     elif isinstance(values, dict):
         value_array = np.array(list(values.values()), dtype=float)
         total = np.sum(value_array)
         new_values = (value_array / total) * scale
         return dict(zip(values.keys(), new_values))
+    else:
+        raise TypeError("Unexpected variable type for values to be normalized. Getting ", type(values))
     
 
 def get_aligned_value(pitcher_val, batter_val):
@@ -535,21 +556,35 @@ def get_aligned_value(pitcher_val, batter_val):
 
     # np.random.uniform(min(pitcher_val, batter_val),
     #                   max(pitcher_val, batter_val))
-    return (pitcher_val + batter_val) / 2
+    if isinstance(pitcher_val, list) and isinstance(batter_val, list):
+        if len(pitcher_val) != len(batter_val):
+            raise TypeError("Bad data for pitcher and batter. Attempting to align values: \n", pitcher_val, "\n", batter_val)
+        new_values = []
+        for i in range(len(pitcher_val)):
+            new_values.append((pitcher_val[i] + batter_val[i]) / 2)
+        return new_values
+    elif isinstance(pitcher_val, float) and isinstance(batter_val, float):
+        return (pitcher_val + batter_val) / 2
+    else:   
+        raise TypeError("Unexpected variable type aligning between pitcher and batter.\n",
+                        "Pitcher is ", type(pitcher_val), " and batter is ", type(batter_val))
     
-
 
 def read_data():
     # Read and prep data, returning dataframes
-    batter_df = pd.read_excel("../Data/Merged_Data_b.xlsx", sheet_name="Batting Data")
-    pitcher_df = pd.read_excel("../Data/Merged_Data_b.xlsx", sheet_name="Pitching Data")
+    batter_df = pd.read_excel("../Data/Merged_Data_C.xlsx", sheet_name="Batting Data")
+    pitcher_df = pd.read_excel("../Data/Merged_Data_C.xlsx", sheet_name="Pitching Data")
     hit_traj_df = pd.read_excel("../Data/hit_trajectory.xlsx", sheet_name="Worksheet", index_col=0)
 
     pitcher_df.fillna(0, inplace=True) # TODO is this ok? Or need to be more selective like below?
     # pitcher_df[["FA%", "FT%", "FC%", "FS%", "FO%", "SI%", "SL%", "CU%", "KC%", "EP%", "CH%", "SC%", "KN%", "UN%"]] = pitcher_df[["FA%", "FT%", "FC%", "FS%", "FO%", "SI%", "SL%", "CU%", "KC%", "EP%", "CH%", "SC%", "KN%", "UN%"]].fillna(0)
-    hit_traj_df["Outs"] = hit_traj_df["AB"] - hit_traj_df["H"]
-    total_ab = sum(hit_traj_df["AB"])
-    hit_traj_df["Out_Rate"] = hit_traj_df["Outs"] / total_ab
+    hit_traj_df["1B"] = hit_traj_df["H"] - hit_traj_df["2B"] - hit_traj_df["3B"] - hit_traj_df["HR"]
+    hit_traj_df["Out"] = hit_traj_df["AB"] - hit_traj_df["H"]
+    hit_traj_df["1B%"] = hit_traj_df["1B"] / hit_traj_df["AB"]
+    hit_traj_df["2B%"] = hit_traj_df["2B"] / hit_traj_df["AB"]
+    hit_traj_df["3B%"] = hit_traj_df["3B"] / hit_traj_df["AB"]
+    hit_traj_df["HR%"] = hit_traj_df["HR"] / hit_traj_df["AB"]
+    hit_traj_df["Out%"] = hit_traj_df["Out"] / hit_traj_df["AB"]
     
     return batter_df, pitcher_df, hit_traj_df
 
@@ -565,17 +600,11 @@ if __name__ == '__main__':
     # TODO add pitching changes, relief pitching. Currently just selecting a starting pitcher for each side to pitch the whole game
     selected_batter_ids = np.random.choice(batter_ids, 18, replace=False) # samples w/o replacement
     selected_pitcher_ids = np.random.choice(pitcher_ids, 2, replace=False) # samples w/o replacemnet
-
-    out_dists = {i: row["Out_Rate"] for i, row in hit_traj_df.iterrows()}
     
-    # AB = PA - BB - HBP - SF - SH (- interference)
-    # Assuming other outcomes on contact -- various outs -- comprise AB minus those outcomes (1B, 2B, 3B, HR)
-        # look at AB - other outcomes  = SO + GO + FO + LO + GDP + foul out
+    # TODO update decision logic for new GB/LD/FB then 1B/2B/3B/HR/Out rates
     # TODO integrate new decision logic for other outcomes (IBB, HBP, SF, SH, BO)
     batter_data = [ 
         (lambda row:
-            (normed_outs := normalize_values(out_dists, 
-                                            1 - ((row["1B"] + row["2B"] + row["3B"] + row["HR"]) / row["AB"])),
             {'name': row["Name"],
              'id': row["PlayerId"],
              'team': row["Team"],
@@ -583,23 +612,57 @@ if __name__ == '__main__':
              'swing_prob': {'strike': row["Z-Swing%"], 'ball': row["O-Swing%"]},
              'contact_prob': {'strike': row["Z-Contact%"], 'ball': row["O-Contact%"]},
              'foul_prob': {'strike': 0.22, 'ball': 0.22}, # TODO add this by-player? Also add foul-out chance/rate
-             'int_walk_prob': row["IBB"] / row["PA"],
-             'hit_by_pitch_prob': row["HBP"] / row["PA"],
-             'sac_fly_prob': row["SF"] / row["PA"],
-             'sac_bunt_prob': row["SH"] / row["PA"],
-             'outcome_prob': { # 'bunt': row["BUH"] / row["AB"] # TODO, and also add to the subtraction in normed_outs
-                              'single': row["1B"] / row["AB"],
-                              'double': row["2B"] / row["AB"],
-                              'triple': row["3B"] / row["AB"],
-                              'home_run': row["HR"] / row["AB"],
-                              'ground_out': normed_outs["Ground Balls"], # TODO chance of being a double play
-                              'fly_out': normed_outs["Fly Balls"], # TODO chance of tagging up
-                              'line_out': normed_outs["Line Drives"],
-                              'bunt_out': normed_outs["Bunts"]} # TODO should bunt be in here? It's in the data, & can get a hit on a successful bunt, w/o sac or fielder's choice
+            #  'int_walk_prob': row["IBB"] / row["PA"], # TODO no longer in merged data for these 4
+            #  'hit_by_pitch_prob': row["HBP"] / row["PA"],
+            #  'sac_fly_prob': row["SF"] / row["PA"],
+            #  'sac_bunt_prob': row["SH"] / row["PA"],
+             # TODO add GDP rate/logic
+             'contact_cat_prob': {
+                            "ground_ball": row["GB%"],
+                            "line_drive": row["LD%"],
+                            "fly_ball": row["FB%"],
+                            # TODO eventually, add Bunts? Split off from GB% somehow?
+                            },
+             'outcome_prob': {
+                            # TODO add way to track what type of single/double/triple/hr/out it was for event log
+                            "ground_ball": {
+                                            "single": hit_traj_df.loc["Ground Balls", "1B%"],
+                                            "double": hit_traj_df.loc["Ground Balls", "2B%"],
+                                            "triple": hit_traj_df.loc["Ground Balls", "3B%"],
+                                            "home_run": hit_traj_df.loc["Ground Balls", "HR%"], # this should always be 0
+                                            "out": hit_traj_df.loc["Ground Balls", "Out%"]
+                                            },
+                            "line_drive": {
+                                            "single": hit_traj_df.loc["Line Drives", "1B%"],
+                                            "double": hit_traj_df.loc["Line Drives", "2B%"],
+                                            "triple": hit_traj_df.loc["Line Drives", "3B%"],
+                                            "home_run": hit_traj_df.loc["Line Drives", "HR%"],
+                                            "out": hit_traj_df.loc["Line Drives", "Out%"]
+                                            },
+                            "fly_ball": { # TODO incorporate IFFB% somehow? Also from pitcher side
+                                            "single": hit_traj_df.loc["Fly Balls", "1B%"],
+                                            "double": hit_traj_df.loc["Fly Balls", "2B%"],
+                                            "triple": hit_traj_df.loc["Fly Balls", "3B%"],
+                                            "home_run": row["HR/FB"], # Note, this will make sum likely not 1, which is normalized later
+                                            "out": hit_traj_df.loc["Fly Balls", "Out%"]
+                                            },
+                            # "bunt": {
+                            #                 "single": hit_traj_df.loc["Bunts", "1B%"],
+                            #                 "double": hit_traj_df.loc["Bunts", "2B%"],
+                            #                 "triple": hit_traj_df.loc["Bunts", "3B%"],
+                            #                 "home_run": hit_traj_df.loc["Bunts", "HR%"], # this should always be 0
+                            #                 "out": hit_traj_df.loc["Bunts", "Out%"] # this should always be 0
+                            #                 }
+                            },
+             'outcome_power_prob': {
+                                "soft": row["Soft%"],
+                                "medium": row["Med%"],
+                                "hard": row["Hard%"]
+                              },
             # TODO add stolen bases, wild pitches, errors?
             # TODO pull from distribution for distance of a ball hit, or power, for chances of tagging up or multiple bases?
-            })[1]
-        )(batter_df[batter_df["PlayerId"] == bid].iloc[0])
+            })
+        (batter_df[batter_df["PlayerId"] == bid].iloc[0])
             for bid in selected_batter_ids
     ]
 
@@ -618,9 +681,20 @@ if __name__ == '__main__':
                                  'curveball': row["CU%"],
                                  'slider': row["SL%"],
                                  'changeup': row["CH%"]},
-                                 # TODO add more pitch types in
+                                 # TODO eventually, add Bunts? Split off from GB% somehow?
              'swing_prob': {'strike': row["Z-Swing%"], 'ball': row["O-Swing%"]},
              'contact_prob': {'strike': row["Z-Contact%"], 'ball': row["O-Contact%"]},
+             'contact_cat_prob': {
+                            "ground_ball": row["GB%"],
+                            "line_drive": row["LD%"],
+                            "fly_ball": row["FB%"],
+                            # TODO eventually, add Bunts?
+                            },
+             'outcome_power_prob': {
+                                "soft": row["Soft%"],
+                                "medium": row["Med%"],
+                                "hard": row["Hard%"]
+                              },
              'velocity_dist': perturb_values(base_velocity_dist, 0.05), # TODO replace with params for some other RN pull on pitch
              'movement_prob': perturb_values(base_movement_prob, 0.05), # TODO replace with params for some other RN pull on pitch
              'strike_prob': row["Zone%"] # prob inside zone, not of being a strike bc of zone/swing/foul
@@ -641,7 +715,7 @@ if __name__ == '__main__':
     game.play_ball()
     
     event_log = pd.DataFrame(game.event_log)
-    event_log.to_csv("event_log_1.csv", encoding='utf-8-sig', index=False)
+    event_log.to_csv("event_log.csv", encoding='utf-8-sig', index=False)
     
     make_box_score(event_log)
         
