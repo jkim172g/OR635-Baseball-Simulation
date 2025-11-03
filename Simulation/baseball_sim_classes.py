@@ -4,7 +4,6 @@
 import pandas as pd
 import numpy as np
 import pdb
-import sys
 
 np.random.seed(17) # TODO need to set any random streams/substreams?
 
@@ -23,12 +22,13 @@ class Batter:
         self.zone_prob = batter_data['zone_prob']
         self.swing_prob = batter_data['swing_prob']
         self.contact_prob = batter_data['contact_prob']
+        self.contact_cat_prob = batter_data['contact_cat_prob']
         self.outcome_prob = batter_data['outcome_prob']
         self.foul_prob = batter_data['foul_prob']
-        self.int_walk_prob = batter_data['int_walk_prob']
-        self.hit_by_pitch_prob = batter_data['hit_by_pitch_prob']
-        self.sac_fly_prob = batter_data['sac_fly_prob']
-        self.sac_bunt_prob = batter_data['sac_bunt_prob']             
+        # self.int_walk_prob = batter_data['int_walk_prob']
+        # self.hit_by_pitch_prob = batter_data['hit_by_pitch_prob']
+        # self.sac_fly_prob = batter_data['sac_fly_prob']
+        # self.sac_bunt_prob = batter_data['sac_bunt_prob']             
         
     def __str__(self):
         return f"Batter: {self.name}, {self.team}"
@@ -47,6 +47,7 @@ class Pitcher:
         self.pitch_type_prob = pitcher_data['pitch_type_prob']
         self.swing_prob = pitcher_data['swing_prob']
         self.contact_prob = pitcher_data['contact_prob']
+        self.contact_cat_prob = pitcher_data['contact_cat_prob']
         self.velocity_dist = pitcher_data['velocity_dist']
         self.movement_prob = pitcher_data['movement_prob']
         self.strike_prob = pitcher_data['strike_prob']
@@ -99,9 +100,9 @@ class Game:
     
     def pitch(self, batter, pitcher):
         # Get pitch details
-        pitch_type = np.random.choice(list(pitcher.pitch_type_prob.keys()), p=normalize_values(pitcher.pitch_type_prob.values(), 1))
-        pitch_velocity = np.random.choice(list(pitcher.velocity_dist.keys()), p=normalize_values(pitcher.velocity_dist.values(), 1))
-        pitch_movement = np.random.choice(list(pitcher.movement_prob.keys()), p=normalize_values(pitcher.movement_prob.values(), 1))
+        pitch_type = np.random.choice(list(pitcher.pitch_type_prob.keys()), p=normalize_values(list(pitcher.pitch_type_prob.values()), 1))
+        pitch_velocity = np.random.choice(list(pitcher.velocity_dist.keys()), p=normalize_values(list(pitcher.velocity_dist.values()), 1))
+        pitch_movement = np.random.choice(list(pitcher.movement_prob.keys()), p=normalize_values(list(pitcher.movement_prob.values()), 1))
         
         #Calculate result
         strike_prob = get_aligned_value(pitcher.strike_prob, batter.zone_prob) # Uses Zone% for each
@@ -126,10 +127,13 @@ class Game:
                     if foul:
                         result = 'foul'
                     else:
-                        contact_cat_prob = get_aligned_value(list(pitcher.contact_cat_prob.values()), list(batter.contact_cat_prob.values()))
+                        contact_cat_prob = get_aligned_value(
+                            normalize_values(list(pitcher.contact_cat_prob.values()), 1),
+                            normalize_values(list(batter.contact_cat_prob.values()), 1)
+                            )
                         contact_cat = np.random.choice(list(batter.contact_cat_prob.keys()), p=normalize_values(contact_cat_prob, 1))
                         outcome_prob = batter.outcome_prob[contact_cat]                        
-                        result = np.random.choice(list(outcome_prob.keys()), p=normalize_values(outcome_prob.values(), 1))
+                        result = np.random.choice(list(outcome_prob.keys()), p=normalize_values(list(outcome_prob.values()), 1))
                 else:
                     #If swung and missed, strike 
                     result = 'strike'
@@ -156,10 +160,13 @@ class Game:
                     if foul:
                         result = 'foul'
                     else:
-                        contact_cat_prob = get_aligned_value(list(pitcher.contact_cat_prob.values()), list(batter.contact_cat_prob.values()))
+                        contact_cat_prob = get_aligned_value(
+                            normalize_values(list(pitcher.contact_cat_prob.values()), 1),
+                            normalize_values(list(batter.contact_cat_prob.values()), 1)
+                            )
                         contact_cat = np.random.choice(list(batter.contact_cat_prob.keys()), p=normalize_values(contact_cat_prob, 1))
                         outcome_prob = batter.outcome_prob[contact_cat]                        
-                        result = np.random.choice(list(outcome_prob.keys()), p=normalize_values(outcome_prob.values(), 1))
+                        result = np.random.choice(list(outcome_prob.keys()), p=normalize_values(list(outcome_prob.values()), 1))
                 else:
                     #If swung and missed, strike 
                     result = 'strike'
@@ -479,15 +486,15 @@ def normalize_values(values, scale=1):
     if isinstance(values, list):
         value_array = np.array(list(values), dtype=float)
         total = np.sum(value_array)
-        return (value_array / total) * scale
+        new_values = (value_array / total) * scale
+        return list(new_values)
     elif isinstance(values, dict):
         value_array = np.array(list(values.values()), dtype=float)
         total = np.sum(value_array)
         new_values = (value_array / total) * scale
         return dict(zip(values.keys(), new_values))
     else:
-        print("Unexpected variable type for values to be normalized. Getting ", type(values))
-        sys.exit()
+        raise TypeError("Unexpected variable type for values to be normalized. Getting ", type(values))
     
 
 def get_aligned_value(pitcher_val, batter_val):
@@ -499,20 +506,16 @@ def get_aligned_value(pitcher_val, batter_val):
     #                   max(pitcher_val, batter_val))
     if isinstance(pitcher_val, list) and isinstance(batter_val, list):
         if len(pitcher_val) != len(batter_val):
-            print("Bad data for pitcher and batter. Attempting to align values:")
-            print(pitcher_val)
-            print(batter_val)
-            sys.exit()
+            raise TypeError("Bad data for pitcher and batter. Attempting to align values: \n", pitcher_val, "\n", batter_val)
         new_values = []
-        for i in len(pitcher_val):
+        for i in range(len(pitcher_val)):
             new_values.append((pitcher_val[i] + batter_val[i]) / 2)
         return new_values
     elif isinstance(pitcher_val, float) and isinstance(batter_val, float):
         return (pitcher_val + batter_val) / 2
-    else:
-        print("Unexpected variable type aligning between pitcher and batter.")
-        print("Pitcher is ", type(pitcher_val), " and batter is ", type(batter_val))
-        sys.exit()
+    else:   
+        raise TypeError("Unexpected variable type aligning between pitcher and batter.\n",
+                        "Pitcher is ", type(pitcher_val), " and batter is ", type(batter_val))
     
 
 def read_data():
@@ -557,15 +560,15 @@ if __name__ == '__main__':
              'swing_prob': {'strike': row["Z-Swing%"], 'ball': row["O-Swing%"]},
              'contact_prob': {'strike': row["Z-Contact%"], 'ball': row["O-Contact%"]},
              'foul_prob': {'strike': 0.22, 'ball': 0.22}, # TODO add this by-player? Also add foul-out chance/rate
-             'int_walk_prob': row["IBB"] / row["PA"],
-             'hit_by_pitch_prob': row["HBP"] / row["PA"],
-             'sac_fly_prob': row["SF"] / row["PA"],
-             'sac_bunt_prob': row["SH"] / row["PA"],
+            #  'int_walk_prob': row["IBB"] / row["PA"], # TODO no longer in merged data for these 4
+            #  'hit_by_pitch_prob': row["HBP"] / row["PA"],
+            #  'sac_fly_prob': row["SF"] / row["PA"],
+            #  'sac_bunt_prob': row["SH"] / row["PA"],
              # TODO add GDP rate/logic
              'contact_cat_prob': {
                             "ground_ball": row["GB%"],
                             "line_drive": row["LD%"],
-                            "fly_ball": row["FB"],
+                            "fly_ball": row["FB%"],
                             # TODO eventually, add Bunts? Split off from GB% somehow?
                             },
              'outcome_prob': {
@@ -588,7 +591,7 @@ if __name__ == '__main__':
                                             "single": hit_traj_df.loc["Fly Balls", "1B%"],
                                             "double": hit_traj_df.loc["Fly Balls", "2B%"],
                                             "triple": hit_traj_df.loc["Fly Balls", "3B%"],
-                                            "home_run": hit_traj_df.loc["Fly Balls", "HR%"],
+                                            "home_run": row["HR/FB"], # Note, this will make sum likely not 1, which is normalized later
                                             "out": hit_traj_df.loc["Fly Balls", "Out%"]
                                             },
                             # "bunt": {
@@ -601,7 +604,7 @@ if __name__ == '__main__':
                             }
             # TODO add stolen bases, wild pitches, errors?
             # TODO pull from distribution for distance of a ball hit, or power, for chances of tagging up or multiple bases?
-            })[1]
+            })
         (batter_df[batter_df["PlayerId"] == bid].iloc[0])
             for bid in selected_batter_ids
     ]
@@ -627,7 +630,7 @@ if __name__ == '__main__':
              'contact_cat_prob': {
                             "ground_ball": row["GB%"],
                             "line_drive": row["LD%"],
-                            "fly_ball": row["FB"],
+                            "fly_ball": row["FB%"],
                             # TODO eventually, add Bunts?
                             },
              'velocity_dist': perturb_values(base_velocity_dist, 0.05), # TODO replace with params for some other RN pull on pitch
@@ -650,7 +653,7 @@ if __name__ == '__main__':
     game.play_ball()
     
     event_log = pd.DataFrame(game.event_log)
-    event_log.to_csv("event_log_1.csv", encoding='utf-8-sig', index=False)
+    event_log.to_csv("event_log.csv", encoding='utf-8-sig', index=False)
     
     make_box_score(event_log)
         
