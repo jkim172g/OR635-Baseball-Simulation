@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import pdb
 
-np.random.seed(17) # TODO need to set any random streams/substreams?
+np.random.seed(16000) # TODO need to set any random streams/substreams?
 
 # TODO do we want to track stats of what happen in the Batters and Pitchers themselves as well?
 
@@ -249,8 +249,8 @@ class Game:
     def determine_pitch_change(self, pitching_team, batting_team, pitcher, prev_pitches, prev_batting_score, starter):
         replace = False
         if starter:
-            
-            if pitcher.num_pitch > np.random.uniform(105,5)-3:
+            if pitcher.num_pitch > np.random.normal(105,5)-3:
+                
                 if not (self.inning >= 9 and pitching_team.score > batting_team.score):
                     replace = True
             elif prev_pitches - pitcher.num_pitch >= 35:
@@ -262,7 +262,7 @@ class Game:
             elif self.inning > 6 and batting_team.score - prev_batting_score > 2:
                 replace = True
         else:
-            if pitcher.num_pitch > np.random.uniform(25,5)-3:
+            if pitcher.num_pitch > np.random.normal(25,5)-3:
                 if self.outs < 2:
                     replace = True
             elif prev_pitches - pitcher.num_pitch >= 35:
@@ -272,6 +272,7 @@ class Game:
             elif pitching_team.score - batting_team.score < 3 and batting_team.score - prev_batting_score > 2:
                 replace = True
             elif 4 <= self.inning <= 6 and batting_team.score - prev_batting_score > 2:
+                
                 replace = True
             elif self.inning > 6 and batting_team.score - prev_batting_score > 1:
                 replace = True
