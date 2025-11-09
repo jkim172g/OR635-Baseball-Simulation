@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import pdb
 
-np.random.seed(16000) # TODO need to set any random streams/substreams?
+np.random.seed(100) # TODO need to set any random streams/substreams?
 
 # TODO do we want to track stats of what happen in the Batters and Pitchers themselves as well?
 
@@ -54,6 +54,7 @@ class Pitcher:
         self.movement_prob = pitcher_data['movement_prob']
         self.strike_prob = pitcher_data['strike_prob']
         self.num_pitch = 0
+        self.num_batters = 0
         self.starter = pitcher_data['starter']
         
         def __str__(self):
@@ -96,10 +97,10 @@ class Game:
         self.team1 = team1
         self.team2 = team2
         
-        self.event_log = {'Inning':[self.inning], 'Inning Half':[self.inning_half],'Event':['Init'],
-                          'Pitch Outcome':['Init'], 'Batter':['NA'], 'Batter Number':['NA'], 'Bases':[self.bases],
-                          'Baserunners':[self.baserunners], 'Balls':[self.balls], 'Strikes':[self.strikes],
-                          'Outs':[self.outs],'Team 1 Score':[0], 'Team 2 Score':[0], 'Pitcher':['NA'],
+        self.event_log = {'Inning':[], 'Inning Half':[],'Event':[],
+                          'Pitch Outcome':[], 'Batter':[], 'Batter Number':[], 'Bases':[],
+                          'Baserunners':[], 'Baserunning Event':[], 'Baserunning Result': [],'Balls':[], 'Strikes':[],
+                          'Outs':[],'Team 1 Score':[], 'Team 2 Score':[], 'Pitcher':[],
                           }
     
     def pitch(self, batter, pitcher):
@@ -109,7 +110,8 @@ class Game:
         #pitch_type = np.random.choice(list(pitcher.pitch_type_prob.keys()), p=normalize_values(pitcher.pitch_type_prob.values(), 1))
         #pitch_velocity = np.random.choice(list(pitcher.velocity_dist.keys()), p=normalize_values(pitcher.velocity_dist.values(), 1))
         #pitch_movement = np.random.choice(list(pitcher.movement_prob.keys()), p=normalize_values(pitcher.movement_prob.values(), 1))
-        
+        contact_cat = None
+        power = None
         #Calculate result
         strike_prob = get_aligned_value(pitcher.strike_prob, batter.zone_prob) # Uses Zone% for each
         strike = True if np.random.uniform() < strike_prob else False
@@ -138,7 +140,9 @@ class Game:
                             normalize_values(list(batter.contact_cat_prob.values()), 1)
                             )
                         contact_cat = np.random.choice(list(batter.contact_cat_prob.keys()), p=normalize_values(contact_cat_prob, 1))
-                        outcome_prob = batter.outcome_prob[contact_cat]                        
+                        outcome_prob = batter.outcome_prob[contact_cat]             
+                        outcome_power_prob = batter.outcome_power_prob
+                        power = np.random.choice(list(outcome_power_prob.keys()), p=normalize_values(list(outcome_power_prob.values()), 1))
                         result = np.random.choice(list(outcome_prob.keys()), p=normalize_values(list(outcome_prob.values()), 1))
                 else:
                     #If swung and missed, strike 
@@ -171,7 +175,9 @@ class Game:
                             normalize_values(list(batter.contact_cat_prob.values()), 1)
                             )
                         contact_cat = np.random.choice(list(batter.contact_cat_prob.keys()), p=normalize_values(contact_cat_prob, 1))
-                        outcome_prob = batter.outcome_prob[contact_cat]                        
+                        outcome_prob = batter.outcome_prob[contact_cat]   
+                        outcome_power_prob = batter.outcome_power_prob
+                        power = np.random.choice(list(outcome_power_prob.keys()), p=normalize_values(list(outcome_power_prob.values()), 1))
                         result = np.random.choice(list(outcome_prob.keys()), p=normalize_values(list(outcome_prob.values()), 1))
                 else:
                     #If swung and missed, strike 
@@ -182,14 +188,117 @@ class Game:
                 result = 'ball'
                
         
-        return result, pitch_result
+        return result, pitch_result, contact_cat, power
         
 
-    def move_bases(self, action, batting_team, current_batter):
+    def move_bases(self, action, batting_team, current_batter, contact_cat, power):
         #Put logic here for moving bases based on the action
-     
+        
+        def first_to_third(contact_cat, power, current_batter):
+            first_to_third_probs = {('soft','ground_ball'):(0.65,0.1),
+                                     ('soft','line_drive'):(0.75,0.05),
+                                     ('soft','fly_ball'):(0.1,0.01),
+                                     ('medium','ground_ball'):(0.66,0.05),
+                                     ('medium','line_drive'):(0.33,0.07),
+                                     ('medium','fly_ball'):(0.6,0.2),
+                                     ('hard','ground_ball'):(0.25,0.1),
+                                     ('hard','line_drive'):(0.66,0.05),
+                                     ('hard','fly_ball'):(0.8,0.15)}
+            result = []
+            probs = first_to_third_probs[(power, contact_cat)]
+            attempt = True if np.random.uniform() < probs[0] else False
+            if attempt:
+                result.append('first to third attempted')
+                thrown_out = True if np.random.uniform() < probs[1] else False
+                if thrown_out:
+                    result.append('thrown out')
+                    self.outs += 1
+                else:
+                   result.append('safe')
+
+            return result
+        
+        def single_to_double(contact_cat, power, current_batter):
+            single_to_double_probs = {('soft','ground_ball'):(0,0),
+                                     ('soft','line_drive'):(0,0),
+                                     ('soft','fly_ball'):(0,0),
+                                     ('medium','ground_ball'):(0,0),
+                                     ('medium','line_drive'):(0.05,0.25),
+                                     ('medium','fly_ball'):(0,0),
+                                     ('hard','ground_ball'):(0.1,0.4),
+                                     ('hard','line_drive'):(0.1,0.4),
+                                     ('hard','fly_ball'):(0.1,0.4)}
+            result = []
+            probs = single_to_double_probs[(power, contact_cat)]
+            attempt = True if np.random.uniform() < probs[0] else False
+            if attempt:
+                result.append('single to double attempted')
+                thrown_out = True if np.random.uniform() < probs[1] else False
+                if thrown_out:
+                    result.append('thrown out')
+                    self.outs += 1
+                else:
+                   result.append('safe')
+
+            return result
+        def first_to_home_double(contact_cat, current_batter):
+            num_outs = '2' if self.outs == 1 else '<2'
+            run_diff = '>3' if abs(self.team1.score - self.team2.score) >3 else '<3'
+            if num_outs != '2':
+                game_state = num_outs + ' ' + run_diff
+            else:
+                game_state = '2'
+            first_to_home_probs = {('<2 >3','ground_ball'):(0.5,0.1),
+                                     ('<2 >3','line_drive'):(0.5,0.1),
+                                     ('<2 >3','fly_ball'):(0.3,0.1),
+                                     ('<2 <3','ground_ball'):(0.4,0.03),
+                                     ('<2 <3','line_drive'):(0.6,0.03),
+                                     ('<2 <3','fly_ball'):(0.2,0.03),
+                                     ('2','ground_ball'):(0.9,0.1),
+                                     ('2','line_drive'):(0.9,0.1),
+                                     ('2','fly_ball'):(0.9,0.1)}
+            result = []
+            probs = first_to_home_probs[(game_state, contact_cat)]
+            attempt = True if np.random.uniform() < probs[0] else False
+            if attempt:
+                result.append('first to home attempted')
+                thrown_out = True if np.random.uniform() < probs[1] else False
+                if thrown_out:
+                    result.append('thrown out')
+                    self.outs += 1
+                else:
+                   result.append('safe')
+
+            return result
+        
+        def double_to_triple(contact_cat, power, current_batter):
+            single_to_double_probs = {('soft','ground_ball'):(0,0),
+                                     ('soft','line_drive'):(0,0),
+                                     ('soft','fly_ball'):(0,0),
+                                     ('medium','ground_ball'):(0,0),
+                                     ('medium','line_drive'):(0,0),
+                                     ('medium','fly_ball'):(0,0),
+                                     ('hard','ground_ball'):(0.05,0.6),
+                                     ('hard','line_drive'):(0.05,0.6),
+                                     ('hard','fly_ball'):(0.05,0.6)}
+            result = []
+            probs = single_to_double_probs[(power, contact_cat)]
+            attempt = True if np.random.uniform() < probs[0] else False
+            if attempt:
+                result.append('single to double attempted')
+                thrown_out = True if np.random.uniform() < probs[1] else False
+                if thrown_out:
+                    result.append('thrown out')
+                    self.outs += 1
+                else:
+                   result.append('safe')
+
+            return result
+                 
+                
         ## How do we determine whether a player already on base was out?
         #pdb.set_trace()
+        baserunning_result = []
         if action == 'home_run':
             batting_team.score += sum(self.bases) + 1
             self.bases = [0,0,0]
@@ -217,34 +326,194 @@ class Game:
                 self.bases[1] = 1
                 self.baserunners[1] = self.baserunners[0]
                 self.baserunners[0] = current_batter.name
-        elif action == 'single': # TODO update baserunning logic later
+        elif action == 'single':
             # Batter goes to First, any baserunners advance, score if on Third
             batting_team.score += self.bases[2]
-            self.bases[2] = self.bases[1]
-            self.bases[1] = self.bases[0]
-            self.bases[0] = 1
-            self.baserunners[2] = self.baserunners[1]
-            self.baserunners[1] = self.baserunners[0]
-            self.baserunners[0] = current_batter.name
+            # Check if runner on first
+            if self.bases[0] == 1:
+                #If runner on first, check if runner attempts to third
+                first_to_third_result = first_to_third(contact_cat, power, current_batter)
+                
+                if len(first_to_third_result) == 0:
+                    
+                    #If not attempted, all runners advance one base
+                    self.bases[2] = self.bases[1]
+                    self.bases[1] = self.bases[0]
+                    self.bases[0] = 1
+                    self.baserunners[2] = self.baserunners[1]
+                    self.baserunners[1] = self.baserunners[0]
+                    self.baserunners[0] = current_batter.name
+                elif first_to_third_result[1] == 'safe':
+                    baserunning_result.append(first_to_third_result)
+                    # If safe, any runner on second scores and first goes to third
+                    self.bases[2] = 1
+                    batting_team.score += self.bases[1]
+                    self.baserunners[2] = self.baserunners[0]
+                    # Check single to double
+                    single_to_double_result = single_to_double(contact_cat, power, current_batter)
+                    
+                    # If not single to double, batter just goes one base
+                    if len(single_to_double_result) == 0:
+                        
+                        self.bases[1] = 0
+                        self.bases[0] = 1
+                        self.baserunners[1] = 0
+                        self.baserunners[0] = current_batter.name
+                    elif single_to_double_result[1] == 'safe':
+                        #If single to double safe, move bases accordingly
+                        baserunning_result.append(single_to_double_result)
+                        self.bases[1] = 1
+                        self.bases[0] = 0
+                        self.baserunners[1] = current_batter.name
+                        self.baserunners[0] = 0
+                    else:
+                        #If not safe update
+                        baserunning_result.append(single_to_double_result)
+                        self.bases[1] = 0
+                        self.bases[0] = 0
+                        self.baserunners[1] = 0
+                        self.baserunners[0] = 0
+                        
+                else:
+                    baserunning_result.append(first_to_third_result)
+                    #If first to third not safe, then batter will NOT attempt to go to second. Update accordingly
+                    self.bases[2] = 0
+                    self.bases[1] = 0
+                    self.bases[0] = 1
+                    self.baserunners[2] = 0
+                    self.baserunners[1] = 0
+                    self.baserunners[0] = current_batter.name
+            else:
+                #If no runner on first, check if batter attempts to go to second
+                single_to_double_result = single_to_double(contact_cat, power, current_batter)
+                
+                if len(single_to_double_result) == 0:
+                    
+                    #If no attempt to second, all baserunners move one base
+                    self.bases[2] = self.bases[1]
+                    self.bases[1] = self.bases[0]
+                    self.bases[0] = 1
+                    self.baserunners[2] = self.baserunners[1]
+                    self.baserunners[1] = self.baserunners[0]
+                    self.baserunners[0] = current_batter.name
+                elif single_to_double_result[1] == 'safe':
+                    baserunning_result.append(single_to_double_result)
+                    #If attempted and safe, runner on second goes to third
+                    self.bases[2] = self.bases[1]
+                    self.bases[1] = 1
+                    self.bases[0] = 0
+                    self.baserunners[2] = self.baserunners[1]
+                    self.baserunners[1] = current_batter.name
+                    self.baserunners[0] = 0
+                else:
+                    #If attempted and out, update
+                    baserunning_result.append(single_to_double_result)
+                    self.bases[2] = self.bases[1]
+                    self.bases[1] = 0
+                    self.bases[0] = 0
+                    self.baserunners[2] = self.baserunners[1]
+                    self.baserunners[1] = 0
+                    self.baserunners[0] = 0
+            
         elif action == 'double': # TODO update baserunning logic later
-            # Batter goes to second, any baserunners advance two bases (for now), score if on Second or Third
+            # Runners on third and second score
             batting_team.score += self.bases[2] + self.bases[1]
-            self.bases[2] = self.bases[0]
-            self.bases[1] = 1
-            self.bases[0] = 0
-            self.baserunners[2] = self.baserunners[0]
-            self.baserunners[1] = current_batter.name
-            self.baserunners[0] = 0        
-        elif action == 'triple':
-            # All runners clear bases, score, batter goes to Third
-            batting_team.score += sum(self.bases)
-            self.bases = [0,0,1]
-            self.baserunners[2] = current_batter.name
-            self.baserunners[1] = 0
-            self.baserunners[0] = 0
+            # Check if runner on first
+            if self.bases[0] == 1:
+                #If runner on first, check if runner attempts to home
+                first_to_home_result = first_to_home_double(contact_cat,current_batter)
+                
+                if len(first_to_home_result) == 0:
+                    
+                    #If not attempted, all runners advance two bases
+                    self.bases[2] = self.bases[0]
+                    self.bases[1] = 1
+                    self.bases[0] = 0
+                    self.baserunners[2] = self.baserunners[0]
+                    self.baserunners[1] = current_batter.name
+                    self.baserunners[0] = 0
+                elif first_to_home_result[1] == 'safe':
+                    baserunning_result.append(first_to_home_result)
+                    # If safe, add one to score
+                    batting_team.score += 1
+                    
+                    # Check double to triple
+                    double_to_triple_result = double_to_triple(contact_cat, power, current_batter)
+                    
+                    
+                    if len(double_to_triple_result) == 0:
+                        # If not dohble to triple not attempted, batter goes two bases. First and third are empty
+                        self.bases[2] = 0
+                        self.bases[1] = 1
+                        self.bases[0] = 0
+                        self.baserunners[1] = 0
+                        self.baserunners[1] = current_batter.name
+                        self.baserunners[0] = 0
+                    elif double_to_triple_result[1] == 'safe':
+                        #If double to triple safe, only third is 
+                        baserunning_result.append(double_to_triple_result)
+                        self.bases[2] = 1
+                        self.bases[1] = 0
+                        self.bases[0] = 0
+                        self.baserunners[2] = current_batter.name
+                        self.baserunners[1] = 0
+                        self.baserunners[0] = 0
+                    else:
+                        #If not safe, bases are empty
+                        baserunning_result.append(double_to_triple_result)
+                        self.bases[2] = 0
+                        self.bases[1] = 0
+                        self.bases[0] = 0
+                        self.baserunners[1] = 0
+                        self.baserunners[1] = 0
+                        self.baserunners[0] = 0
+                        
+                else:
+                    baserunning_result.append(first_to_home_result)
+                    #If first to third not safe, then batter will NOT attempt to go to third. Update accordingly
+                    self.bases[2] = 0
+                    self.bases[1] = 1
+                    self.bases[0] = 0
+                    self.baserunners[2] = 0
+                    self.baserunners[1] = current_batter.name
+                    self.baserunners[0] = 0
+            else:
+                #If no runner on first, check if batter attempts to go to third
+                double_to_triple_result = double_to_triple(contact_cat, power, current_batter)
+                
+                if len(double_to_triple_result) == 0:
+                    
+                    #If no attempt to third, batter ends at second. first and third empty
+                    self.bases[2] = 0
+                    self.bases[1] = 1
+                    self.bases[0] = 0
+                    self.baserunners[2] = 0
+                    self.baserunners[1] = current_batter.name
+                    self.baserunners[0] = 0
+                elif double_to_triple_result[1] == 'safe':
+                    #If attempted and safe, batter goes to third, all others empty
+                    baserunning_result.append(double_to_triple_result)
+                    
+                    self.bases[2] = 1
+                    self.bases[1] = 0
+                    self.bases[0] = 0
+                    self.baserunners[2] = current_batter.name
+                    self.baserunners[1] = 0
+                    self.baserunners[0] = 0
+                else:
+                    #If attempted and out, all bases empty
+                    baserunning_result.append(double_to_triple_result)
+                    self.bases[2] = 0
+                    self.bases[1] = 0
+                    self.bases[0] = 0
+                    self.baserunners[2] = 0
+                    self.baserunners[1] = 0
+                    self.baserunners[0] = 0
         else:
             # TODO add tag-up logic
             self.outs += 1
+
+        return baserunning_result
     
     def determine_pitch_change(self, pitching_team, batting_team, pitcher, prev_pitches, prev_batting_score, starter):
         replace = False
@@ -262,6 +531,7 @@ class Game:
             elif self.inning > 6 and batting_team.score - prev_batting_score > 2:
                 replace = True
         else:
+            
             if pitcher.num_pitch > np.random.normal(25,5)-3:
                 if self.outs < 2:
                     replace = True
@@ -283,6 +553,7 @@ class Game:
         end_game = False
         prev_pitches =  [pitching_team.pitchers[pitching_team.pitcher_index].num_pitch][0]
         prev_batting_score = [batting_team.score][0]
+    
         while self.outs < 3 and not end_game:
             #Set batter and pitcher
             self.strikes = 0
@@ -292,8 +563,9 @@ class Game:
             #Run through a pitch and update outcomes
             hit = False
             while self.strikes < 3 and self.balls < 4 and not hit and not end_game:
+                baserunning_result = []
                 #Get result of pitch
-                event, pitch_result = self.pitch(current_batter, current_pitcher)
+                event, pitch_result, contact_cat, power = self.pitch(current_batter, current_pitcher)
                 #Update stats
                 if event == 'strike':
                         self.strikes += 1
@@ -304,18 +576,18 @@ class Game:
                         self.balls += 1
                         #Record a walk if ball 4
                         if self.balls == 4:
-                            self.move_bases('walk', batting_team, current_batter)
+                            baserunning_result = self.move_bases('walk', batting_team, current_batter, contact_cat, power)
                 elif event == 'foul':
                     #Record a strike if foul and strikes < 2
                     if self.strikes < 2:
                         self.strikes += 1
                 else:
                     #Move bases if a hit
-                    self.move_bases(event, batting_team, current_batter)
+                    baserunning_result = self.move_bases(event, batting_team, current_batter,contact_cat, power)
                     hit = True
                 #After each pitch, update current game state
                 
-                self.update_event_log(current_batter, batting_team.batter_index, current_pitcher, event, pitch_result)
+                self.update_event_log(current_batter, batting_team.batter_index, current_pitcher, event, pitch_result, baserunning_result)
                 
                 #If home team scored in the final inning to go ahead, end game
                 if self.inning >= 9 and self.inning_half == 'bottom' and batting_team.score > pitching_team.score:
@@ -338,7 +610,7 @@ class Game:
                 prev_pitches =  [pitching_team.pitchers[pitching_team.pitcher_index].num_pitch][0]
                 prev_batting_score = [batting_team.score][0]
         
-    def update_event_log(self, current_batter, batter_index, current_pitcher, event, pitch_result):
+    def update_event_log(self, current_batter, batter_index, current_pitcher, event, pitch_result, baserunning_result):
         #Add all current information to the event log
         self.event_log['Inning'].append(self.inning)
         self.event_log['Inning Half'].append(self.inning_half)
@@ -353,6 +625,20 @@ class Game:
         self.event_log['Batter Number'].append(batter_index + 1) # TODO maybe replace with an added current_batter.lineup_spot?
         self.event_log['Pitcher'].append(current_pitcher.name)
         self.event_log['Pitch Outcome'].append(pitch_result)
+        if len(baserunning_result) == 0:
+            self.event_log['Baserunning Event'].append('None')
+            if sum(self.bases) == 0:
+                self.event_log['Baserunning Result'].append('NA')
+            else:
+                self.event_log['Baserunning Result'].append('safe')
+        else:
+            b_event = ''
+            b_result = ''
+            for base_event in baserunning_result:
+                b_event += base_event[0] + ','
+                b_result += base_event[1] + ','
+            self.event_log['Baserunning Event'].append(b_event[:-1])
+            self.event_log['Baserunning Result'].append(b_result[:-1])
         if self.strikes == 3:
             self.event_log['Event'].append('strikeout')
         elif self.balls == 4:
@@ -599,7 +885,7 @@ if __name__ == '__main__':
     pitcher_ids = list(pitcher_df["PlayerId"])
     # TODO add pitching changes, relief pitching. Currently just selecting a starting pitcher for each side to pitch the whole game
     selected_batter_ids = np.random.choice(batter_ids, 18, replace=False) # samples w/o replacement
-    selected_pitcher_ids = np.random.choice(pitcher_ids, 10, replace=False) # samples w/o replacemnet
+    selected_pitcher_ids = np.random.choice(pitcher_ids, 26, replace=False) # samples w/o replacemnet
     
     # TODO update decision logic for new GB/LD/FB then 1B/2B/3B/HR/Out rates
     # TODO integrate new decision logic for other outcomes (IBB, HBP, SF, SH, BO)
@@ -708,12 +994,12 @@ if __name__ == '__main__':
     batters2 = [Batter(batter) for batter in batter_data[9:]]
 
     
-    pitchers1 = [Pitcher(pitcher) for pitcher in pitcher_data[0:5]]
+    pitchers1 = [Pitcher(pitcher) for pitcher in pitcher_data[0:13]]
     #Label first pitcher as the starter
     pitchers1[0].starter = True
 
     
-    pitchers2 = [Pitcher(pitcher) for pitcher in pitcher_data[5:]]
+    pitchers2 = [Pitcher(pitcher) for pitcher in pitcher_data[13:]]
     #Label first pitcher as the starter
     pitchers2[0].starter = True
 
