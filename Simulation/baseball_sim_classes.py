@@ -421,7 +421,7 @@ class Game:
             # Check if runner on first
             if self.bases[0] == 1:
                 #If runner on first, check if runner attempts to home
-                first_to_home_result = first_to_home_double(contact_cat,current_batter)
+                first_to_home_result = first_to_home_double(contact_cat, current_batter)
                 
                 if len(first_to_home_result) == 0:
                     
@@ -583,11 +583,12 @@ class Game:
                         self.strikes += 1
                 else:
                     #Move bases if a hit
-                    baserunning_result = self.move_bases(event, batting_team, current_batter,contact_cat, power)
+                    baserunning_result = self.move_bases(event, batting_team, current_batter, contact_cat, power)
                     hit = True
                 #After each pitch, update current game state
                 
-                self.update_event_log(current_batter, batting_team.batter_index, current_pitcher, event, pitch_result, baserunning_result)
+                self.update_event_log(current_batter, batting_team.batter_index, current_pitcher, event,
+                                      contact_cat, pitch_result, baserunning_result)
                 
                 #If home team scored in the final inning to go ahead, end game
                 if self.inning >= 9 and self.inning_half == 'bottom' and batting_team.score > pitching_team.score:
@@ -610,7 +611,7 @@ class Game:
                 prev_pitches =  [pitching_team.pitchers[pitching_team.pitcher_index].num_pitch][0]
                 prev_batting_score = [batting_team.score][0]
         
-    def update_event_log(self, current_batter, batter_index, current_pitcher, event, pitch_result, baserunning_result):
+    def update_event_log(self, current_batter, batter_index, current_pitcher, event, contact_cat, pitch_result, baserunning_result):
         #Add all current information to the event log
         self.event_log['Inning'].append(self.inning)
         self.event_log['Inning Half'].append(self.inning_half)
@@ -644,7 +645,14 @@ class Game:
         elif self.balls == 4:
             self.event_log['Event'].append('walk')
         else:
-            self.event_log['Event'].append(event)
+            if event in ["out", "single", "double", "triple", "home_run"]:
+                if event == "out":
+                    contact = contact_cat.split("_")[0]
+                else:
+                    contact = contact_cat.replace("_", " ")
+                self.event_log['Event'].append(contact + " " + event.replace("_", " "))
+            else:
+                self.event_log['Event'].append(event)
             
     
     def play_ball(self):
