@@ -442,11 +442,11 @@ class Game:
                     
                     
                     if len(double_to_triple_result) == 0:
-                        # If not dohble to triple not attempted, batter goes two bases. First and third are empty
+                        # If not double to triple not attempted, batter goes two bases. First and third are empty
                         self.bases[2] = 0
                         self.bases[1] = 1
                         self.bases[0] = 0
-                        self.baserunners[1] = 0
+                        self.baserunners[2] = 0
                         self.baserunners[1] = current_batter.name
                         self.baserunners[0] = 0
                     elif double_to_triple_result[1] == 'safe':
@@ -464,13 +464,13 @@ class Game:
                         self.bases[2] = 0
                         self.bases[1] = 0
                         self.bases[0] = 0
-                        self.baserunners[1] = 0
+                        self.baserunners[2] = 0
                         self.baserunners[1] = 0
                         self.baserunners[0] = 0
                         
                 else:
                     baserunning_result.append(first_to_home_result)
-                    #If first to third not safe, then batter will NOT attempt to go to third. Update accordingly
+                    #If first to home not safe, then batter will NOT attempt to go to third. Update accordingly
                     self.bases[2] = 0
                     self.bases[1] = 1
                     self.bases[0] = 0
