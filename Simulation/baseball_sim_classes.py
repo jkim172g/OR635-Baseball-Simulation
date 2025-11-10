@@ -105,14 +105,13 @@ class Game:
     
     def pitch(self, batter, pitcher):
         # Get pitch details
-
         pitcher.num_pitch += 1
-        print()
         pitch_type = np.random.choice(list(pitcher.pitch_type_prob.keys()), p=normalize_values(list(pitcher.pitch_type_prob.values()), 1))
         #pitch_velocity = np.random.choice(list(pitcher.velocity_dist.keys()), p=normalize_values(list(pitcher.velocity_dist.values()), 1))
         #pitch_movement = np.random.choice(list(pitcher.movement_prob.keys()), p=normalize_values(list(pitcher.movement_prob.values()), 1))
         contact_cat = None
         power = None
+
         #Calculate result
         batter_zone_prob = batter.zone_prob[pitch_type] or batter.zone_prob["na"]
         strike_prob = get_aligned_value(pitcher.strike_prob, batter_zone_prob) # Uses Zone% for each
@@ -191,10 +190,9 @@ class Game:
             else:
                 pitch_result= 'ball'
                 #if ball not swung at, result is a ball
-                result = 'ball'
-               
+                result = 'ball'         
         
-        return result, pitch_result, contact_cat, power
+        return result, pitch_result, swing, contact_cat, power
         
 
     def move_bases(self, action, batting_team, current_batter, contact_cat, power):
@@ -581,7 +579,7 @@ class Game:
             while self.strikes < 3 and self.balls < 4 and not hit and not end_game:
                 baserunning_result = []
                 #Get result of pitch
-                event, pitch_result, contact_cat, power = self.pitch(current_batter, current_pitcher)
+                event, pitch_result, swing, contact_cat, power = self.pitch(current_batter, current_pitcher)
                 #Update stats
                 if event == 'strike':
                         self.strikes += 1
@@ -604,7 +602,7 @@ class Game:
                 #After each pitch, update current game state
                 
                 self.update_event_log(current_batter, batting_team.batter_index, current_pitcher, event,
-                                      contact_cat, pitch_result, baserunning_result)
+                                      swing, contact_cat, pitch_result, baserunning_result)
                 
                 #If home team scored in the final inning to go ahead, end game
                 if self.inning >= 9 and self.inning_half == 'bottom' and batting_team.score > pitching_team.score:
@@ -627,7 +625,7 @@ class Game:
                 prev_pitches =  [pitching_team.pitchers[pitching_team.pitcher_index].num_pitch][0]
                 prev_batting_score = [batting_team.score][0]
         
-    def update_event_log(self, current_batter, batter_index, current_pitcher, event, contact_cat, pitch_result, baserunning_result):
+    def update_event_log(self, current_batter, batter_index, current_pitcher, event, swing, contact_cat, pitch_result, baserunning_result):
         #Add all current information to the event log
         self.event_log['Inning'].append(self.inning)
         self.event_log['Inning Half'].append(self.inning_half)
@@ -658,13 +656,21 @@ class Game:
             self.event_log['Baserunning Result'].append(b_result[:-1])
         if self.strikes == 3:
             self.event_log['Event'].append('strikeout')
-            self.event_log['Detailed Event'].append('strikeout') # TODO make swining vs looking
+            if swing:
+                self.event_log['Detailed Event'].append('strikeout swinging')
+            else:
+                self.event_log['Detailed Event'].append('strikeout looking')
         elif self.balls == 4:
             self.event_log['Event'].append('walk')
             self.event_log['Detailed Event'].append('walk')
         else:
             self.event_log['Event'].append(event)
-            if event in ["out", "single", "double", "triple", "home_run"]:
+            if event == "strike":
+                if swing:
+                    self.event_log['Detailed Event'].append('swinging strike')
+                else:
+                    self.event_log['Detailed Event'].append('called strike')
+            elif event in ["out", "single", "double", "triple", "home_run"]:
                 if event == "out":
                     contact = contact_cat.split("_")[0]
                 else:
@@ -1072,7 +1078,7 @@ if __name__ == '__main__':
     
     game = Game(team1, team2)
     game.play_ball()
-    
+
     event_log = pd.DataFrame(game.event_log)
     event_log.to_csv("event_log.csv", encoding='utf-8-sig', index=False)
     
