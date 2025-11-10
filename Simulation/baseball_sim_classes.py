@@ -509,6 +509,14 @@ class Game:
                     self.baserunners[2] = 0
                     self.baserunners[1] = 0
                     self.baserunners[0] = 0
+        elif action == "triple":
+            # All runners clear bases, score, batter goes to Third
+            # Note there is no attempted extra bases with this, as triples are already very rare, so an inside the park HR is incredibly unlikely
+            batting_team.score += sum(self.bases)
+            self.bases = [0,0,1]
+            self.baserunners[2] = current_batter.name
+            self.baserunners[1] = 0
+            self.baserunners[0] = 0
         else:
             # TODO add tag-up logic
             self.outs += 1
