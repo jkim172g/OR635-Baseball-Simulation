@@ -517,9 +517,11 @@ class Game:
             self.baserunners[2] = current_batter.name
             self.baserunners[1] = 0
             self.baserunners[0] = 0
-        else:
-            # TODO add tag-up logic
+        elif action == "out":
+            # TODO add tag-up logic for fly outs
             self.outs += 1
+        else:
+            raise NotImplementedError("Logic for this event action is not implemented yet.")
 
         return baserunning_result
     
@@ -892,8 +894,6 @@ def read_data():
 
 
 if __name__ == '__main__':
-    # TODO add selection based on team? Data currently has lots of blanks bc of trades/moves
-    # TODO don't have hard hit %s in merged_data_b, so can't calc GO/LO/FO from that
     
     batter_df, pitcher_df, hit_traj_df = read_data()
 
@@ -903,8 +903,6 @@ if __name__ == '__main__':
     selected_batter_ids = np.random.choice(batter_ids, 18, replace=False) # samples w/o replacement
     selected_pitcher_ids = np.random.choice(pitcher_ids, 26, replace=False) # samples w/o replacemnet
     
-    # TODO update decision logic for new GB/LD/FB then 1B/2B/3B/HR/Out rates
-    # TODO integrate new decision logic for other outcomes (IBB, HBP, SF, SH, BO)
     batter_data = [ 
         (lambda row:
             {'name': row["Name"],
