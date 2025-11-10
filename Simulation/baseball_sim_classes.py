@@ -97,7 +97,7 @@ class Game:
         self.team1 = team1
         self.team2 = team2
         
-        self.event_log = {'Inning':[], 'Inning Half':[],'Event':[], 'Detailed Event':[],
+        self.event_log = {'Inning':[], 'Inning Half':[],'Event':[], 'Detailed Event':[], 'Pitch Type':[],
                           'Pitch Outcome':[], 'Batter':[], 'Batter Number':[], 'Bases':[],
                           'Baserunners':[], 'Baserunning Event':[], 'Baserunning Result': [],'Balls':[], 'Strikes':[],
                           'Outs':[],'Team 1 Score':[], 'Team 2 Score':[], 'Pitcher':[],
@@ -192,7 +192,7 @@ class Game:
                 #if ball not swung at, result is a ball
                 result = 'ball'         
         
-        return result, pitch_result, swing, contact_cat, power
+        return result, pitch_result, swing, pitch_type, contact_cat, power
         
 
     def move_bases(self, action, batting_team, current_batter, contact_cat, power):
@@ -579,7 +579,7 @@ class Game:
             while self.strikes < 3 and self.balls < 4 and not hit and not end_game:
                 baserunning_result = []
                 #Get result of pitch
-                event, pitch_result, swing, contact_cat, power = self.pitch(current_batter, current_pitcher)
+                event, pitch_result, swing, pitch_type, contact_cat, power = self.pitch(current_batter, current_pitcher)
                 #Update stats
                 if event == 'strike':
                         self.strikes += 1
@@ -602,7 +602,7 @@ class Game:
                 #After each pitch, update current game state
                 
                 self.update_event_log(current_batter, batting_team.batter_index, current_pitcher, event,
-                                      swing, contact_cat, pitch_result, baserunning_result)
+                                      swing, contact_cat, pitch_result, pitch_type, baserunning_result)
                 
                 #If home team scored in the final inning to go ahead, end game
                 if self.inning >= 9 and self.inning_half == 'bottom' and batting_team.score > pitching_team.score:
@@ -625,7 +625,8 @@ class Game:
                 prev_pitches =  [pitching_team.pitchers[pitching_team.pitcher_index].num_pitch][0]
                 prev_batting_score = [batting_team.score][0]
         
-    def update_event_log(self, current_batter, batter_index, current_pitcher, event, swing, contact_cat, pitch_result, baserunning_result):
+    def update_event_log(self, current_batter, batter_index, current_pitcher, event, swing,
+                         contact_cat, pitch_result, pitch_type, baserunning_result):
         #Add all current information to the event log
         self.event_log['Inning'].append(self.inning)
         self.event_log['Inning Half'].append(self.inning_half)
@@ -639,6 +640,7 @@ class Game:
         self.event_log['Batter'].append(current_batter.name)
         self.event_log['Batter Number'].append(batter_index + 1) # TODO maybe replace with an added current_batter.lineup_spot?
         self.event_log['Pitcher'].append(current_pitcher.name)
+        self.event_log['Pitch Type'].append(pitch_type)
         self.event_log['Pitch Outcome'].append(pitch_result)
         if len(baserunning_result) == 0:
             self.event_log['Baserunning Event'].append('None')
