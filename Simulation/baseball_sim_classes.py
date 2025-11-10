@@ -97,7 +97,7 @@ class Game:
         self.team1 = team1
         self.team2 = team2
         
-        self.event_log = {'Inning':[], 'Inning Half':[],'Event':[],
+        self.event_log = {'Inning':[], 'Inning Half':[],'Event':[], 'Detailed Event':[],
                           'Pitch Outcome':[], 'Batter':[], 'Batter Number':[], 'Bases':[],
                           'Baserunners':[], 'Baserunning Event':[], 'Baserunning Result': [],'Balls':[], 'Strikes':[],
                           'Outs':[],'Team 1 Score':[], 'Team 2 Score':[], 'Pitcher':[],
@@ -658,17 +658,20 @@ class Game:
             self.event_log['Baserunning Result'].append(b_result[:-1])
         if self.strikes == 3:
             self.event_log['Event'].append('strikeout')
+            self.event_log['Detailed Event'].append('strikeout') # TODO make swining vs looking
         elif self.balls == 4:
             self.event_log['Event'].append('walk')
+            self.event_log['Detailed Event'].append('walk')
         else:
+            self.event_log['Event'].append(event)
             if event in ["out", "single", "double", "triple", "home_run"]:
                 if event == "out":
                     contact = contact_cat.split("_")[0]
                 else:
                     contact = contact_cat.replace("_", " ")
-                self.event_log['Event'].append(contact + " " + event.replace("_", " "))
+                self.event_log['Detailed Event'].append(contact + " " + event.replace("_", " "))
             else:
-                self.event_log['Event'].append(event)
+                self.event_log['Detailed Event'].append(event)
             
     
     def play_ball(self):
