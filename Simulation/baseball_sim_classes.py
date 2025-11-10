@@ -107,26 +107,30 @@ class Game:
         # Get pitch details
 
         pitcher.num_pitch += 1
-        #pitch_type = np.random.choice(list(pitcher.pitch_type_prob.keys()), p=normalize_values(pitcher.pitch_type_prob.values(), 1))
-        #pitch_velocity = np.random.choice(list(pitcher.velocity_dist.keys()), p=normalize_values(pitcher.velocity_dist.values(), 1))
-        #pitch_movement = np.random.choice(list(pitcher.movement_prob.keys()), p=normalize_values(pitcher.movement_prob.values(), 1))
+        print()
+        pitch_type = np.random.choice(list(pitcher.pitch_type_prob.keys()), p=normalize_values(list(pitcher.pitch_type_prob.values()), 1))
+        #pitch_velocity = np.random.choice(list(pitcher.velocity_dist.keys()), p=normalize_values(list(pitcher.velocity_dist.values()), 1))
+        #pitch_movement = np.random.choice(list(pitcher.movement_prob.keys()), p=normalize_values(list(pitcher.movement_prob.values()), 1))
         contact_cat = None
         power = None
         #Calculate result
-        strike_prob = get_aligned_value(pitcher.strike_prob, batter.zone_prob) # Uses Zone% for each
+        batter_zone_prob = batter.zone_prob[pitch_type] or batter.zone_prob["na"]
+        strike_prob = get_aligned_value(pitcher.strike_prob, batter_zone_prob) # Uses Zone% for each
         strike = True if np.random.uniform() < strike_prob else False
         if strike:
             pitch_result = 'strike'
             #If strike, check if batter swings
             #Adjust swing prob by half if 3 balls and less than two strikes
             # Uses Z-Swing%
-            adj_batter_swing_prob = batter.swing_prob['strike']/2 if self.balls == 3 and self.strikes < 2 else batter.swing_prob['strike']
+            base_batter_swing_prob = batter.swing_prob[pitch_type]["strike"] or batter.swing_prob["na"]["strike"]
+            adj_batter_swing_prob = base_batter_swing_prob/2 if self.balls == 3 and self.strikes < 2 else base_batter_swing_prob
             swing_prob = get_aligned_value(pitcher.swing_prob['strike'], adj_batter_swing_prob)
             swing = True if np.random.uniform() < swing_prob else False
             if swing:
                 #If batter swings, check if contact was made
                 # Uses Z-Contact%
-                contact_prob = get_aligned_value(pitcher.contact_prob['strike'], batter.contact_prob['strike'])
+                batter_contact_prob = batter.contact_prob[pitch_type]["strike"] or batter.contact_prob["na"]["strike"]
+                contact_prob = get_aligned_value(pitcher.contact_prob['strike'], batter_contact_prob)
                 contact = True if np.random.uniform() < contact_prob else False
                 #If contact was made, calculate result
                 if contact:
@@ -153,7 +157,8 @@ class Game:
         else:
             #If ball was thrown, check if it was swung at
             # Uses O-Swing%
-            adj_batter_swing_prob = batter.swing_prob['ball']/2 if self.balls == 3 and self.strikes < 2 else batter.swing_prob['ball']
+            base_batter_swing_prob = batter.swing_prob[pitch_type]["ball"] or batter.swing_prob["na"]["ball"]
+            adj_batter_swing_prob = base_batter_swing_prob/2 if self.balls == 3 and self.strikes < 2 else base_batter_swing_prob
             swing_prob = get_aligned_value(pitcher.swing_prob['ball'], adj_batter_swing_prob)
             swing = True if np.random.uniform() < swing_prob else False
             if swing:
@@ -161,7 +166,8 @@ class Game:
                 pitch_result= 'strike'
                 #If batter swings, check if contact was made
                 # Uses O-Contact%
-                contact_prob = get_aligned_value(pitcher.contact_prob['ball'], batter.contact_prob['ball'])
+                batter_contact_prob = batter.contact_prob[pitch_type]["ball"] or batter.contact_prob["na"]["ball"]
+                contact_prob = get_aligned_value(pitcher.contact_prob['ball'], batter_contact_prob)
                 contact = True if np.random.uniform() < contact_prob else False
                 #If contact was made, calculate result
                 if contact:
@@ -880,6 +886,15 @@ def read_data():
     pitcher_df = pd.read_excel("../Data/Merged_Data_C.xlsx", sheet_name="Pitching Data")
     hit_traj_df = pd.read_excel("../Data/hit_trajectory.xlsx", sheet_name="Worksheet", index_col=0)
 
+    fb_disc_df_raw = pd.read_csv("../Data/Batter_FB_Discipline.csv") # fastball
+    fb_disc_df = fb_disc_df_raw.groupby("Name", as_index=False).mean(numeric_only=True).set_index("Name", drop=False)
+    ch_disc_df_raw = pd.read_csv("../Data/Batter_CH_Discipline.csv") # changeup
+    ch_disc_df = ch_disc_df_raw.groupby("Name", as_index=False).mean(numeric_only=True).set_index("Name", drop=False)
+    cu_disc_df_raw = pd.read_csv("../Data/Batter_CU_Discipline.csv") # curveball
+    cu_disc_df = cu_disc_df_raw.groupby("Name", as_index=False).mean(numeric_only=True).set_index("Name", drop=False)
+    sl_disc_df_raw = pd.read_csv("../Data/Batter_SL_Discipline.csv") # slider
+    sl_disc_df = sl_disc_df_raw.groupby("Name", as_index=False).mean(numeric_only=True).set_index("Name", drop=False)
+
     pitcher_df.fillna(0, inplace=True) # TODO is this ok? Or need to be more selective like below?
     # pitcher_df[["FA%", "FT%", "FC%", "FS%", "FO%", "SI%", "SL%", "CU%", "KC%", "EP%", "CH%", "SC%", "KN%", "UN%"]] = pitcher_df[["FA%", "FT%", "FC%", "FS%", "FO%", "SI%", "SL%", "CU%", "KC%", "EP%", "CH%", "SC%", "KN%", "UN%"]].fillna(0)
     hit_traj_df["1B"] = hit_traj_df["H"] - hit_traj_df["2B"] - hit_traj_df["3B"] - hit_traj_df["HR"]
@@ -890,12 +905,17 @@ def read_data():
     hit_traj_df["HR%"] = hit_traj_df["HR"] / hit_traj_df["AB"]
     hit_traj_df["Out%"] = hit_traj_df["Out"] / hit_traj_df["AB"]
     
-    return batter_df, pitcher_df, hit_traj_df
+    return batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df
 
 
 if __name__ == '__main__':
     
-    batter_df, pitcher_df, hit_traj_df = read_data()
+    batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df = read_data()
+
+    fb_names = set(fb_disc_df.index)
+    cu_names = set(cu_disc_df.index)
+    sl_names = set(sl_disc_df.index)
+    ch_names = set(ch_disc_df.index)
 
     batter_ids = list(batter_df["PlayerId"])
     pitcher_ids = list(pitcher_df["PlayerId"])
@@ -908,9 +928,35 @@ if __name__ == '__main__':
             {'name': row["Name"],
              'id': row["PlayerId"],
              'team': row["Team"],
-             'zone_prob': row["Zone%"],
-             'swing_prob': {'strike': row["Z-Swing%"], 'ball': row["O-Swing%"]},
-             'contact_prob': {'strike': row["Z-Contact%"], 'ball': row["O-Contact%"]},
+             'zone_prob': {
+                           "na": row["Zone%"],
+                           "fastball": fb_disc_df.loc[row["Name"], "Zone%"] if row["Name"] in fb_names else None, 
+                           "curveball": cu_disc_df.loc[row["Name"], "Zone%"] if row["Name"] in cu_names else None,
+                           "slider": sl_disc_df.loc[row["Name"], "Zone%"] if row["Name"] in sl_names else None,
+                           "changeup": ch_disc_df.loc[row["Name"], "Zone%"] if row["Name"] in ch_names else None 
+                        },
+             'swing_prob': {
+                            "na": {'strike': row["Z-Swing%"], 'ball': row["O-Swing%"]},
+                            "fastball": {'strike': fb_disc_df.loc[row["Name"], "Z-Swing%"] if row["Name"] in fb_names else None,
+                                         'ball': fb_disc_df.loc[row["Name"], "O-Swing%"] if row["Name"] in fb_names else None},
+                            "curveball": {'strike': cu_disc_df.loc[row["Name"], "Z-Swing%"] if row["Name"] in cu_names else None,
+                                         'ball': cu_disc_df.loc[row["Name"], "O-Swing%"] if row["Name"] in cu_names else None},
+                            "slider": {'strike': sl_disc_df.loc[row["Name"], "Z-Swing%"] if row["Name"] in sl_names else None,
+                                         'ball': sl_disc_df.loc[row["Name"], "O-Swing%"] if row["Name"] in sl_names else None},
+                            "changeup": {'strike': ch_disc_df.loc[row["Name"], "Z-Swing%"] if row["Name"] in ch_names else None,
+                                         'ball': ch_disc_df.loc[row["Name"], "O-Swing%"] if row["Name"] in ch_names else None},
+                        },
+             'contact_prob': {
+                            "na": {'strike': row["Z-Contact%"], 'ball': row["O-Contact%"]},
+                            "fastball": {'strike': fb_disc_df.loc[row["Name"], "Z-Contact%"] if row["Name"] in fb_names else None,
+                                         'ball': fb_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in fb_names else None},
+                            "curveball": {'strike': cu_disc_df.loc[row["Name"], "Z-Contact%"] if row["Name"] in cu_names else None,
+                                         'ball': cu_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in cu_names else None},
+                            "slider": {'strike': sl_disc_df.loc[row["Name"], "Z-Contact%"] if row["Name"] in sl_names else None,
+                                         'ball': sl_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in sl_names else None},
+                            "changeup": {'strike': ch_disc_df.loc[row["Name"], "Z-Contact%"] if row["Name"] in ch_names else None,
+                                         'ball': ch_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in ch_names else None},
+                        },
              'foul_prob': {'strike': 0.22, 'ball': 0.22}, # TODO add this by-player? Also add foul-out chance/rate
             #  'int_walk_prob': row["IBB"] / row["PA"], # TODO no longer in merged data for these 4
             #  'hit_by_pitch_prob': row["HBP"] / row["PA"],
