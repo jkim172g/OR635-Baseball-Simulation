@@ -536,7 +536,8 @@ class Game:
                 
                 if not (self.inning >= 9 and pitching_team.score > batting_team.score):
                     replace = True
-            elif prev_pitches - pitcher.num_pitch >= 35:
+            elif pitcher.num_pitch - prev_pitches >= 35:
+                # threw 35+ pitches in an inning
                 replace = True
             elif self.inning < 4 and batting_team.score - prev_batting_score > 5:
                 replace = True
@@ -549,7 +550,8 @@ class Game:
             if pitcher.num_pitch > np.random.normal(25,5)-3:
                 if self.outs < 2:
                     replace = True
-            elif prev_pitches - pitcher.num_pitch >= 35:
+            elif pitcher.num_pitch - prev_pitches >= 35:
+                # threw 35+ pitches in an inning
                 replace = True
             elif batting_team.score - prev_batting_score > 3:
                 replace = True
