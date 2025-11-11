@@ -532,35 +532,45 @@ class Game:
     def determine_pitch_change(self, pitching_team, batting_team, pitcher, prev_pitches, prev_batting_score, starter):
         replace = False
         if starter:
+            # logic for starters
             if pitcher.num_pitch > np.random.normal(105,5)-3:
-                
+                # reached high pitch count
                 if not (self.inning >= 9 and pitching_team.score > batting_team.score):
+                    # not winning in the 9th or after
                     replace = True
             elif pitcher.num_pitch - prev_pitches >= 35:
                 # threw 35+ pitches in an inning
                 replace = True
             elif self.inning < 4 and batting_team.score - prev_batting_score > 5:
+                # gave up over 5 runs, and it's inside the first three innings
                 replace = True
             elif 4 <= self.inning <= 6 and batting_team.score - prev_batting_score > 3:
+                # gave up over 3 runs, and it's inside the middle three innings
                 replace = True
             elif self.inning > 6 and batting_team.score - prev_batting_score > 2:
+                # gave up over 2 runs, and it's inside the last three innings (or extra innings)
                 replace = True
         else:
-            
+            # logic for bullpen
             if pitcher.num_pitch > np.random.normal(25,5)-3:
+                # reached high pitch count
                 if self.outs < 2:
+                    # not one out away from ending the inning
                     replace = True
             elif pitcher.num_pitch - prev_pitches >= 35:
                 # threw 35+ pitches in an inning
                 replace = True
             elif batting_team.score - prev_batting_score > 3:
+                # gave up over 3 runs
                 replace = True
             elif pitching_team.score - batting_team.score < 3 and batting_team.score - prev_batting_score > 2:
+                # lead down to less than 3 runs and has given up over 2 runs
                 replace = True
             elif 4 <= self.inning <= 6 and batting_team.score - prev_batting_score > 2:
-                
+                # gave up over 2 runs, and it's inside the middle three innings
                 replace = True
             elif self.inning > 6 and batting_team.score - prev_batting_score > 1:
+                # gave up more than 1 run, and it's inside the last three innings (or extra innings)
                 replace = True
                     
         return replace
