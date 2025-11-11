@@ -55,6 +55,9 @@ class Pitcher:
         self.strike_prob = pitcher_data['strike_prob']
         self.num_pitch = 0
         self.num_batters = 0
+        self.runs_allowed = 0
+        self.hits_allowed = 0
+        self.outs = 0
         self.starter = pitcher_data['starter']
         
         def __str__(self):
@@ -195,7 +198,7 @@ class Game:
         return result, pitch_result, swing, pitch_type, contact_cat, power
         
 
-    def move_bases(self, action, batting_team, current_batter, contact_cat, power):
+    def move_bases(self, action, batting_team, current_batter, contact_cat, power, current_pitcher):
         #Put logic here for moving bases based on the action
         
         def first_to_third(contact_cat, power, current_batter):
@@ -217,6 +220,7 @@ class Game:
                 if thrown_out:
                     result.append('thrown out')
                     self.outs += 1
+                    current_pitcher.outs += 1
                 else:
                    result.append('safe')
 
@@ -241,6 +245,7 @@ class Game:
                 if thrown_out:
                     result.append('thrown out')
                     self.outs += 1
+                    current_pitcher.outs += 1
                 else:
                    result.append('safe')
 
@@ -270,6 +275,7 @@ class Game:
                 if thrown_out:
                     result.append('thrown out')
                     self.outs += 1
+                    current_pitcher.outs += 1
                 else:
                    result.append('safe')
 
@@ -294,6 +300,7 @@ class Game:
                 if thrown_out:
                     result.append('thrown out')
                     self.outs += 1
+                    current_pitcher.outs += 1
                 else:
                    result.append('safe')
 
@@ -305,6 +312,7 @@ class Game:
         baserunning_result = []
         if action == 'home_run':
             batting_team.score += sum(self.bases) + 1
+            current_pitcher.runs_allowed += sum(self.bases) + 1
             self.bases = [0,0,0]
             self.baserunners = [0,0,0]
         elif action == 'walk':
@@ -316,6 +324,7 @@ class Game:
             # Bases loaded, advance all and score
             elif self.bases == [1,1,1]:
                 batting_team.score += 1
+                current_pitcher.runs_allowed += 1
                 self.baserunners[2] = self.baserunners[1]
                 self.baserunners[1] = self.baserunners[0]
                 self.baserunners[0] = current_batter.name
@@ -333,6 +342,7 @@ class Game:
         elif action == 'single':
             # Batter goes to First, any baserunners advance, score if on Third
             batting_team.score += self.bases[2]
+            current_pitcher.runs_allowed += self.bases[2]
             # Check if runner on first
             if self.bases[0] == 1:
                 #If runner on first, check if runner attempts to third
@@ -352,6 +362,7 @@ class Game:
                     # If safe, any runner on second scores and first goes to third
                     self.bases[2] = 1
                     batting_team.score += self.bases[1]
+                    current_pitcher.runs_allowed += self.bases[1]
                     self.baserunners[2] = self.baserunners[0]
                     # Check single to double
                     single_to_double_result = single_to_double(contact_cat, power, current_batter)
@@ -422,6 +433,7 @@ class Game:
         elif action == 'double': # TODO update baserunning logic later
             # Runners on third and second score
             batting_team.score += self.bases[2] + self.bases[1]
+            current_pitcher.runs_allowed += self.bases[2] + self.bases[1]
             # Check if runner on first
             if self.bases[0] == 1:
                 #If runner on first, check if runner attempts to home
@@ -440,6 +452,7 @@ class Game:
                     baserunning_result.append(first_to_home_result)
                     # If safe, add one to score
                     batting_team.score += 1
+                    current_pitcher.runs_allowed += 1
                     
                     # Check double to triple
                     double_to_triple_result = double_to_triple(contact_cat, power, current_batter)
@@ -517,6 +530,7 @@ class Game:
             # All runners clear bases, score, batter goes to Third
             # Note there is no attempted extra bases with this, as triples are already very rare, so an inside the park HR is incredibly unlikely
             batting_team.score += sum(self.bases)
+            current_pitcher.runs_allowed += sum(self.bases)
             self.bases = [0,0,1]
             self.baserunners[2] = current_batter.name
             self.baserunners[1] = 0
@@ -524,12 +538,14 @@ class Game:
         elif action == "out":
             # TODO add tag-up logic for fly outs
             self.outs += 1
+            current_pitcher.outs += 1
         else:
             raise NotImplementedError("Logic for this event action is not implemented yet.")
 
         return baserunning_result
     
-    def determine_pitch_change(self, pitching_team, batting_team, pitcher, prev_pitches, prev_batting_score, starter):
+    def determine_pitch_change(self, pitching_team, batting_team, pitcher, prev_pitches,
+                               prev_batting_score, runs_allowed, baserunner_count, starter):
         replace = False
         if starter:
             # logic for starters
@@ -541,15 +557,21 @@ class Game:
             elif pitcher.num_pitch - prev_pitches >= 35:
                 # threw 35+ pitches in an inning
                 replace = True
-            elif self.inning < 4 and batting_team.score - prev_batting_score > 5:
-                # gave up over 5 runs, and it's inside the first three innings
+            elif batting_team.score - prev_batting_score > 5:
+                # gave up over 5 runs in an inning
                 replace = True
-            elif 4 <= self.inning <= 6 and batting_team.score - prev_batting_score > 3:
-                # gave up over 3 runs, and it's inside the middle three innings
+            elif self.inning < 4 and runs_allowed > 5:
+                # gave up over 5 runs total, and it's inside the first three innings
                 replace = True
-            elif self.inning > 6 and batting_team.score - prev_batting_score > 2:
-                # gave up over 2 runs, and it's inside the last three innings (or extra innings)
+            elif 4 <= self.inning <= 6 and runs_allowed > 3:
+                # gave up over 3 runs total, and it's inside the middle three innings
                 replace = True
+            elif self.inning > 6 and baserunner_count > 2:
+                # gave up over 2 baserunners, and it's inside the final three innings (or extra innings)
+                replace = True
+            # elif self.inning > 6 and runs_allowed > 2:
+            #     # gave up over 2 runs total, and it's inside the last three innings (or extra innings)
+            #     replace = True
         else:
             # logic for bullpen
             if pitcher.num_pitch > np.random.normal(25,5)-3:
@@ -560,25 +582,39 @@ class Game:
             elif pitcher.num_pitch - prev_pitches >= 35:
                 # threw 35+ pitches in an inning
                 replace = True
+            elif self.outs == 3 and pitcher.outs > 1:
+                # end of the inning, relief pitcher was in for more than one out
+                # intended to prevent (or at least mostly) pitching more than 4 outs
+                # new pitcher will start next inning
+                replace = True
             elif batting_team.score - prev_batting_score > 3:
                 # gave up over 3 runs
                 replace = True
-            elif pitching_team.score - batting_team.score < 3 and batting_team.score - prev_batting_score > 2:
-                # lead down to less than 3 runs and has given up over 2 runs
+            elif (4 <= pitching_team.score - prev_batting_score <= 6) and batting_team.score - prev_batting_score > 2:
+                # lead was 4-6 and gave up down up over 2 runs
                 replace = True
-            elif 4 <= self.inning <= 6 and batting_team.score - prev_batting_score > 2:
-                # gave up over 2 runs, and it's inside the middle three innings
+            elif baserunner_count > 2 and pitching_team.score - batting_team.score < 3:
+                # gave up over 2 baserunners, with the lead currently less than 3 (after baserunners have possibly scored)
                 replace = True
-            elif self.inning > 6 and batting_team.score - prev_batting_score > 1:
-                # gave up more than 1 run, and it's inside the last three innings (or extra innings)
-                replace = True
+            # elif pitching_team.score - batting_team.score < 3 and batting_team.score - prev_batting_score > 2:
+            #     # lead down to less than 3 runs and has given up over 2 runs
+            #     replace = True
+            # elif 4 <= self.inning <= 6 and batting_team.score - prev_batting_score > 2:
+            #     # gave up over 2 runs, and it's inside the middle three innings
+            #     replace = True
+            # elif self.inning > 6 and batting_team.score - prev_batting_score > 1:
+            #     # gave up more than 1 run, and it's inside the last three innings (or extra innings)
+            #     replace = True
                     
         return replace
 
     def simulate_inning_half(self, batting_team, pitching_team):
         end_game = False
-        prev_pitches =  [pitching_team.pitchers[pitching_team.pitcher_index].num_pitch][0]
-        prev_batting_score = [batting_team.score][0]
+
+        # Reset at start of half inning, track for pitching changes based only on this inning's events
+        prev_pitches = [pitching_team.pitchers[pitching_team.pitcher_index].num_pitch][0] # pitch count at start of inning
+        prev_batting_score = [batting_team.score][0] # batting team's score at start of inning
+        baserunner_count = 0 # baserunners this inning, updated on hit or walk
     
         while self.outs < 3 and not end_game:
             #Set batter and pitcher
@@ -598,18 +634,22 @@ class Game:
                         #Record an out if strike out
                         if self.strikes == 3:
                             self.outs += 1
+                            current_pitcher.outs += 1
                 elif event == 'ball':
                         self.balls += 1
                         #Record a walk if ball 4
                         if self.balls == 4:
-                            baserunning_result = self.move_bases('walk', batting_team, current_batter, contact_cat, power)
+                            baserunning_result = self.move_bases('walk', batting_team, current_batter, contact_cat, power, current_pitcher)
+                            baserunner_count += 1
                 elif event == 'foul':
                     #Record a strike if foul and strikes < 2
                     if self.strikes < 2:
                         self.strikes += 1
                 else:
                     #Move bases if a hit
-                    baserunning_result = self.move_bases(event, batting_team, current_batter, contact_cat, power)
+                    baserunning_result = self.move_bases(event, batting_team, current_batter, contact_cat, power, current_pitcher)
+                    if event != "out":
+                        baserunner_count += 1
                     hit = True
                 #After each pitch, update current game state
                 
@@ -624,9 +664,10 @@ class Game:
                 batting_team.batter_index += 1
             else:
                 batting_team.batter_index = 0
-            #Update pitcher
+            #Update pitcher, possibly
             result = self.determine_pitch_change(pitching_team, batting_team, current_pitcher, prev_pitches, 
-                                                 prev_batting_score, current_pitcher.starter)
+                                                 prev_batting_score, current_pitcher.runs_allowed,
+                                                 baserunner_count, current_pitcher.starter)
             if result:
                 if pitching_team.pitcher_index < pitching_team.num_pitchers - 1:
                     pitching_team.pitcher_index += 1
@@ -634,8 +675,9 @@ class Game:
                     #TODO: We shouldn't cycle back to the first pitcher, but this is to avoid an error
                     pitching_team.pitcher_index = 0
                 #Reset previous number of pitches and previous score
-                prev_pitches =  [pitching_team.pitchers[pitching_team.pitcher_index].num_pitch][0]
-                prev_batting_score = [batting_team.score][0]
+                prev_pitches = [pitching_team.pitchers[pitching_team.pitcher_index].num_pitch][0] # this will be 0 for new pitcher
+                prev_batting_score = [batting_team.score][0] # reset batting team's score for when the new pitcher entered
+                baserunner_count = 0 # reset baserunner count for new pitcher
         
     def update_event_log(self, current_batter, batter_index, current_pitcher, event, swing,
                          contact_cat, pitch_result, pitch_type, baserunning_result):
@@ -650,7 +692,7 @@ class Game:
         self.event_log['Team 1 Score'].append(self.team1.score)
         self.event_log['Team 2 Score'].append(self.team2.score)
         self.event_log['Batter'].append(current_batter.name)
-        self.event_log['Batter Number'].append(batter_index + 1) # TODO maybe replace with an added current_batter.lineup_spot?
+        self.event_log['Batter Number'].append(batter_index + 1)
         self.event_log['Pitcher'].append(current_pitcher.name)
         self.event_log['Pitch Type'].append(pitch_type)
         self.event_log['Pitch Outcome'].append(pitch_result)
