@@ -201,7 +201,8 @@ class Game:
     def move_bases(self, action, batting_team, current_batter, contact_cat, power, current_pitcher):
         #Put logic here for moving bases based on the action
         
-        def first_to_third(contact_cat, power, current_batter):
+        def first_to_third(contact_cat, power):
+            # prob is (rate attempt, rate thrown out)
             first_to_third_probs = {('soft','ground_ball'):(0.65,0.1),
                                      ('soft','line_drive'):(0.75,0.05),
                                      ('soft','fly_ball'):(0.1,0.01),
@@ -226,7 +227,8 @@ class Game:
 
             return result
         
-        def single_to_double(contact_cat, power, current_batter):
+        def single_to_double(contact_cat, power):
+            # prob is (rate attempt, rate thrown out)
             single_to_double_probs = {('soft','ground_ball'):(0,0),
                                      ('soft','line_drive'):(0,0),
                                      ('soft','fly_ball'):(0,0),
@@ -250,7 +252,9 @@ class Game:
                    result.append('safe')
 
             return result
-        def first_to_home_double(contact_cat, current_batter):
+        
+        def first_to_home_double(contact_cat):
+            # prob is (rate attempt, rate thrown out)
             num_outs = '2' if self.outs == 1 else '<2'
             run_diff = '>3' if abs(self.team1.score - self.team2.score) >3 else '<3'
             if num_outs != '2':
@@ -281,7 +285,8 @@ class Game:
 
             return result
         
-        def double_to_triple(contact_cat, power, current_batter):
+        def double_to_triple(contact_cat, power):
+            # prob is (rate attempt, rate thrown out)
             single_to_double_probs = {('soft','ground_ball'):(0,0),
                                      ('soft','line_drive'):(0,0),
                                      ('soft','fly_ball'):(0,0),
@@ -305,8 +310,59 @@ class Game:
                    result.append('safe')
 
             return result
+        
+        def tag_up_second_to_third(contact_cat, power):
+            # prob is (rate attempt, rate thrown out)
+            tag_up_second_to_third_probs = {('soft','ground_ball'):(0,0),
+                                     ('soft','line_drive'):(0,0),
+                                     ('soft','fly_ball'):(0,0),
+                                     ('medium','ground_ball'):(0,0),
+                                     ('medium','line_drive'):(0,0),
+                                     ('medium','fly_ball'):(0,0),
+                                     ('hard','ground_ball'):(0,0),
+                                     ('hard','line_drive'):(0,0),
+                                     ('hard','fly_ball'):(0.6,0.1)}
+            result = []
+            probs = tag_up_second_to_third_probs[(power, contact_cat)]
+            attempt = True if np.random.uniform() < probs[0] else False
+            if attempt:
+                result.append('tag up second to third attempted')
+                thrown_out = True if np.random.uniform() < probs[1] else False
+                if thrown_out:
+                    result.append('thrown out')
+                    self.outs += 1
+                    current_pitcher.outs += 1
+                else:
+                    result.append('safe')
+            
+            return result
+            
+        def tag_up_third_to_home(contact_cat, power):
+            # prob is (rate attempt, rate thrown out)
+            tag_up_third_to_home_probs = {('soft','ground_ball'):(0,0),
+                                     ('soft','line_drive'):(0,0),
+                                     ('soft','fly_ball'):(0,0),
+                                     ('medium','ground_ball'):(0,0),
+                                     ('medium','line_drive'):(0.6,0.2),
+                                     ('medium','fly_ball'):(0.6,0.2),
+                                     ('hard','ground_ball'):(0,0),
+                                     ('hard','line_drive'):(1,0),
+                                     ('hard','fly_ball'):(1,0)}
+            result = []
+            probs = tag_up_third_to_home_probs[(power, contact_cat)]
+            attempt = True if np.random.uniform() < probs[0] else False
+            if attempt:
+                result.append('tag up third to home attempted')
+                thrown_out = True if np.random.uniform() < probs[1] else False
+                if thrown_out:
+                    result.append('thrown out')
+                    self.outs += 1
+                    current_pitcher.outs += 1
+                else:
+                    result.append('safe')
+            
+            return result
                  
-                
         ## How do we determine whether a player already on base was out?
         #pdb.set_trace()
         baserunning_result = []
@@ -346,10 +402,9 @@ class Game:
             # Check if runner on first
             if self.bases[0] == 1:
                 #If runner on first, check if runner attempts to third
-                first_to_third_result = first_to_third(contact_cat, power, current_batter)
+                first_to_third_result = first_to_third(contact_cat, power)
                 
                 if len(first_to_third_result) == 0:
-                    
                     #If not attempted, all runners advance one base
                     self.bases[2] = self.bases[1]
                     self.bases[1] = self.bases[0]
@@ -365,11 +420,10 @@ class Game:
                     current_pitcher.runs_allowed += self.bases[1]
                     self.baserunners[2] = self.baserunners[0]
                     # Check single to double
-                    single_to_double_result = single_to_double(contact_cat, power, current_batter)
+                    single_to_double_result = single_to_double(contact_cat, power)
                     
                     # If not single to double, batter just goes one base
                     if len(single_to_double_result) == 0:
-                        
                         self.bases[1] = 0
                         self.bases[0] = 1
                         self.baserunners[1] = 0
@@ -387,8 +441,7 @@ class Game:
                         self.bases[1] = 0
                         self.bases[0] = 0
                         self.baserunners[1] = 0
-                        self.baserunners[0] = 0
-                        
+                        self.baserunners[0] = 0    
                 else:
                     baserunning_result.append(first_to_third_result)
                     #If first to third not safe, then batter will NOT attempt to go to second. Update accordingly
@@ -400,10 +453,9 @@ class Game:
                     self.baserunners[0] = current_batter.name
             else:
                 #If no runner on first, check if batter attempts to go to second
-                single_to_double_result = single_to_double(contact_cat, power, current_batter)
+                single_to_double_result = single_to_double(contact_cat, power)
                 
                 if len(single_to_double_result) == 0:
-                    
                     #If no attempt to second, all baserunners move one base
                     self.bases[2] = self.bases[1]
                     self.bases[1] = self.bases[0]
@@ -429,18 +481,16 @@ class Game:
                     self.baserunners[2] = self.baserunners[1]
                     self.baserunners[1] = 0
                     self.baserunners[0] = 0
-            
-        elif action == 'double': # TODO update baserunning logic later
+        elif action == 'double':
             # Runners on third and second score
             batting_team.score += self.bases[2] + self.bases[1]
             current_pitcher.runs_allowed += self.bases[2] + self.bases[1]
             # Check if runner on first
             if self.bases[0] == 1:
                 #If runner on first, check if runner attempts to home
-                first_to_home_result = first_to_home_double(contact_cat, current_batter)
+                first_to_home_result = first_to_home_double(contact_cat)
                 
                 if len(first_to_home_result) == 0:
-                    
                     #If not attempted, all runners advance two bases
                     self.bases[2] = self.bases[0]
                     self.bases[1] = 1
@@ -455,8 +505,7 @@ class Game:
                     current_pitcher.runs_allowed += 1
                     
                     # Check double to triple
-                    double_to_triple_result = double_to_triple(contact_cat, power, current_batter)
-                    
+                    double_to_triple_result = double_to_triple(contact_cat, power)
                     
                     if len(double_to_triple_result) == 0:
                         # If not double to triple not attempted, batter goes two bases. First and third are empty
@@ -483,8 +532,7 @@ class Game:
                         self.bases[0] = 0
                         self.baserunners[2] = 0
                         self.baserunners[1] = 0
-                        self.baserunners[0] = 0
-                        
+                        self.baserunners[0] = 0      
                 else:
                     baserunning_result.append(first_to_home_result)
                     #If first to home not safe, then batter will NOT attempt to go to third. Update accordingly
@@ -496,10 +544,9 @@ class Game:
                     self.baserunners[0] = 0
             else:
                 #If no runner on first, check if batter attempts to go to third
-                double_to_triple_result = double_to_triple(contact_cat, power, current_batter)
+                double_to_triple_result = double_to_triple(contact_cat, power)
                 
                 if len(double_to_triple_result) == 0:
-                    
                     #If no attempt to third, batter ends at second. first and third empty
                     self.bases[2] = 0
                     self.bases[1] = 1
@@ -536,10 +583,57 @@ class Game:
             self.baserunners[1] = 0
             self.baserunners[0] = 0
         elif action == "out":
-            # TODO add tag-up logic for fly outs
             self.outs += 1
             current_pitcher.outs += 1
+            if self.outs < 3:
+                # inning not over, try tagging up from third
+                if self.bases[2] == 1:
+                    # runner on third, valid to try for home
+                    tag_up_third_to_home_result = tag_up_third_to_home(contact_cat, power)
+
+                    if len(tag_up_third_to_home_result) == 0:
+                        # If no tag up attempt, no movement
+                        pass
+                    elif tag_up_third_to_home_result[1] == 'safe':
+                        # If attempted and safe, runner on third scores, add score, clear third
+                        baserunning_result.append(tag_up_third_to_home_result)
+                        
+                        batting_team.score += 1
+                        current_pitcher.runs_allowed += 1
+
+                        self.bases[2] = 0
+                        self.baserunners[2] = 0
+                    else:
+                        # If attempted and out, clear third (out added in tag up method)
+                        baserunning_result.append(single_to_double_result)
+
+                        self.bases[2] = 0
+                        self.baserunners[2] = 0
+            if self.outs < 3:
+                # inning still not over, try tagging up from second
+                if self.bases[1] == 1 and self.bases[2] == 0:
+                    # runner on second and not on third, valid to try for third
+                    tag_up_second_to_third_result = tag_up_second_to_third(contact_cat, power)
+
+                    if len(tag_up_second_to_third_result) == 0:
+                        # If no tag up attempt, no movement
+                        pass
+                    elif tag_up_second_to_third_result[1] == 'safe':
+                        # If attempted and safe, runner on second moves to third, second empty
+                        baserunning_result.append(tag_up_third_to_home_result)
+
+                        self.bases[2] = self.bases[1]
+                        self.bases[1] = 0
+                        self.baserunners[2] = self.baserunners[1]
+                        self.baserunners[1] = 0
+                    else:
+                        # If attempted and out, clear second (out added in tag up method)
+                        baserunning_result.append(single_to_double_result)
+
+                        self.bases[1] = 0
+                        self.baserunners[1] = 0
         else:
+            # Shouldn't get here unless new outcomes are added
             raise NotImplementedError("Logic for this event action is not implemented yet.")
 
         return baserunning_result
