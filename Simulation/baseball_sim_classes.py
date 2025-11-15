@@ -5,9 +5,7 @@ import pandas as pd
 import numpy as np
 import pdb
 
-np.random.seed(100) # TODO need to set any random streams/substreams?
-
-# TODO do we want to track stats of what happen in the Batters and Pitchers themselves as well?
+np.random.seed(100)
 
 class Batter:
     
@@ -91,7 +89,7 @@ class Game:
         self.strikes = 0
         self.balls = 0
         self.bases = [0,0,0]
-        self.baserunners = [0,0,0] # TODO something other than 0 when empty? Dict instead with bases named?
+        self.baserunners = [0,0,0]
         self.team1_batter_index = 0
         self.team2_batter_index = 0
         self.team1_pitcher_index = 0
@@ -107,6 +105,40 @@ class Game:
                           }
     
     def pitch(self, batter, pitcher):
+
+        def steal(result, orig, dest):
+            # prob is (rate attempt, rate thrown out)
+            # Note -- unlike other baserunning, this doesn't handle the adding of an out if thrown out
+            probs = (0.0102, 0.203)
+            attempt = True if np.random.uniform() < probs[0] else False
+            if attempt:
+                result.append(f'steal {orig} to {dest} attempted')
+                thrown_out = True if np.random.uniform() < probs[1] else False
+                if thrown_out:
+                    result.extend(['thrown out', orig, dest])
+                else:
+                    result.extend(['safe', orig, dest])
+
+        def check_steal_attempt():
+            # This does not allow for double steal attempts
+            # Note -- this may also get overridden by the pitch resolving to result in a walk or strikeout
+            result = []
+            if self.outs == 2:
+                # Two outs
+                if self.bases[2] == 0 and self.bases[1] == 0 and self.bases[0] == 1:
+                    # Baserunner on first only
+                    steal(result, "first", "second")
+            else:
+                # Zero/one out
+                if self.bases[2] == 0 and self.bases[1] == 1:
+                    # Baserunner on second, third is empty
+                    steal(result, "second", "third")
+                elif self.bases[2] == 0 and self.bases[1] == 0 and self.bases[0] == 1:
+                    # Baserunner on first only
+                    steal(result, "first", "second")
+
+            return result
+
         # Get pitch details
         pitcher.num_pitch += 1
         pitch_type = np.random.choice(list(pitcher.pitch_type_prob.keys()), p=normalize_values(list(pitcher.pitch_type_prob.values()), 1))
@@ -114,6 +146,7 @@ class Game:
         #pitch_movement = np.random.choice(list(pitcher.movement_prob.keys()), p=normalize_values(list(pitcher.movement_prob.values()), 1))
         contact_cat = None
         power = None
+        steal_result = None
 
         #Calculate result
         batter_zone_prob = batter.zone_prob[pitch_type] or batter.zone_prob["na"]
@@ -153,9 +186,11 @@ class Game:
                 else:
                     #If swung and missed, strike 
                     result = 'strike'
+                    steal_result = check_steal_attempt()
             else:
                 #If strike not swung at, strike
                 result = 'strike'
+                steal_result = check_steal_attempt()
         else:
             #If ball was thrown, check if it was swung at
             # Uses O-Swing%
@@ -190,16 +225,18 @@ class Game:
                 else:
                     #If swung and missed, strike 
                     result = 'strike'
+                    steal_result = check_steal_attempt()
             else:
                 pitch_result= 'ball'
                 #if ball not swung at, result is a ball
-                result = 'ball'         
+                result = 'ball'
+                steal_result = check_steal_attempt()
         
-        return result, pitch_result, swing, pitch_type, contact_cat, power
+        return result, pitch_result, swing, pitch_type, contact_cat, power, steal_result
         
 
-    def move_bases(self, action, batting_team, current_batter, contact_cat, power, current_pitcher):
-        #Put logic here for moving bases based on the action
+    def move_bases(self, action, batting_team, current_batter, contact_cat, power, current_pitcher, steal_result=None):
+        # Logic for moving bases/baserunning, based on game state and actions/event results
         
         def first_to_third(contact_cat, power):
             # prob is (rate attempt, rate thrown out)
@@ -366,7 +403,33 @@ class Game:
         ## How do we determine whether a player already on base was out?
         #pdb.set_trace()
         baserunning_result = []
-        if action == 'home_run':
+        if action == 'steal':
+            # No contact made on pitch, at bat still ongoing (no strikeout or walk)
+            if len(steal_result) == 0:
+                # No steal attempt, shouldn't really have called this move_bases with event steal
+                pass
+            else:
+                base_map = {'first': 0,
+                            'second': 1,
+                            'third': 2}
+                orig = base_map.get(steal_result[2])
+                dest = base_map.get(steal_result[3])
+                if steal_result[1] == 'safe':
+                    # Base successfully stolen, update baserunners
+                    baserunning_result.append(steal_result[:2])
+                    self.bases[dest] = self.bases[orig]
+                    self.bases[orig] = 0
+                    self.baserunners[dest] = self.baserunners[orig]
+                    self.baserunners[orig] = 0
+                else:
+                    # Thrown out stealing, increase outs, remove baserunner
+                    baserunning_result.append(steal_result[:2])
+                    self.outs += 1
+                    current_pitcher.outs += 1
+                    self.bases[orig] = 0
+                    self.baserunners[orig] = 0
+        elif action == 'home_run':
+            # All baserunners score, bases clear
             batting_team.score += sum(self.bases) + 1
             current_pitcher.runs_allowed += sum(self.bases) + 1
             self.bases = [0,0,0]
@@ -605,7 +668,7 @@ class Game:
                         self.baserunners[2] = 0
                     else:
                         # If attempted and out, clear third (out added in tag up method)
-                        baserunning_result.append(single_to_double_result)
+                        baserunning_result.append(tag_up_third_to_home_result)
 
                         self.bases[2] = 0
                         self.baserunners[2] = 0
@@ -620,7 +683,7 @@ class Game:
                         pass
                     elif tag_up_second_to_third_result[1] == 'safe':
                         # If attempted and safe, runner on second moves to third, second empty
-                        baserunning_result.append(tag_up_third_to_home_result)
+                        baserunning_result.append(tag_up_second_to_third_result)
 
                         self.bases[2] = self.bases[1]
                         self.bases[1] = 0
@@ -628,7 +691,7 @@ class Game:
                         self.baserunners[1] = 0
                     else:
                         # If attempted and out, clear second (out added in tag up method)
-                        baserunning_result.append(single_to_double_result)
+                        baserunning_result.append(tag_up_second_to_third_result)
 
                         self.bases[1] = 0
                         self.baserunners[1] = 0
@@ -716,25 +779,32 @@ class Game:
             self.balls = 0
             current_batter = batting_team.batters[batting_team.batter_index]
             current_pitcher = pitching_team.pitchers[pitching_team.pitcher_index]
-            #Run through a pitch and update outcomes
+            #Simulate an at bat, runing through pitches and update outcomes
+            #(outs are checked again in case of a failed steal ending the inning, and thus the at bat)
             hit = False
-            while self.strikes < 3 and self.balls < 4 and not hit and not end_game:
+            while self.outs < 3 and self.strikes < 3 and self.balls < 4 and not hit and not end_game:
                 baserunning_result = []
                 #Get result of pitch
-                event, pitch_result, swing, pitch_type, contact_cat, power = self.pitch(current_batter, current_pitcher)
-                #Update stats
+                event, pitch_result, swing, pitch_type, contact_cat, power, steal_result = self.pitch(current_batter, current_pitcher)
+                #Update stats & move bases
                 if event == 'strike':
                         self.strikes += 1
                         #Record an out if strike out
                         if self.strikes == 3:
                             self.outs += 1
                             current_pitcher.outs += 1
+                        #Otherwise resolve potential steal
+                        else:
+                            baserunning_result = self.move_bases('steal', batting_team, current_batter, contact_cat, power, current_pitcher, steal_result)
                 elif event == 'ball':
                         self.balls += 1
                         #Record a walk if ball 4
                         if self.balls == 4:
                             baserunning_result = self.move_bases('walk', batting_team, current_batter, contact_cat, power, current_pitcher)
                             baserunner_count += 1
+                        #Otherwise resolve potential steal
+                        else:
+                            baserunning_result = self.move_bases('steal', batting_team, current_batter, contact_cat, power, current_pitcher, steal_result)
                 elif event == 'foul':
                     #Record a strike if foul and strikes < 2
                     if self.strikes < 2:
@@ -745,8 +815,8 @@ class Game:
                     if event != "out":
                         baserunner_count += 1
                     hit = True
-                #After each pitch, update current game state
                 
+                #After each pitch, update current game state
                 self.update_event_log(current_batter, batting_team.batter_index, current_pitcher, event,
                                       swing, contact_cat, pitch_result, pitch_type, baserunning_result)
                 
@@ -1054,7 +1124,7 @@ def read_data():
     sl_disc_df_raw = pd.read_csv("../Data/Batter_SL_Discipline.csv") # slider
     sl_disc_df = sl_disc_df_raw.groupby("Name", as_index=False).mean(numeric_only=True).set_index("Name", drop=False)
 
-    pitcher_df.fillna(0, inplace=True) # TODO is this ok? Or need to be more selective like below?
+    pitcher_df.fillna(0, inplace=True)
     # pitcher_df[["FA%", "FT%", "FC%", "FS%", "FO%", "SI%", "SL%", "CU%", "KC%", "EP%", "CH%", "SC%", "KN%", "UN%"]] = pitcher_df[["FA%", "FT%", "FC%", "FS%", "FO%", "SI%", "SL%", "CU%", "KC%", "EP%", "CH%", "SC%", "KN%", "UN%"]].fillna(0)
     hit_traj_df["1B"] = hit_traj_df["H"] - hit_traj_df["2B"] - hit_traj_df["3B"] - hit_traj_df["HR"]
     hit_traj_df["Out"] = hit_traj_df["AB"] - hit_traj_df["H"]
@@ -1078,7 +1148,7 @@ if __name__ == '__main__':
 
     batter_ids = list(batter_df["PlayerId"])
     pitcher_ids = list(pitcher_df["PlayerId"])
-    # TODO add pitching changes, relief pitching. Currently just selecting a starting pitcher for each side to pitch the whole game
+    
     selected_batter_ids = np.random.choice(batter_ids, 18, replace=False) # samples w/o replacement
     selected_pitcher_ids = np.random.choice(pitcher_ids, 26, replace=False) # samples w/o replacemnet
     
@@ -1117,7 +1187,7 @@ if __name__ == '__main__':
                                          'ball': ch_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in ch_names else None},
                         },
              'foul_prob': {'strike': 0.22, 'ball': 0.22}, # TODO add this by-player? Also add foul-out chance/rate
-            #  'int_walk_prob': row["IBB"] / row["PA"], # TODO no longer in merged data for these 4
+            #  'int_walk_prob': row["IBB"] / row["PA"],
             #  'hit_by_pitch_prob': row["HBP"] / row["PA"],
             #  'sac_fly_prob': row["SF"] / row["PA"],
             #  'sac_bunt_prob': row["SH"] / row["PA"],
@@ -1129,7 +1199,6 @@ if __name__ == '__main__':
                             # TODO eventually, add Bunts? Split off from GB% somehow?
                             },
              'outcome_prob': {
-                            # TODO add way to track what type of single/double/triple/hr/out it was for event log
                             "ground_ball": {
                                             "single": hit_traj_df.loc["Ground Balls", "1B%"],
                                             "double": hit_traj_df.loc["Ground Balls", "2B%"],
@@ -1200,8 +1269,8 @@ if __name__ == '__main__':
                                 "medium": row["Med%"],
                                 "hard": row["Hard%"]
                               },
-             'velocity_dist': perturb_values(base_velocity_dist, 0.05), # TODO replace with params for some other RN pull on pitch
-             'movement_prob': perturb_values(base_movement_prob, 0.05), # TODO replace with params for some other RN pull on pitch
+             'velocity_dist': perturb_values(base_velocity_dist, 0.05), # not used right now
+             'movement_prob': perturb_values(base_movement_prob, 0.05), # not used right now
              'strike_prob': row["Zone%"], # prob inside zone, not of being a strike bc of zone/swing/foul
              'starter': False # Whether this pitcher is a starter, is updated after assigned to teams
             }
