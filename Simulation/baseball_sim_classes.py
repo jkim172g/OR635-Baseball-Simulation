@@ -1118,7 +1118,7 @@ def get_aligned_value(pitcher_val, batter_val):
                         "Pitcher is ", type(pitcher_val), " and batter is ", type(batter_val))
     
 
-def read_data(team1_name, team2_name):
+def read_data(team1_name, team2_name, run_playoffs):
     # Read and prep data, returning dataframes
     batter_df = pd.read_excel("../Data/Merged_Data_C.xlsx", sheet_name="Batting Data")
     pitcher_df = pd.read_excel("../Data/Merged_Data_C.xlsx", sheet_name="Pitching Data")
@@ -1145,63 +1145,40 @@ def read_data(team1_name, team2_name):
 
     # Read roster data, drop entries with no Player ID, and check pitcher quantity
     # NOTE -- will count any positionless players as field players & as such, batters
-    if team1_name is not None:
-        team1_roster_df = pd.read_excel("../Data/Playoff Rosters Reformatted.xlsx", sheet_name=team1_name)
-        team1_roster_df.dropna(subset=["PlayerId"], inplace=True, ignore_index=True)
-        if len(team1_roster_df[team1_roster_df["Position"] == "SP"]) == 0:
-            raise ValueError(f"Roster for {team1_name} does not have any specified starting pitchers; should list SP in Position column.")
-        if len(team1_roster_df[team1_roster_df["Position"].isin(["RP", "CP"])]) == 0:
-            raise ValueError(f"Roster for {team1_name} does not have any specified relief/closing pitchers; should list RP or CP in Position column.")
+    teams = ["Phillies", "Brewers", "Dodgers", "Reds", "Padres", "Cubs", "Blue Jays",
+             "Mariners", "Yankees", "Tigers", "Guardians", "Red Sox"]
+    team_roster_df_dict = {}
+    if not run_playoffs:
+        for team_name in [team1_name, team2_name]:
+            if team_name is not None:
+                team_roster_df = pd.read_excel("../Data/Playoff Rosters Reformatted.xlsx", sheet_name=team_name)
+                team_roster_df.dropna(subset=["PlayerId"], inplace=True, ignore_index=True)
+                if len(team_roster_df[team_roster_df["Position"] == "SP"]) == 0:
+                    raise ValueError(f"Roster for {team_name} does not have any specified starting pitchers; should list SP in Position column.")
+                if len(team_roster_df[team_roster_df["Position"].isin(["RP", "CP"])]) == 0:
+                    raise ValueError(f"Roster for {team_name} does not have any specified relief/closing pitchers; should list RP or CP in Position column.")
+            else:
+                team_roster_df = None
+            team_roster_df_dict[team_name] = team_roster_df
     else:
-        team1_roster_df = None
-
-    if team2_name is not None:
-        team2_roster_df = pd.read_excel("../Data/Playoff Rosters Reformatted.xlsx", sheet_name=team2_name)
-        team2_roster_df.dropna(subset=["PlayerId"], inplace=True, ignore_index=True)
-        if len(team2_roster_df[team2_roster_df["Position"] == "SP"]) == 0:
-            raise ValueError(f"Roster for {team2_name} does not have any specified starting pitchers; should list SP in Position column.")
-        if len(team2_roster_df[team2_roster_df["Position"].isin(["RP", "CP"])]) == 0:
-            raise ValueError(f"Roster for {team2_name} does not have any specified relief/closing pitchers; should list RP or CP in Position column.")
-    else:
-        team2_roster_df = None
+        for team_name in teams:
+            team_roster_df = pd.read_excel("../Data/Playoff Rosters Reformatted.xlsx", sheet_name=team_name)
+            team_roster_df.dropna(subset=["PlayerId"], inplace=True, ignore_index=True)
+            if len(team_roster_df[team_roster_df["Position"] == "SP"]) == 0:
+                raise ValueError(f"Roster for {team_name} does not have any specified starting pitchers; should list SP in Position column.")
+            if len(team_roster_df[team_roster_df["Position"].isin(["RP", "CP"])]) == 0:
+                raise ValueError(f"Roster for {team_name} does not have any specified relief/closing pitchers; should list RP or CP in Position column.")
+            team_roster_df_dict[team_name] = team_roster_df
         
-    return batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df, team1_roster_df, team2_roster_df
+    return batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df, team_roster_df_dict
 
 
-if __name__ == '__main__':
-
-    # Collect runtime arguments
-    parser = argparse.ArgumentParser(description="A baseball simulation for OR 635 class project.")
-
-    parser.add_argument("-n", "--num_reps", type=int, default=1,
-                        help="The number of replications to perform. Default is 1.")
-    parser.add_argument("--t1", type=str, default=None,
-                        help="Team number 1 to grab the playoff roster for. If omitted, players picked randomly.")
-    parser.add_argument("--t2", type=str, default=None,
-                        help="Team number 2 to grab the playoff roster for. If omitted, players picked randomly.")
-
-    args = parser.parse_args()
-
-    team1_name = args.t1
-    team2_name = args.t2
-    n_reps = args.num_reps
-
-    # Read & prep data
-    batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df, team1_roster_df, team2_roster_df = read_data(team1_name, team2_name)
-
-    fb_names = set(fb_disc_df.index)
-    cu_names = set(cu_disc_df.index)
-    sl_names = set(sl_disc_df.index)
-    ch_names = set(ch_disc_df.index)
-
-    batter_ids = list(batter_df["PlayerId"])
-    pitcher_ids = list(pitcher_df["PlayerId"])
-
-    # NOTE -- currently setting lineups and pitcher selection/order once, then running n replications
-
+def run_games(run_playoffs, team_roster_df_dict, team1_name, team2_name, n_reps,
+              batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df,
+              fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids):
     # Construct teams, from inputs or randomly
     # Set player id lists
-    if team1_roster_df is None and team2_roster_df is None:
+    if team_roster_df_dict[team1_name] is None and team_roster_df_dict[team2_name] is None:
         # No specified teams, all random
         # Batters
         game_batter_ids = np.random.choice(batter_ids, 18, replace=False) # samples w/o replacement
@@ -1211,8 +1188,9 @@ if __name__ == '__main__':
         game_pitcher_ids = np.random.choice(pitcher_ids, 26, replace=False) # samples w/o replacement
         team1_pitcher_ids = game_pitcher_ids[:13]
         team2_pitcher_ids = game_pitcher_ids[13:]
-    elif team1_roster_df is not None and team2_roster_df is None:
+    elif team_roster_df_dict[team1_name] is not None and team_roster_df_dict[team2_name] is None:
         # Only team 1 specified
+        team1_roster_df = team_roster_df_dict[team1_name]
         # Batters
         team1_batters = list(team1_roster_df[~team1_roster_df["Position"].isin(["SP", "RP", "CP"])]["PlayerId"])
         team1_batter_ids = team1_batters[:9]
@@ -1227,8 +1205,9 @@ if __name__ == '__main__':
         team1_pitcher_ids = [team1_sp] + team1_rps_shuffled
         other_pitchers = list(set(pitcher_ids) - set(team1_sps + team1_rps))
         team2_pitcher_ids = np.random.choice(other_pitchers, 13, replace=False) # samples w/o replacement
-    elif team1_roster_df is None and team2_roster_df is not None:
+    elif team_roster_df_dict[team1_name] is None and team_roster_df_dict[team2_name] is not None:
         # Only team 2 specified
+        team2_roster_df = team_roster_df_dict[team2_name]
         # Batters
         team2_batters = list(team2_roster_df[~team2_roster_df["Position"].isin(["SP", "RP", "CP"])]["PlayerId"])
         team2_batter_ids = team2_batters[:9]
@@ -1245,6 +1224,8 @@ if __name__ == '__main__':
         team1_pitcher_ids = np.random.choice(other_pitchers, 13, replace=False) # samples w/o replacement
     else:
         # Both specified
+        team1_roster_df = team_roster_df_dict[team1_name]
+        team2_roster_df = team_roster_df_dict[team2_name]
         # Batters
         team1_batters = list(team1_roster_df[~team1_roster_df["Position"].isin(["SP", "RP", "CP"])]["PlayerId"])
         team1_batter_ids = team1_batters[:9]
@@ -1412,16 +1393,150 @@ if __name__ == '__main__':
     team2 = Team(batters2, pitchers2)
 
     # Run n_reps replications/games
-    for rep in range(n_reps):
+    wins = {
+        team1_name: 0,
+        team2_name: 0
+    }
+
+    for __ in range(n_reps):
         # Create & run game
         game = Game(team1, team2)
-        game.play_ball()
+        winner = game.play_ball()
+        wins[winner] += 1
         
         # Save results
         event_log = pd.DataFrame(game.event_log)
         event_log.to_csv("event_log.csv", encoding='utf-8-sig', index=False)
+
+        # make_box_score(event_log)
+
+    if wins[team1_name] > wins[team2_name]:
+        # Team 1 won more games
+        return team1_name
+    elif wins[team2_name] > wins[team1_name]:
+        # Team 2 won more games
+        return team2_name
+    else:
+        # They won an equal number of games, play one more to tie-break
+        game = Game(team1, team2)
+        final_winner = game.play_ball()
+        return final_winner
+
+
+def run_series(run_playoffs, round_reps, team_roster_df_dict, round_team1, round_team2, round_ngames,
+                batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df,
+                fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids):
+    wins = {
+        round_team1: 0,
+        round_team2: 0
+    }
+    for __ in range(round_reps):
+        winner = run_games(run_playoffs, team_roster_df_dict, round_team1, round_team2, round_ngames,
+                batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df,
+                fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids)
+        wins[winner] += 1
+
+    if wins[round_team1] > wins[round_team2]:
+        # Team 1 wins the series more often
+        return round_team1
+    elif wins[round_team2] > wins[round_team1]:
+        # Team 2 wins the series more often
+        return round_team2
+    else:
+        # They won an equal number of times, run one more to tie-break
+        final_winner = run_games(run_playoffs, team_roster_df_dict, round_team1, round_team2, round_ngames,
+                batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df,
+                fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids)
+        return final_winner
+
+
+if __name__ == '__main__':
+    # Collect runtime arguments
+    parser = argparse.ArgumentParser(description="A baseball simulation for OR 635 class project.")
+
+    parser.add_argument("-n", "--num_reps", type=int, default=1,
+                        help="The number of replications to perform. Default is 1.")
+    parser.add_argument("--t1", type=str, default=None,
+                        help="Team number 1 to grab the playoff roster for. If omitted, players picked randomly.")
+    parser.add_argument("--t2", type=str, default=None,
+                        help="Team number 2 to grab the playoff roster for. If omitted, players picked randomly.")
+    parser.add_argument("-p", "--playoffs", action="store_true",
+                        help="Flag to run the playoffs, ignoring other arguments. Default is False.")
+
+    args = parser.parse_args()
+
+    team1_name = args.t1
+    team2_name = args.t2
+    n_reps = args.num_reps
+    run_playoffs = args.playoffs
+
+    # Read & prep data
+    batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df, team_roster_df_dict = read_data(team1_name, team2_name, run_playoffs)
+
+    fb_names = set(fb_disc_df.index)
+    cu_names = set(cu_disc_df.index)
+    sl_names = set(sl_disc_df.index)
+    ch_names = set(ch_disc_df.index)
+
+    batter_ids = list(batter_df["PlayerId"])
+    pitcher_ids = list(pitcher_df["PlayerId"])
     
-    # make_box_score(event_log)
+    # TODO event_log (and box_score if not commented out) only saved/created for the final run (early get overwritten)
+    if not run_playoffs:
+        # Not running playoffs, just run n reps for the given teams (or random teams)
+        winner = run_games(run_playoffs, team_roster_df_dict, team1_name, team2_name, n_reps,
+                batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df,
+                fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids)
+    else:
+        # Run the playoffs
+        round_reps = 162
+        # TODO set up loop here to organize the playoffs
+            # Below will select the batters as the first 9, so that is set
+            # It will pick one SP and shuffle the RP, which is also right game to game, but needs something to avoid same SP consecutively
+            # Then needs to run 3, 5, or 7 times depending on the round, and then return who wins, record that & any other stats/info
+            # Then go on to simulate the next pieces
+        # TODO need run_playoffs to be used as a flag in run_games to determine whether to try and avoid repeat SP
+        # TODO for each round:
+        # TODO something to track bracket & who is advancing
+        # TODO and also to track results
+        # TODO update the below based on the actual round and progressing through the bracked
+        bracket = {
+            "ALWC_1_Team1": "Tigers",
+            "ALWC_1_Team2": "Guardians",
+            "ALWC_2_Team1": "Red Sox",
+            "ALWC_2_Team2": "Yankees",
+            "NLWC_1_Team1": "Reds",
+            "NLWC_1_Team2": "Dodgers",
+            "NLWC_2_Team1": "Padres",
+            "NLWC_2_Team2": "Cubs",
+            "ALDS_1_Team1": "Mariners",
+            "ALDS_1_Team2": None,
+            "ALDS_2_Team1": "Blue Jays",
+            "ALDS_2_Team2": None,
+            "NLDS_1_Team1": "Phillies",
+            "NLDS_1_Team2": None,
+            "NLDS_2_Team1": "Brewers",
+            "NLDS_2_Team2": None,
+            "ALCS_Team1": None,
+            "ALCS_Team2": None,
+            "NLCS_Team1": None,
+            "NLCS_Team2": None,
+            "WS_Team1": None,
+            "WS_Team2": None,
+        }
+
+        # TODO work way through the bracker
+        round_ngames = 3 # 3 for WC, 5 for DS, 7 for CS and WS
+        round_team1 = ""
+        round_team2 = ""
+        # TODO play_ball still needs to return the winner, as the team_name (which may also need to be passed in?)
+        winner = run_series(run_playoffs, round_reps, team_roster_df_dict, round_team1, round_team2, round_ngames,
+                batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df,
+                fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids)
+        
+        
+
+
         
     
     ### Some code below to run 100 games and compute team record, average score
