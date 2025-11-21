@@ -206,11 +206,15 @@ class Game:
             #If ball was thrown, check if it was swung at
             # Uses O-Swing%
             base_batter_swing_prob = batter.swing_prob[pitch_type]["ball"] or batter.swing_prob["na"]["ball"]
-            if self.balls> self.strikes:
+            first_pitch = True if self.balls == 0 and self.strikes == 0 else False
+            if self.balls > self.strikes:
+                # more balls than strikes, adjust batter swing rate
                 adj_batter_swing_prob = (base_batter_swing_prob-((self.balls/3)*base_batter_swing_prob))
             else:
+                # regular swing rate
                 adj_batter_swing_prob = base_batter_swing_prob
-            swing_prob = get_aligned_value(pitcher.swing_prob['ball'], adj_batter_swing_prob)
+            # find aligned between batter and pitcher, unless first pitch, then don't swing outside of zone
+            swing_prob = 0.0 if first_pitch else get_aligned_value(pitcher.swing_prob['ball'], adj_batter_swing_prob)
             swing = True if np.random.uniform() < swing_prob else False
             if swing:
                 # Pitch now considered a strike regardless of outcome
