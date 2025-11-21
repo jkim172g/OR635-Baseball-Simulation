@@ -4,8 +4,11 @@
 import pandas as pd
 import numpy as np
 import pdb
+from tqdm import tqdm
+
 
 np.random.seed(100)
+
 
 class Batter:
     
@@ -158,7 +161,11 @@ class Game:
             #Adjust swing prob by half if 3 balls and less than two strikes
             # Uses Z-Swing%
             base_batter_swing_prob = batter.swing_prob[pitch_type]["strike"] or batter.swing_prob["na"]["strike"]
-            adj_batter_swing_prob = base_batter_swing_prob/2 if self.balls == 3 and self.strikes < 2 else base_batter_swing_prob
+            #adj_batter_swing_prob = base_batter_swing_prob/2 if self.balls == 3 and self.strikes < 2 else base_batter_swing_prob
+            if self.balls> self.strikes:
+                adj_batter_swing_prob = base_batter_swing_prob-((self.balls/3)*base_batter_swing_prob)
+            else:
+                adj_batter_swing_prob = base_batter_swing_prob
             swing_prob = get_aligned_value(pitcher.swing_prob['strike'], adj_batter_swing_prob)
             swing = True if np.random.uniform() < swing_prob else False
             if swing:
@@ -170,7 +177,11 @@ class Game:
                 #If contact was made, calculate result
                 if contact:
                     # If contact was made, check if foul
-                    foul = True if np.random.uniform() < batter.foul_prob['strike'] else False
+                    if self.strikes == 2:
+                        #If two strikes, foul is twice as likely
+                        foul = True if np.random.uniform() < min(0.9,batter.foul_prob['strike']*2) else False
+                    else:
+                        foul = True if np.random.uniform() < batter.foul_prob['strike'] else False
                     if foul:
                         result = 'foul'
                     else:
@@ -195,7 +206,10 @@ class Game:
             #If ball was thrown, check if it was swung at
             # Uses O-Swing%
             base_batter_swing_prob = batter.swing_prob[pitch_type]["ball"] or batter.swing_prob["na"]["ball"]
-            adj_batter_swing_prob = base_batter_swing_prob/2 if self.balls == 3 and self.strikes < 2 else base_batter_swing_prob
+            if self.balls> self.strikes:
+                adj_batter_swing_prob = (base_batter_swing_prob-((self.balls/3)*base_batter_swing_prob))
+            else:
+                adj_batter_swing_prob = base_batter_swing_prob
             swing_prob = get_aligned_value(pitcher.swing_prob['ball'], adj_batter_swing_prob)
             swing = True if np.random.uniform() < swing_prob else False
             if swing:
@@ -209,7 +223,11 @@ class Game:
                 #If contact was made, calculate result
                 if contact:
                     # If contact, check if foul
-                    foul = True if np.random.uniform() < batter.foul_prob['ball'] else False
+                    if self.strikes == 2:
+                        #If two strikes, foul is twice as likely
+                        foul = True if np.random.uniform() < min(0.9,batter.foul_prob['strike']*2.5) else False
+                    else:
+                        foul = True if np.random.uniform() < batter.foul_prob['strike'] else False
                     if foul:
                         result = 'foul'
                     else:
@@ -704,75 +722,51 @@ class Game:
     def determine_pitch_change(self, pitching_team, batting_team, pitcher, prev_pitches,
                                prev_batting_score, runs_allowed, baserunner_count, starter):
         replace = False
-        if starter:
-            # logic for starters
-            if pitcher.num_pitch > np.random.normal(105,5)-3:
-                # reached high pitch count
-                if not (self.inning >= 9 and pitching_team.score > batting_team.score):
-                    # not winning in the 9th or after
-                    replace = True
-            elif pitcher.num_pitch - prev_pitches >= 35:
-                # threw 35+ pitches in an inning
-                replace = True
-            elif batting_team.score - prev_batting_score > 5:
-                # gave up over 5 runs in an inning
-                replace = True
-            elif self.inning < 4 and runs_allowed > 5:
-                # gave up over 5 runs total, and it's inside the first three innings
-                replace = True
-            elif 4 <= self.inning <= 6 and runs_allowed > 3:
-                # gave up over 3 runs total, and it's inside the middle three innings
-                replace = True
-            elif self.inning > 6 and baserunner_count > 2:
-                # gave up over 2 baserunners, and it's inside the final three innings (or extra innings)
-                replace = True
-            # elif self.inning > 6 and runs_allowed > 2:
-            #     # gave up over 2 runs total, and it's inside the last three innings (or extra innings)
-            #     replace = True
-        else:
-            # logic for bullpen
-            if pitcher.num_pitch > np.random.normal(25,5)-3:
-                # reached high pitch count
-                if self.outs < 2:
-                    # not one out away from ending the inning
-                    replace = True
-            elif pitcher.num_pitch - prev_pitches >= 35:
-                # threw 35+ pitches in an inning
-                replace = True
-            elif self.outs == 3 and pitcher.outs > 1:
-                # end of the inning, relief pitcher was in for more than one out
-                # intended to prevent (or at least mostly) pitching more than 4 outs
-                # new pitcher will start next inning
-                replace = True
-            elif batting_team.score - prev_batting_score > 3:
-                # gave up over 3 runs
-                replace = True
-            elif (4 <= pitching_team.score - prev_batting_score <= 6) and batting_team.score - prev_batting_score > 2:
-                # lead was 4-6 and gave up down up over 2 runs
-                replace = True
-            elif baserunner_count > 2 and pitching_team.score - batting_team.score < 3:
-                # gave up over 2 baserunners, with the lead currently less than 3 (after baserunners have possibly scored)
-                replace = True
-            # elif pitching_team.score - batting_team.score < 3 and batting_team.score - prev_batting_score > 2:
-            #     # lead down to less than 3 runs and has given up over 2 runs
-            #     replace = True
-            # elif 4 <= self.inning <= 6 and batting_team.score - prev_batting_score > 2:
-            #     # gave up over 2 runs, and it's inside the middle three innings
-            #     replace = True
-            # elif self.inning > 6 and batting_team.score - prev_batting_score > 1:
-            #     # gave up more than 1 run, and it's inside the last three innings (or extra innings)
-            #     replace = True
+
+        if pitcher.num_batters > 3:
+            if starter:
+                if pitcher.num_pitch > np.random.normal(105,5)-3:
                     
+                    if not (self.inning >= 9 and pitching_team.score > batting_team.score):
+                        replace = True
+                elif prev_pitches - pitcher.num_pitch >= 35:
+                    replace = True
+                elif self.inning < 4 and batting_team.score - prev_batting_score > 5:
+                    replace = True
+                elif 4 <= self.inning <= 6 and batting_team.score - prev_batting_score > 3:
+                    replace = True
+                elif self.inning > 6 and batting_team.score - prev_batting_score > 2:
+                    replace = True
+            else:
+                
+                if pitcher.num_pitch > np.random.normal(25,5)-3:
+                    if self.outs < 2:
+                        replace = True
+                elif prev_pitches - pitcher.num_pitch >= 35:
+                    replace = True
+                elif batting_team.score - prev_batting_score > 3:
+                    replace = True
+                elif pitching_team.score - batting_team.score < 3 and batting_team.score - prev_batting_score > 2:
+                    replace = True
+                elif 4 <= self.inning <= 6 and batting_team.score - prev_batting_score > 2:
+                    
+                    replace = True
+                elif self.inning > 6 and batting_team.score - prev_batting_score > 1:
+                    replace = True
+
         return replace
 
     def simulate_inning_half(self, batting_team, pitching_team):
         end_game = False
 
+
         # Reset at start of half inning, track for pitching changes based only on this inning's events
         prev_pitches = [pitching_team.pitchers[pitching_team.pitcher_index].num_pitch][0] # pitch count at start of inning
         prev_batting_score = [batting_team.score][0] # batting team's score at start of inning
         baserunner_count = 0 # baserunners this inning, updated on hit or walk
+        pitching_team.pitchers[pitching_team.pitcher_index].num_batters += 1
     
+
         while self.outs < 3 and not end_game:
             #Set batter and pitcher
             self.strikes = 0
@@ -828,7 +822,10 @@ class Game:
                 batting_team.batter_index += 1
             else:
                 batting_team.batter_index = 0
-            #Update pitcher, possibly
+
+            current_pitcher.num_batters += 1
+            #Update pitcher
+
             result = self.determine_pitch_change(pitching_team, batting_team, current_pitcher, prev_pitches, 
                                                  prev_batting_score, current_pitcher.runs_allowed,
                                                  baserunner_count, current_pitcher.starter)
@@ -1295,22 +1292,23 @@ if __name__ == '__main__':
     team1 = Team(batters1,pitchers1)
     team2 = Team(batters2,pitchers2)
     
+  
     game = Game(team1, team2)
     game.play_ball()
-
+    
     event_log = pd.DataFrame(game.event_log)
     event_log.to_csv("event_log.csv", encoding='utf-8-sig', index=False)
     
-    make_box_score(event_log)
+    #make_box_score(event_log)
         
     
     ### Some code below to run 100 games and compute team record, average score
     # scores = {i:[] for i in range(1,10)}
     # team1_record = [0,0,0]
     # team2_record = [0,0,0]
-    # for i in range(1000):
-    #     team1 = Team(batters1,[pitcher1])
-    #     team2 = Team(batters2,[pitcher1])
+    # for i in range(100):
+    #     team1 = Team(batters1,pitchers1)
+    #     team2 = Team(batters2,pitchers2)
         
     #     game = Game(team1, team2)   
     #     game.play_ball()
