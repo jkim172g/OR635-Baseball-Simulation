@@ -101,7 +101,7 @@ class Game:
         self.team1 = team1
         self.team2 = team2
         
-        self.event_log = {'Inning':[], 'Inning Half':[],'Event':[], 'Detailed Event':[], 'Pitch Type':[],
+        self.event_log = {'Inning':[], 'Inning Half':[],'Event':[], 'Detailed Event':[], 'Contact Power':[], 'Pitch Type':[],
                           'Pitch Outcome':[], 'Batter':[], 'Batter Number':[], 'Bases':[],
                           'Baserunners':[], 'Baserunning Event':[], 'Baserunning Result': [],'Balls':[], 'Strikes':[],
                           'Outs':[],'Team 1 Score':[], 'Team 2 Score':[], 'Pitcher':[],
@@ -812,7 +812,7 @@ class Game:
                 
                 #After each pitch, update current game state
                 self.update_event_log(current_batter, batting_team.batter_index, current_pitcher, event,
-                                      swing, contact_cat, pitch_result, pitch_type, baserunning_result)
+                                      swing, contact_cat, power, pitch_result, pitch_type, baserunning_result)
                 
                 #If home team scored in the final inning to go ahead, end game
                 if self.inning >= 9 and self.inning_half == 'bottom' and batting_team.score > pitching_team.score:
@@ -841,7 +841,7 @@ class Game:
                 baserunner_count = 0 # reset baserunner count for new pitcher
         
     def update_event_log(self, current_batter, batter_index, current_pitcher, event, swing,
-                         contact_cat, pitch_result, pitch_type, baserunning_result):
+                         contact_cat, power, pitch_result, pitch_type, baserunning_result):
         #Add all current information to the event log
         self.event_log['Inning'].append(self.inning)
         self.event_log['Inning Half'].append(self.inning_half)
@@ -872,15 +872,21 @@ class Game:
             self.event_log['Baserunning Event'].append(b_event[:-1])
             self.event_log['Baserunning Result'].append(b_result[:-1])
         if self.strikes == 3:
+            self.event_log['Contact Power'].append('NA')
             self.event_log['Event'].append('strikeout')
             if swing:
                 self.event_log['Detailed Event'].append('strikeout swinging')
             else:
                 self.event_log['Detailed Event'].append('strikeout looking')
         elif self.balls == 4:
+            self.event_log['Contact Power'].append('NA')
             self.event_log['Event'].append('walk')
             self.event_log['Detailed Event'].append('walk')
         else:
+            if power is None:
+                self.event_log['Contact Power'].append('NA')
+            else:
+                self.event_log['Contact Power'].append(power)
             self.event_log['Event'].append(event)
             if event == "strike":
                 if swing:
