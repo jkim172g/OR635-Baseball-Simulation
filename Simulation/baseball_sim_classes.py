@@ -1,12 +1,14 @@
 ## Project for GMU OR 635: Discrete System Simulation
 ## Authors: Jacob Kim, Noah Mecikalski, Bennett Miller, W.J. Moretz
 
+# Imports
 import pandas as pd
 import numpy as np
 import pdb
 from tqdm import tqdm
+import argparse
 
-
+# Set seed
 np.random.seed(100)
 
 
@@ -1116,7 +1118,7 @@ def get_aligned_value(pitcher_val, batter_val):
                         "Pitcher is ", type(pitcher_val), " and batter is ", type(batter_val))
     
 
-def read_data():
+def read_data(team1_name, team2_name):
     # Read and prep data, returning dataframes
     batter_df = pd.read_excel("../Data/Merged_Data_C.xlsx", sheet_name="Batting Data")
     pitcher_df = pd.read_excel("../Data/Merged_Data_C.xlsx", sheet_name="Pitching Data")
@@ -1140,13 +1142,52 @@ def read_data():
     hit_traj_df["3B%"] = hit_traj_df["3B"] / hit_traj_df["AB"]
     hit_traj_df["HR%"] = hit_traj_df["HR"] / hit_traj_df["AB"]
     hit_traj_df["Out%"] = hit_traj_df["Out"] / hit_traj_df["AB"]
-    
-    return batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df
+
+    # Read roster data, drop entries with no Player ID, and check pitcher quantity
+    # NOTE -- will count any positionless players as field players & as such, batters
+    if team1_name is not None:
+        team1_roster_df = pd.read_excel("../Data/Playoff Rosters Reformatted.xlsx", sheet_name=team1_name)
+        team1_roster_df.dropna(subset=["PlayerId"], inplace=True, ignore_index=True)
+        if len(team1_roster_df[team1_roster_df["Position"] == "SP"]) == 0:
+            raise ValueError(f"Roster for {team1_name} does not have any specified starting pitchers; should list SP in Position column.")
+        if len(team1_roster_df[team1_roster_df["Position"].isin(["RP", "CP"])]) == 0:
+            raise ValueError(f"Roster for {team1_name} does not have any specified relief/closing pitchers; should list RP or CP in Position column.")
+    else:
+        team1_roster_df = None
+
+    if team2_name is not None:
+        team2_roster_df = pd.read_excel("../Data/Playoff Rosters Reformatted.xlsx", sheet_name=team2_name)
+        team2_roster_df.dropna(subset=["PlayerId"], inplace=True, ignore_index=True)
+        if len(team2_roster_df[team2_roster_df["Position"] == "SP"]) == 0:
+            raise ValueError(f"Roster for {team2_name} does not have any specified starting pitchers; should list SP in Position column.")
+        if len(team2_roster_df[team2_roster_df["Position"].isin(["RP", "CP"])]) == 0:
+            raise ValueError(f"Roster for {team2_name} does not have any specified relief/closing pitchers; should list RP or CP in Position column.")
+    else:
+        team2_roster_df = None
+        
+    return batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df, team1_roster_df, team2_roster_df
 
 
 if __name__ == '__main__':
-    
-    batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df = read_data()
+
+    # Collect runtime arguments
+    parser = argparse.ArgumentParser(description="A baseball simulation for OR 635 class project.")
+
+    parser.add_argument("-n", "--num_reps", type=int, default=1,
+                        help="The number of replications to perform. Default is 1.")
+    parser.add_argument("--t1", type=str, default=None,
+                        help="Team number 1 to grab the playoff roster for. If omitted, players picked randomly.")
+    parser.add_argument("--t2", type=str, default=None,
+                        help="Team number 2 to grab the playoff roster for. If omitted, players picked randomly.")
+
+    args = parser.parse_args()
+
+    team1_name = args.t1
+    team2_name = args.t2
+    n_reps = args.num_reps
+
+    # Read & prep data
+    batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df, team1_roster_df, team2_roster_df = read_data(team1_name, team2_name)
 
     fb_names = set(fb_disc_df.index)
     cu_names = set(cu_disc_df.index)
@@ -1155,97 +1196,161 @@ if __name__ == '__main__':
 
     batter_ids = list(batter_df["PlayerId"])
     pitcher_ids = list(pitcher_df["PlayerId"])
+
+    # NOTE -- currently setting lineups and pitcher selection/order once, then running n replications
+
+    # Construct teams, from inputs or randomly
+    # Set player id lists
+    if team1_roster_df is None and team2_roster_df is None:
+        # No specified teams, all random
+        # Batters
+        game_batter_ids = np.random.choice(batter_ids, 18, replace=False) # samples w/o replacement
+        team1_batter_ids = game_batter_ids[:9]
+        team2_batter_ids = game_batter_ids[9:]
+        # Pitchers
+        game_pitcher_ids = np.random.choice(pitcher_ids, 26, replace=False) # samples w/o replacement
+        team1_pitcher_ids = game_pitcher_ids[:13]
+        team2_pitcher_ids = game_pitcher_ids[13:]
+    elif team1_roster_df is not None and team2_roster_df is None:
+        # Only team 1 specified
+        # Batters
+        team1_batters = list(team1_roster_df[~team1_roster_df["Position"].isin(["SP", "RP", "CP"])]["PlayerId"])
+        team1_batter_ids = np.random.choice(team1_batters, 9, replace=False) # samples w/o replacement
+        other_batters = list(set(batter_ids) - set(team1_batters))
+        team2_batter_ids = np.random.choice(other_batters, 9, replace=False) # samples w/o replacement
+        # Pitchers -- choose one starter, shuffle RP/CPs, insert SP at front
+        team1_sps = list(team1_roster_df[team1_roster_df["Position"] == "SP"]["PlayerId"])
+        team1_sp = np.random.choice(team1_sps, 1, replace=False)[0]
+        team1_rps = list(team1_roster_df[team1_roster_df["Position"].isin(["RP", "CP"])]["PlayerId"])
+        team1_rps_shuffled = list(np.random.permutation(team1_rps))
+        team1_pitcher_ids = [team1_sp] + team1_rps_shuffled
+        other_pitchers = list(set(pitcher_ids) - set(team1_sps + team1_rps))
+        team2_pitcher_ids = np.random.choice(other_pitchers, 13, replace=False) # samples w/o replacement
+    elif team1_roster_df is None and team2_roster_df is not None:
+        # Only team 2 specified
+        # Batters
+        team2_batters = list(team2_roster_df[~team2_roster_df["Position"].isin(["SP", "RP", "CP"])]["PlayerId"])
+        team2_batter_ids = np.random.choice(team2_batters, 9, replace=False) # samples w/o replacement
+        other_batters = list(set(batter_ids) - set(team2_batters))
+        team1_batter_ids = np.random.choice(other_batters, 9, replace=False) # samples w/o replacement
+        # Pitchers -- choose one starter, shuffle RP/CPs, insert SP at front
+        team2_sps = list(team2_roster_df[team2_roster_df["Position"] == "SP"]["PlayerId"])
+        team2_sp = np.random.choice(team2_sps, 1, replace=False)[0]
+        team2_rps = list(team2_roster_df[team2_roster_df["Position"].isin(["RP", "CP"])]["PlayerId"])
+        team2_rps_shuffled = list(np.random.permutation(team2_rps))
+        team2_pitcher_ids = [team2_sp] + team2_rps_shuffled
+        other_pitchers = list(set(pitcher_ids) - set(team2_sps + team2_rps))
+        team1_pitcher_ids = np.random.choice(other_pitchers, 13, replace=False) # samples w/o replacement
+    else:
+        # Both specified
+        # Batters
+        team1_batters = list(team1_roster_df[~team1_roster_df["Position"].isin(["SP", "RP", "CP"])]["PlayerId"])
+        team1_batter_ids = np.random.choice(team1_batters, 9, replace=False) # samples w/o replacement
+        team2_batters = list(team2_roster_df[~team2_roster_df["Position"].isin(["SP", "RP", "CP"])]["PlayerId"])
+        team2_batter_ids = np.random.choice(team2_batters, 9, replace=False) # samples w/o replacement
+        # Pitchers
+        team1_sps = list(team1_roster_df[team1_roster_df["Position"] == "SP"]["PlayerId"])
+        team1_sp = np.random.choice(team1_sps, 1, replace=False)[0]
+        team1_rps = list(team1_roster_df[team1_roster_df["Position"].isin(["RP", "CP"])]["PlayerId"])
+        team1_rps_shuffled = list(np.random.permutation(team1_rps))
+        team1_pitcher_ids = [team1_sp] + team1_rps_shuffled
+        team2_sps = list(team2_roster_df[team2_roster_df["Position"] == "SP"]["PlayerId"])
+        team2_sp = np.random.choice(team2_sps, 1, replace=False)[0]
+        team2_rps = list(team2_roster_df[team2_roster_df["Position"].isin(["RP", "CP"])]["PlayerId"])
+        team2_rps_shuffled = list(np.random.permutation(team2_rps))
+        team2_pitcher_ids = [team2_sp] + team2_rps_shuffled
     
-    selected_batter_ids = np.random.choice(batter_ids, 18, replace=False) # samples w/o replacement
-    selected_pitcher_ids = np.random.choice(pitcher_ids, 26, replace=False) # samples w/o replacemnet
-    
-    batter_data = [ 
-        (lambda row:
-            {'name': row["Name"],
-             'id': row["PlayerId"],
-             'team': row["Team"],
-             'zone_prob': {
-                           "na": row["Zone%"],
-                           "fastball": fb_disc_df.loc[row["Name"], "Zone%"] if row["Name"] in fb_names else None, 
-                           "curveball": cu_disc_df.loc[row["Name"], "Zone%"] if row["Name"] in cu_names else None,
-                           "slider": sl_disc_df.loc[row["Name"], "Zone%"] if row["Name"] in sl_names else None,
-                           "changeup": ch_disc_df.loc[row["Name"], "Zone%"] if row["Name"] in ch_names else None 
-                        },
-             'swing_prob': {
-                            "na": {'strike': row["Z-Swing%"], 'ball': row["O-Swing%"]},
-                            "fastball": {'strike': fb_disc_df.loc[row["Name"], "Z-Swing%"] if row["Name"] in fb_names else None,
-                                         'ball': fb_disc_df.loc[row["Name"], "O-Swing%"] if row["Name"] in fb_names else None},
-                            "curveball": {'strike': cu_disc_df.loc[row["Name"], "Z-Swing%"] if row["Name"] in cu_names else None,
-                                         'ball': cu_disc_df.loc[row["Name"], "O-Swing%"] if row["Name"] in cu_names else None},
-                            "slider": {'strike': sl_disc_df.loc[row["Name"], "Z-Swing%"] if row["Name"] in sl_names else None,
-                                         'ball': sl_disc_df.loc[row["Name"], "O-Swing%"] if row["Name"] in sl_names else None},
-                            "changeup": {'strike': ch_disc_df.loc[row["Name"], "Z-Swing%"] if row["Name"] in ch_names else None,
-                                         'ball': ch_disc_df.loc[row["Name"], "O-Swing%"] if row["Name"] in ch_names else None},
-                        },
-             'contact_prob': {
-                            "na": {'strike': row["Z-Contact%"], 'ball': row["O-Contact%"]},
-                            "fastball": {'strike': fb_disc_df.loc[row["Name"], "Z-Contact%"] if row["Name"] in fb_names else None,
-                                         'ball': fb_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in fb_names else None},
-                            "curveball": {'strike': cu_disc_df.loc[row["Name"], "Z-Contact%"] if row["Name"] in cu_names else None,
-                                         'ball': cu_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in cu_names else None},
-                            "slider": {'strike': sl_disc_df.loc[row["Name"], "Z-Contact%"] if row["Name"] in sl_names else None,
-                                         'ball': sl_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in sl_names else None},
-                            "changeup": {'strike': ch_disc_df.loc[row["Name"], "Z-Contact%"] if row["Name"] in ch_names else None,
-                                         'ball': ch_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in ch_names else None},
-                        },
-             'foul_prob': {'strike': 0.22, 'ball': 0.22}, # TODO add this by-player? Also add foul-out chance/rate
-            #  'int_walk_prob': row["IBB"] / row["PA"],
-            #  'hit_by_pitch_prob': row["HBP"] / row["PA"],
-            #  'sac_fly_prob': row["SF"] / row["PA"],
-            #  'sac_bunt_prob': row["SH"] / row["PA"],
-             # TODO add GDP rate/logic
-             'contact_cat_prob': {
-                            "ground_ball": row["GB%"],
-                            "line_drive": row["LD%"],
-                            "fly_ball": row["FB%"],
-                            # TODO eventually, add Bunts? Split off from GB% somehow?
+    # Construct/fill batter and pitcher data
+    batter_data_dict = {}
+    for batter_team, selected_batter_ids in {"team1": team1_batter_ids, "team2": team2_batter_ids}.items():
+        batter_data = [ 
+            (lambda row:
+                {'name': row["Name"],
+                'id': row["PlayerId"],
+                'team': row["Team"],
+                'zone_prob': {
+                            "na": row["Zone%"],
+                            "fastball": fb_disc_df.loc[row["Name"], "Zone%"] if row["Name"] in fb_names else None, 
+                            "curveball": cu_disc_df.loc[row["Name"], "Zone%"] if row["Name"] in cu_names else None,
+                            "slider": sl_disc_df.loc[row["Name"], "Zone%"] if row["Name"] in sl_names else None,
+                            "changeup": ch_disc_df.loc[row["Name"], "Zone%"] if row["Name"] in ch_names else None 
                             },
-             'outcome_prob': {
-                            "ground_ball": {
-                                            "single": hit_traj_df.loc["Ground Balls", "1B%"],
-                                            "double": hit_traj_df.loc["Ground Balls", "2B%"],
-                                            "triple": hit_traj_df.loc["Ground Balls", "3B%"],
-                                            "home_run": hit_traj_df.loc["Ground Balls", "HR%"], # this should always be 0
-                                            "out": hit_traj_df.loc["Ground Balls", "Out%"]
-                                            },
-                            "line_drive": {
-                                            "single": hit_traj_df.loc["Line Drives", "1B%"],
-                                            "double": hit_traj_df.loc["Line Drives", "2B%"],
-                                            "triple": hit_traj_df.loc["Line Drives", "3B%"],
-                                            "home_run": hit_traj_df.loc["Line Drives", "HR%"],
-                                            "out": hit_traj_df.loc["Line Drives", "Out%"]
-                                            },
-                            "fly_ball": { # TODO incorporate IFFB% somehow? Also from pitcher side
-                                            "single": hit_traj_df.loc["Fly Balls", "1B%"],
-                                            "double": hit_traj_df.loc["Fly Balls", "2B%"],
-                                            "triple": hit_traj_df.loc["Fly Balls", "3B%"],
-                                            "home_run": row["HR/FB"], # Note, this will make sum likely not 1, which is normalized later
-                                            "out": hit_traj_df.loc["Fly Balls", "Out%"]
-                                            },
-                            # "bunt": {
-                            #                 "single": hit_traj_df.loc["Bunts", "1B%"],
-                            #                 "double": hit_traj_df.loc["Bunts", "2B%"],
-                            #                 "triple": hit_traj_df.loc["Bunts", "3B%"],
-                            #                 "home_run": hit_traj_df.loc["Bunts", "HR%"], # this should always be 0
-                            #                 "out": hit_traj_df.loc["Bunts", "Out%"] # this should always be 0
-                            #                 }
+                'swing_prob': {
+                                "na": {'strike': row["Z-Swing%"], 'ball': row["O-Swing%"]},
+                                "fastball": {'strike': fb_disc_df.loc[row["Name"], "Z-Swing%"] if row["Name"] in fb_names else None,
+                                            'ball': fb_disc_df.loc[row["Name"], "O-Swing%"] if row["Name"] in fb_names else None},
+                                "curveball": {'strike': cu_disc_df.loc[row["Name"], "Z-Swing%"] if row["Name"] in cu_names else None,
+                                            'ball': cu_disc_df.loc[row["Name"], "O-Swing%"] if row["Name"] in cu_names else None},
+                                "slider": {'strike': sl_disc_df.loc[row["Name"], "Z-Swing%"] if row["Name"] in sl_names else None,
+                                            'ball': sl_disc_df.loc[row["Name"], "O-Swing%"] if row["Name"] in sl_names else None},
+                                "changeup": {'strike': ch_disc_df.loc[row["Name"], "Z-Swing%"] if row["Name"] in ch_names else None,
+                                            'ball': ch_disc_df.loc[row["Name"], "O-Swing%"] if row["Name"] in ch_names else None},
                             },
-             'outcome_power_prob': {
-                                "soft": row["Soft%"],
-                                "medium": row["Med%"],
-                                "hard": row["Hard%"]
-                              },
-            # TODO add wild pitches, errors?
-            # TODO pull from distribution for distance of a ball hit, or power, for chances of tagging up or multiple bases?
-            })
-        (batter_df[batter_df["PlayerId"] == bid].iloc[0])
-            for bid in selected_batter_ids
-    ]
+                'contact_prob': {
+                                "na": {'strike': row["Z-Contact%"], 'ball': row["O-Contact%"]},
+                                "fastball": {'strike': fb_disc_df.loc[row["Name"], "Z-Contact%"] if row["Name"] in fb_names else None,
+                                            'ball': fb_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in fb_names else None},
+                                "curveball": {'strike': cu_disc_df.loc[row["Name"], "Z-Contact%"] if row["Name"] in cu_names else None,
+                                            'ball': cu_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in cu_names else None},
+                                "slider": {'strike': sl_disc_df.loc[row["Name"], "Z-Contact%"] if row["Name"] in sl_names else None,
+                                            'ball': sl_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in sl_names else None},
+                                "changeup": {'strike': ch_disc_df.loc[row["Name"], "Z-Contact%"] if row["Name"] in ch_names else None,
+                                            'ball': ch_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in ch_names else None},
+                            },
+                'foul_prob': {'strike': 0.22, 'ball': 0.22}, # TODO add this by-player? Also add foul-out chance/rate
+                #  'int_walk_prob': row["IBB"] / row["PA"],
+                #  'hit_by_pitch_prob': row["HBP"] / row["PA"],
+                #  'sac_fly_prob': row["SF"] / row["PA"],
+                #  'sac_bunt_prob': row["SH"] / row["PA"],
+                # TODO add GDP rate/logic
+                'contact_cat_prob': {
+                                "ground_ball": row["GB%"],
+                                "line_drive": row["LD%"],
+                                "fly_ball": row["FB%"],
+                                # TODO eventually, add Bunts? Split off from GB% somehow?
+                                },
+                'outcome_prob': {
+                                "ground_ball": {
+                                                "single": hit_traj_df.loc["Ground Balls", "1B%"],
+                                                "double": hit_traj_df.loc["Ground Balls", "2B%"],
+                                                "triple": hit_traj_df.loc["Ground Balls", "3B%"],
+                                                "home_run": hit_traj_df.loc["Ground Balls", "HR%"], # this should always be 0
+                                                "out": hit_traj_df.loc["Ground Balls", "Out%"]
+                                                },
+                                "line_drive": {
+                                                "single": hit_traj_df.loc["Line Drives", "1B%"],
+                                                "double": hit_traj_df.loc["Line Drives", "2B%"],
+                                                "triple": hit_traj_df.loc["Line Drives", "3B%"],
+                                                "home_run": hit_traj_df.loc["Line Drives", "HR%"],
+                                                "out": hit_traj_df.loc["Line Drives", "Out%"]
+                                                },
+                                "fly_ball": { # TODO incorporate IFFB% somehow? Also from pitcher side
+                                                "single": hit_traj_df.loc["Fly Balls", "1B%"],
+                                                "double": hit_traj_df.loc["Fly Balls", "2B%"],
+                                                "triple": hit_traj_df.loc["Fly Balls", "3B%"],
+                                                "home_run": row["HR/FB"], # Note, this will make sum likely not 1, which is normalized later
+                                                "out": hit_traj_df.loc["Fly Balls", "Out%"]
+                                                },
+                                # "bunt": {
+                                #                 "single": hit_traj_df.loc["Bunts", "1B%"],
+                                #                 "double": hit_traj_df.loc["Bunts", "2B%"],
+                                #                 "triple": hit_traj_df.loc["Bunts", "3B%"],
+                                #                 "home_run": hit_traj_df.loc["Bunts", "HR%"], # this should always be 0
+                                #                 "out": hit_traj_df.loc["Bunts", "Out%"] # this should always be 0
+                                #                 }
+                                },
+                'outcome_power_prob': {
+                                    "soft": row["Soft%"],
+                                    "medium": row["Med%"],
+                                    "hard": row["Hard%"]
+                                },
+                # TODO add wild pitches, errors?
+                # TODO pull from distribution for distance of a ball hit, or power, for chances of tagging up or multiple bases?
+                })
+            (batter_df[batter_df["PlayerId"] == bid].iloc[0])
+                for bid in selected_batter_ids
+        ]
+        batter_data_dict[batter_team] = batter_data
 
     base_velocity_dist = {95:0.5,
                         100:0.5}
@@ -1253,61 +1358,64 @@ if __name__ == '__main__':
                           'down': 0.25,
                           'side': 0.25,
                           'fade': 0.25}
-    pitcher_data = [
-        (lambda row:
-            {'name': row["Name"],
-             'id': row["PlayerId"],
-             'team': row["Team"],
-             'pitch_type_prob': {'fastball': row["FA%"], # + row["FT%"], # Adding 4-seam, 2-seam, and unclassified tgr
-                                 'curveball': row["CU%"],
-                                 'slider': row["SL%"],
-                                 'changeup': row["CH%"]},
-                                 # TODO eventually, add Bunts? Split off from GB% somehow?
-             'swing_prob': {'strike': row["Z-Swing%"], 'ball': row["O-Swing%"]},
-             'contact_prob': {'strike': row["Z-Contact%"], 'ball': row["O-Contact%"]},
-             'contact_cat_prob': {
-                            "ground_ball": row["GB%"],
-                            "line_drive": row["LD%"],
-                            "fly_ball": row["FB%"],
-                            # TODO eventually, add Bunts?
-                            },
-             'outcome_power_prob': {
-                                "soft": row["Soft%"],
-                                "medium": row["Med%"],
-                                "hard": row["Hard%"]
-                              },
-             'velocity_dist': perturb_values(base_velocity_dist, 0.05), # not used right now
-             'movement_prob': perturb_values(base_movement_prob, 0.05), # not used right now
-             'strike_prob': row["Zone%"], # prob inside zone, not of being a strike bc of zone/swing/foul
-             'starter': False # Whether this pitcher is a starter, is updated after assigned to teams
-            }
-        )(pitcher_df[pitcher_df["PlayerId"] == pid].iloc[0])
-            for pid in selected_pitcher_ids
-    ]
     
-    batters1 = [Batter(batter) for batter in batter_data[0:9]]
-    batters2 = [Batter(batter) for batter in batter_data[9:]]
-
+    pitcher_data_dict = {}
+    for pitcher_team, selected_pitcher_ids in {"team1": team1_pitcher_ids, "team2": team2_pitcher_ids}.items():
+        pitcher_data = [
+            (lambda row:
+                {'name': row["Name"],
+                'id': row["PlayerId"],
+                'team': row["Team"],
+                'pitch_type_prob': {'fastball': row["FA%"], # + row["FT%"], # Adding 4-seam, 2-seam, and unclassified tgr
+                                    'curveball': row["CU%"],
+                                    'slider': row["SL%"],
+                                    'changeup': row["CH%"]},
+                                    # TODO eventually, add Bunts? Split off from GB% somehow?
+                'swing_prob': {'strike': row["Z-Swing%"], 'ball': row["O-Swing%"]},
+                'contact_prob': {'strike': row["Z-Contact%"], 'ball': row["O-Contact%"]},
+                'contact_cat_prob': {
+                                "ground_ball": row["GB%"],
+                                "line_drive": row["LD%"],
+                                "fly_ball": row["FB%"],
+                                # TODO eventually, add Bunts?
+                                },
+                'outcome_power_prob': {
+                                    "soft": row["Soft%"],
+                                    "medium": row["Med%"],
+                                    "hard": row["Hard%"]
+                                },
+                'velocity_dist': perturb_values(base_velocity_dist, 0.05), # not used right now
+                'movement_prob': perturb_values(base_movement_prob, 0.05), # not used right now
+                'strike_prob': row["Zone%"], # prob inside zone, not of being a strike bc of zone/swing/foul
+                'starter': False # Whether this pitcher is a starter, is updated after assigned to teams
+                }
+            )(pitcher_df[pitcher_df["PlayerId"] == pid].iloc[0])
+                for pid in selected_pitcher_ids
+        ]
+        pitcher_data_dict[pitcher_team] = pitcher_data
     
-    pitchers1 = [Pitcher(pitcher) for pitcher in pitcher_data[0:13]]
-    #Label first pitcher as the starter
+    # Construct actual Batters and Pitchers, and label first pitcher as the starter
+    batters1 = [Batter(batter) for batter in batter_data_dict["team1"]]
+    batters2 = [Batter(batter) for batter in batter_data_dict["team2"]]
+    
+    pitchers1 = [Pitcher(pitcher) for pitcher in pitcher_data_dict["team1"]]
     pitchers1[0].starter = True
-
-    
-    pitchers2 = [Pitcher(pitcher) for pitcher in pitcher_data[13:]]
-    #Label first pitcher as the starter
+    pitchers2 = [Pitcher(pitcher) for pitcher in pitcher_data_dict["team2"]]
     pitchers2[0].starter = True
 
+    # Create teams
+    team1 = Team(batters1, pitchers1)
+    team2 = Team(batters2, pitchers2)
+
+    # Run n_reps replications/games
+    for rep in range(n_reps):
+        # Create & run game
+        game = Game(team1, team2)
+        game.play_ball()
         
-    team1 = Team(batters1,pitchers1)
-    team2 = Team(batters2,pitchers2)
-    
-  
-    game = Game(team1, team2)
-    game.play_ball()
-    
-    event_log = pd.DataFrame(game.event_log)
-    event_log.to_csv("event_log.csv", encoding='utf-8-sig', index=False)
+        # Save results
+        event_log = pd.DataFrame(game.event_log)
+        event_log.to_csv("event_log.csv", encoding='utf-8-sig', index=False)
     
     #make_box_score(event_log)
         
