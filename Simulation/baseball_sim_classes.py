@@ -1215,7 +1215,8 @@ if __name__ == '__main__':
         # Only team 1 specified
         # Batters
         team1_batters = list(team1_roster_df[~team1_roster_df["Position"].isin(["SP", "RP", "CP"])]["PlayerId"])
-        team1_batter_ids = np.random.choice(team1_batters, 9, replace=False) # samples w/o replacement
+        team1_batter_ids = team1_batters[:9]
+        # team1_batter_ids = np.random.choice(team1_batters, 9, replace=False) # samples w/o replacement
         other_batters = list(set(batter_ids) - set(team1_batters))
         team2_batter_ids = np.random.choice(other_batters, 9, replace=False) # samples w/o replacement
         # Pitchers -- choose one starter, shuffle RP/CPs, insert SP at front
@@ -1230,7 +1231,8 @@ if __name__ == '__main__':
         # Only team 2 specified
         # Batters
         team2_batters = list(team2_roster_df[~team2_roster_df["Position"].isin(["SP", "RP", "CP"])]["PlayerId"])
-        team2_batter_ids = np.random.choice(team2_batters, 9, replace=False) # samples w/o replacement
+        team2_batter_ids = team2_batters[:9]
+        # team2_batter_ids = np.random.choice(team2_batters, 9, replace=False) # samples w/o replacement
         other_batters = list(set(batter_ids) - set(team2_batters))
         team1_batter_ids = np.random.choice(other_batters, 9, replace=False) # samples w/o replacement
         # Pitchers -- choose one starter, shuffle RP/CPs, insert SP at front
@@ -1245,9 +1247,11 @@ if __name__ == '__main__':
         # Both specified
         # Batters
         team1_batters = list(team1_roster_df[~team1_roster_df["Position"].isin(["SP", "RP", "CP"])]["PlayerId"])
-        team1_batter_ids = np.random.choice(team1_batters, 9, replace=False) # samples w/o replacement
+        team1_batter_ids = team1_batters[:9]
+        # team1_batter_ids = np.random.choice(team1_batters, 9, replace=False) # samples w/o replacement
         team2_batters = list(team2_roster_df[~team2_roster_df["Position"].isin(["SP", "RP", "CP"])]["PlayerId"])
-        team2_batter_ids = np.random.choice(team2_batters, 9, replace=False) # samples w/o replacement
+        team2_batter_ids = team2_batters[:9]
+        # team2_batter_ids = np.random.choice(team2_batters, 9, replace=False) # samples w/o replacement
         # Pitchers
         team1_sps = list(team1_roster_df[team1_roster_df["Position"] == "SP"]["PlayerId"])
         team1_sp = np.random.choice(team1_sps, 1, replace=False)[0]
@@ -1417,7 +1421,7 @@ if __name__ == '__main__':
         event_log = pd.DataFrame(game.event_log)
         event_log.to_csv("event_log.csv", encoding='utf-8-sig', index=False)
     
-    #make_box_score(event_log)
+    # make_box_score(event_log)
         
     
     ### Some code below to run 100 games and compute team record, average score
