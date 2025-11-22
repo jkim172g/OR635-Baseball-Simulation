@@ -1176,7 +1176,7 @@ def read_data(team1_name, team2_name, run_playoffs):
 
 def run_games(run_playoffs, team_roster_df_dict, team1_name, team2_name, n_reps,
               batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df,
-              fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids,playoffs_full_results = None):
+              fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids, playoffs_full_results = None):
     # Construct teams, from inputs or randomly
     # Set player id lists
     if team_roster_df_dict[team1_name] is None and team_roster_df_dict[team2_name] is None:
@@ -1189,6 +1189,8 @@ def run_games(run_playoffs, team_roster_df_dict, team1_name, team2_name, n_reps,
         game_pitcher_ids = np.random.choice(pitcher_ids, 26, replace=False) # samples w/o replacement
         team1_pitcher_ids = game_pitcher_ids[:13]
         team2_pitcher_ids = game_pitcher_ids[13:]
+        unused_team1_sps = []
+        unused_team2_sps = []
     elif team_roster_df_dict[team1_name] is not None and team_roster_df_dict[team2_name] is None:
         # Only team 1 specified
         team1_roster_df = team_roster_df_dict[team1_name]
@@ -1201,11 +1203,13 @@ def run_games(run_playoffs, team_roster_df_dict, team1_name, team2_name, n_reps,
         # Pitchers -- choose one starter, shuffle RP/CPs, insert SP at front
         team1_sps = list(team1_roster_df[team1_roster_df["Position"] == "SP"]["PlayerId"])
         team1_sp = np.random.choice(team1_sps, 1, replace=False)[0]
+        unused_team1_sps = list(set(team1_sps) - {team1_sp})
         team1_rps = list(team1_roster_df[team1_roster_df["Position"].isin(["RP", "CP"])]["PlayerId"])
         team1_rps_shuffled = list(np.random.permutation(team1_rps))
         team1_pitcher_ids = [team1_sp] + team1_rps_shuffled
         other_pitchers = list(set(pitcher_ids) - set(team1_sps + team1_rps))
         team2_pitcher_ids = np.random.choice(other_pitchers, 13, replace=False) # samples w/o replacement
+        unused_team2_sps = []
     elif team_roster_df_dict[team1_name] is None and team_roster_df_dict[team2_name] is not None:
         # Only team 2 specified
         team2_roster_df = team_roster_df_dict[team2_name]
@@ -1218,11 +1222,13 @@ def run_games(run_playoffs, team_roster_df_dict, team1_name, team2_name, n_reps,
         # Pitchers -- choose one starter, shuffle RP/CPs, insert SP at front
         team2_sps = list(team2_roster_df[team2_roster_df["Position"] == "SP"]["PlayerId"])
         team2_sp = np.random.choice(team2_sps, 1, replace=False)[0]
+        unused_team2_sps = list(set(team2_sps) - {team2_sp})
         team2_rps = list(team2_roster_df[team2_roster_df["Position"].isin(["RP", "CP"])]["PlayerId"])
         team2_rps_shuffled = list(np.random.permutation(team2_rps))
         team2_pitcher_ids = [team2_sp] + team2_rps_shuffled
         other_pitchers = list(set(pitcher_ids) - set(team2_sps + team2_rps))
         team1_pitcher_ids = np.random.choice(other_pitchers, 13, replace=False) # samples w/o replacement
+        unused_team1_sps = []
     else:
         # Both specified
         team1_roster_df = team_roster_df_dict[team1_name]
@@ -1237,11 +1243,13 @@ def run_games(run_playoffs, team_roster_df_dict, team1_name, team2_name, n_reps,
         # Pitchers
         team1_sps = list(team1_roster_df[team1_roster_df["Position"] == "SP"]["PlayerId"])
         team1_sp = np.random.choice(team1_sps, 1, replace=False)[0]
+        unused_team1_sps = list(set(team1_sps) - {team1_sp})
         team1_rps = list(team1_roster_df[team1_roster_df["Position"].isin(["RP", "CP"])]["PlayerId"])
         team1_rps_shuffled = list(np.random.permutation(team1_rps))
         team1_pitcher_ids = [team1_sp] + team1_rps_shuffled
         team2_sps = list(team2_roster_df[team2_roster_df["Position"] == "SP"]["PlayerId"])
         team2_sp = np.random.choice(team2_sps, 1, replace=False)[0]
+        unused_team2_sps = list(set(team2_sps) - {team2_sp})
         team2_rps = list(team2_roster_df[team2_roster_df["Position"].isin(["RP", "CP"])]["PlayerId"])
         team2_rps_shuffled = list(np.random.permutation(team2_rps))
         team2_pitcher_ids = [team2_sp] + team2_rps_shuffled
@@ -1346,7 +1354,10 @@ def run_games(run_playoffs, team_roster_df_dict, team1_name, team2_name, n_reps,
                           'fade': 0.25}
     
     pitcher_data_dict = {}
-    for pitcher_team, selected_pitcher_ids in {"team1": team1_pitcher_ids, "team2": team2_pitcher_ids}.items():
+    for pitcher_team, selected_pitcher_ids in {"team1": team1_pitcher_ids,
+                                               "team2": team2_pitcher_ids,
+                                               "unused_team1_sps": unused_team1_sps,
+                                               "unused_team2_sps": unused_team2_sps}.items():
         pitcher_data = [
             (lambda row:
                 {'name': row["Name"],
@@ -1386,14 +1397,18 @@ def run_games(run_playoffs, team_roster_df_dict, team1_name, team2_name, n_reps,
     
     pitchers1 = [Pitcher(pitcher) for pitcher in pitcher_data_dict["team1"]]
     pitchers1[0].starter = True
+    orig_spitcher_1 = pitchers1[0]
+    unused_spitchers1 = [Pitcher(pitcher) for pitcher in pitcher_data_dict["unused_team1_sps"]]
+    for p in unused_spitchers1:
+        p.starter = True
     pitchers2 = [Pitcher(pitcher) for pitcher in pitcher_data_dict["team2"]]
     pitchers2[0].starter = True
+    orig_spitcher_2 = pitchers2[0]
+    unused_spitchers2 = [Pitcher(pitcher) for pitcher in pitcher_data_dict["unused_team2_sps"]]
+    for p in unused_spitchers2:
+        p.starter = True
 
-    # Create teams
-    team1 = Team(batters1, pitchers1,team1_name)
-    team2 = Team(batters2, pitchers2,team2_name)
-
-    # Run n_reps replications/games
+    # Init trackers
     wins_by_rep = {
         team1_name: 0,
         team2_name: 0
@@ -1401,15 +1416,40 @@ def run_games(run_playoffs, team_roster_df_dict, team1_name, team2_name, n_reps,
     team1_scores = []
     team2_scores = []
 
+    # Play n_reps games
     for j in range(n_reps):
-        # Create & run game
-        #Check if series has been won
+        if j > 0:
+            # Not first game, update SP
+            p1_idx = j % len(unused_spitchers1) + 1 # game index mod total num SPs
+            # e.g. when j == total num pitchers, means in game j + 1, so back to first SP
+            if p1_idx == 0:
+                # back to first SP
+                pitchers1[0] = orig_spitcher_1
+            else:
+                # go to next, get by index (note unused spitchers is 1 shorter)
+                pitchers1[0] = unused_spitchers1[p1_idx - 1]
+
+            # Same for team 2, but could have diff # SPs
+            p2_idx = j % len(unused_spitchers2) + 1
+            if p2_idx == 0:
+                pitchers2[0] = orig_spitcher_2
+            else:
+                pitchers2[0] = unused_spitchers2[p2_idx - 1]
+
+        # Create teams
+        team1 = Team(batters1, pitchers1, team1_name)
+        team2 = Team(batters2, pitchers2, team2_name)
+
+        # Initialize scores
         team1.score = 0
         team2.score = 0
+
         if run_playoffs:
+            # Check if series has been won
             if wins_by_rep[team1_name] > n_reps/2 or wins_by_rep[team2_name] > n_reps/2:
                 break
             else:
+                # Create & run game
                 game = Game(team1, team2)
                 winner = game.play_ball()
                 wins_by_rep[winner] += 1
@@ -1426,8 +1466,8 @@ def run_games(run_playoffs, team_roster_df_dict, team1_name, team2_name, n_reps,
                 # Save event log, less useful in large runs
                 # event_log = pd.DataFrame(game.event_log)
                 # event_log.to_csv("event_log.csv", encoding='utf-8-sig', index=False)
-                
         else:
+            # Create & run game
             game = Game(team1, team2)
             winner = game.play_ball()
             wins_by_rep[winner] += 1
@@ -1596,7 +1636,6 @@ if __name__ == '__main__':
                                       ("NLCS_Team1","NLCS_Team2")],
                         'World Series': [('WS_Team1',"WS_Team2")]}
             #Set up which rounds feed into other rounds
-            # TODO why is deterministic? Is it?
             advance_round = {'ALWC_1': 'ALDS_1_Team2', 'ALWC_2': 'ALDS_2_Team2',
                              'NLWC_1': 'NLDS_1_Team2', 'NLWC_2': 'NLDS_2_Team2',
                              'ALDS_1': 'ALCS_Team1', 'ALDS_2': 'ALCS_Team2',
@@ -1701,6 +1740,3 @@ if __name__ == '__main__':
     #         scores[j].append(event_log.at[max_index, 'Team 2 Score'])
             
     # avg_scores_by_inning = {i:np.average(scores[i]) for i in range(1,10)}    
-
-
-# TODO do v&v by looking at values vs avg hits, runs, pitches, etc. per game, but also at BB%, R, AVG, etc. for players over many games
