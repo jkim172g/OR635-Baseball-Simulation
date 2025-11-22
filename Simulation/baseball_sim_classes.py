@@ -1528,11 +1528,11 @@ if __name__ == '__main__':
     n_series_reps = args.num_series_reps
     run_playoffs = args.playoffs
     
-    team1_name = args.t1
-    team2_name = args.t2
-    n_playoff_reps = 100
-    n_series_reps = 1
-    run_playoffs = True
+    # team1_name = args.t1
+    # team2_name = args.t2
+    # n_playoff_reps = 100
+    # n_series_reps = 1
+    # run_playoffs = True
  
     # Read & prep data
     batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df, team_roster_df_dict = read_data(team1_name, team2_name, run_playoffs)
