@@ -69,7 +69,7 @@ class Pitcher:
 
 class Team:
     
-    def __init__(self, batters, pitchers):
+    def __init__(self, batters, pitchers,name):
         
         self.batters = batters
         self.pitchers = pitchers
@@ -78,6 +78,7 @@ class Team:
         self.num_batters = len(batters)
         self.pitcher_index = 0
         self.num_pitchers = len(pitchers)
+        self.name = name
     
     def __str__(self):
         return "Team"
@@ -912,7 +913,7 @@ class Game:
     def play_ball(self):
         #pdb.set_trace()
         #Loop through innings
-        while self.inning <= 9 or (self.inning >=9 and team1.score == team2.score):
+        while self.inning <= 9 or (self.inning >=9 and self.team1.score == self.team2.score):
             self.outs = 0
             self.strikes = 0
             self.balls = 0
@@ -920,19 +921,19 @@ class Game:
             self.baserunners = [0,0,0]
             if self.inning_half == 'top':
                 #If top of the inning, team1 is batting and team2 is pitching
-                self.simulate_inning_half(team1, team2)    
+                self.simulate_inning_half(self.team1, self.team2)    
                 self.inning_half = 'bottom'
             else:
                 #If bottom of the inning, team2 is batting and team1 is pitching
-                if self.inning == 9 and team2.score > team1.score:
+                if self.inning == 9 and self.team2.score > self.team1.score:
                     self.inning += 1
                     pass
                 else:
-                    self.simulate_inning_half(team2, team1) 
+                    self.simulate_inning_half(self.team2, self.team1) 
                     self.inning_half = 'top'
                     self.inning += 1
-            
-        return self.event_log
+        winner = self.team1.name if self.team1.score > self.team2.score else self.team2.name
+        return winner
     
 
 def perturb_values(orig_val_dict, range):
@@ -1152,7 +1153,7 @@ def read_data(team1_name, team2_name, run_playoffs):
         for team_name in [team1_name, team2_name]:
             if team_name is not None:
                 team_roster_df = pd.read_excel("../Data/Playoff Rosters Reformatted.xlsx", sheet_name=team_name)
-                team_roster_df.dropna(subset=["PlayerId"], inplace=True, ignore_index=True)
+                team_roster_df.dropna(subset=["PlayerId"], inplace=True)
                 if len(team_roster_df[team_roster_df["Position"] == "SP"]) == 0:
                     raise ValueError(f"Roster for {team_name} does not have any specified starting pitchers; should list SP in Position column.")
                 if len(team_roster_df[team_roster_df["Position"].isin(["RP", "CP"])]) == 0:
@@ -1163,7 +1164,7 @@ def read_data(team1_name, team2_name, run_playoffs):
     else:
         for team_name in teams:
             team_roster_df = pd.read_excel("../Data/Playoff Rosters Reformatted.xlsx", sheet_name=team_name)
-            team_roster_df.dropna(subset=["PlayerId"], inplace=True, ignore_index=True)
+            team_roster_df.dropna(subset=["PlayerId"], inplace=True)
             if len(team_roster_df[team_roster_df["Position"] == "SP"]) == 0:
                 raise ValueError(f"Roster for {team_name} does not have any specified starting pitchers; should list SP in Position column.")
             if len(team_roster_df[team_roster_df["Position"].isin(["RP", "CP"])]) == 0:
@@ -1175,7 +1176,7 @@ def read_data(team1_name, team2_name, run_playoffs):
 
 def run_games(run_playoffs, team_roster_df_dict, team1_name, team2_name, n_reps,
               batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df,
-              fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids):
+              fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids,playoffs_full_results = None):
     # Construct teams, from inputs or randomly
     # Set player id lists
     if team_roster_df_dict[team1_name] is None and team_roster_df_dict[team2_name] is None:
@@ -1389,53 +1390,104 @@ def run_games(run_playoffs, team_roster_df_dict, team1_name, team2_name, n_reps,
     pitchers2[0].starter = True
 
     # Create teams
-    team1 = Team(batters1, pitchers1)
-    team2 = Team(batters2, pitchers2)
+    team1 = Team(batters1, pitchers1,team1_name)
+    team2 = Team(batters2, pitchers2,team2_name)
 
     # Run n_reps replications/games
-    wins = {
+    wins_by_rep = {
         team1_name: 0,
         team2_name: 0
     }
+    team1_scores = []
+    team2_scores = []
 
-    for __ in range(n_reps):
+    for j in range(n_reps):
         # Create & run game
-        game = Game(team1, team2)
-        winner = game.play_ball()
-        wins[winner] += 1
-        
-        # Save results
-        event_log = pd.DataFrame(game.event_log)
-        event_log.to_csv("event_log.csv", encoding='utf-8-sig', index=False)
+        #Check if series has been won
+        team1.score = 0
+        team2.score = 0
+        if run_playoffs:
+            
+            
+            if wins_by_rep[team1_name] > n_reps/2 or wins_by_rep[team2_name] > n_reps/2:
+          
+                break
+            else:
+                game = Game(team1, team2)
+                winner = game.play_ball()
+                wins_by_rep[winner] += 1
+                #Save resuls
+                playoffs_full_results['Game'].append(j+1)
+                playoffs_full_results['Team1'].append(team1.name)
+                playoffs_full_results['Team2'].append(team2.name)
+                playoffs_full_results['Series Record'].append(str(wins_by_rep[team1.name]) + '-' + str(wins_by_rep[team2.name]))
+                playoffs_full_results['Team1 Score'].append(team1.score)
+                playoffs_full_results['Team2 Score'].append(team2.score)
+                team1_scores.append(team1.score)
+                team2_scores.append(team2.score)
+           
+                # Save results
+                
+        else:
+            
+            game = Game(team1, team2)
+            winner = game.play_ball()
+            wins_by_rep[winner] += 1
+            
+            # Save results
+            event_log = pd.DataFrame(game.event_log)
+            event_log.to_csv("event_log.csv", encoding='utf-8-sig', index=False)
 
         # make_box_score(event_log)
 
-    if wins[team1_name] > wins[team2_name]:
+    if wins_by_rep[team1_name] > wins_by_rep[team2_name]:
         # Team 1 won more games
-        return team1_name
-    elif wins[team2_name] > wins[team1_name]:
+        return team1_name, [team1_scores, team2_scores], wins_by_rep
+    elif wins_by_rep[team2_name] > wins_by_rep[team1_name]:
         # Team 2 won more games
-        return team2_name
+        return team2_name,[team1_scores, team2_scores], wins_by_rep
     else:
         # They won an equal number of games, play one more to tie-break
         game = Game(team1, team2)
         final_winner = game.play_ball()
-        return final_winner
+        return final_winner,[team1_scores, team2_scores], wins_by_rep
 
 
 def run_series(run_playoffs, round_reps, team_roster_df_dict, round_team1, round_team2, round_ngames,
                 batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df,
-                fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids):
+                fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids, playoffs_full_results, summary_results):
     wins = {
         round_team1: 0,
         round_team2: 0
     }
-    for __ in range(round_reps):
-        winner = run_games(run_playoffs, team_roster_df_dict, round_team1, round_team2, round_ngames,
+    team1_scores = []
+    team2_scores = []
+    final_records = []
+    for i in tqdm(range(round_reps), round_team1 + ' vs. ' + round_team2):
+        
+        winner, scores, records = run_games(run_playoffs, team_roster_df_dict, round_team1, round_team2, round_ngames,
                 batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df,
-                fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids)
+                fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids, playoffs_full_results)
+        
+        team1_scores += scores[0]
+        team2_scores += scores[1]
+        final_records.append(records)
+        #Add iterations to full results
+        while len(playoffs_full_results['Iteration']) < len(playoffs_full_results['Game']):
+            playoffs_full_results['Iteration'].append(i+1)
         wins[winner] += 1
-
+    #Add summary results
+    summary_results['Team1'].append(round_team1)
+    summary_results['Team2'].append(round_team2)
+    summary_results['Team1 Series Win %'].append(wins[round_team1]/(sum(wins.values())))
+    summary_results['Team2 Series Win %'].append(wins[round_team2]/(sum(wins.values())))
+    summary_results['Team1 Avg Score'].append(np.average(team1_scores))
+    summary_results['Team2 Avg Score'].append(np.average(team2_scores))
+    summary_results['Winner'].append(winner)
+    team1_avg_wins = str(round(np.average([final_records[k][round_team1] for k in range(round_reps)]),2))
+    team2_avg_wins = str(round(np.average([final_records[k][round_team2] for k in range(round_reps)]),2))
+    summary_results['Avg Final Record'].append(str(team1_avg_wins) + '-' + str(team2_avg_wins))
+   
     if wins[round_team1] > wins[round_team2]:
         # Team 1 wins the series more often
         return round_team1
@@ -1444,9 +1496,9 @@ def run_series(run_playoffs, round_reps, team_roster_df_dict, round_team1, round
         return round_team2
     else:
         # They won an equal number of times, run one more to tie-break
-        final_winner = run_games(run_playoffs, team_roster_df_dict, round_team1, round_team2, round_ngames,
+        final_winner, scores, records = run_games(run_playoffs, team_roster_df_dict, round_team1, round_team2, round_ngames,
                 batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df,
-                fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids)
+                fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids, playoffs_full_results)
         return final_winner
 
 
@@ -1469,7 +1521,12 @@ if __name__ == '__main__':
     team2_name = args.t2
     n_reps = args.num_reps
     run_playoffs = args.playoffs
-
+    
+    team1_name = args.t1
+    team2_name = args.t2
+    n_reps = 162
+    run_playoffs = True
+ 
     # Read & prep data
     batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df, team_roster_df_dict = read_data(team1_name, team2_name, run_playoffs)
 
@@ -1489,7 +1546,7 @@ if __name__ == '__main__':
                 fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids)
     else:
         # Run the playoffs
-        round_reps = 162
+        round_reps = n_reps
         # TODO set up loop here to organize the playoffs
             # Below will select the batters as the first 9, so that is set
             # It will pick one SP and shuffle the RP, which is also right game to game, but needs something to avoid same SP consecutively
@@ -1524,17 +1581,70 @@ if __name__ == '__main__':
             "WS_Team1": None,
             "WS_Team2": None,
         }
-
-        # TODO work way through the bracker
-        round_ngames = 3 # 3 for WC, 5 for DS, 7 for CS and WS
-        round_team1 = ""
-        round_team2 = ""
-        # TODO play_ball still needs to return the winner, as the team_name (which may also need to be passed in?)
-        winner = run_series(run_playoffs, round_reps, team_roster_df_dict, round_team1, round_team2, round_ngames,
-                batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df,
-                fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids)
+        #Set the matchups to be played
+        matchups = {'Wildcard':[("ALWC_1_Team1","ALWC_1_Team2"),
+                                ("ALWC_2_Team1","ALWC_2_Team2"),
+                                ("NLWC_1_Team1","NLWC_1_Team2"),
+                                ("NLWC_2_Team1","NLWC_2_Team2")],
+                    'Division':[("ALDS_1_Team1","ALDS_1_Team2"),
+                                ("ALDS_2_Team1","ALDS_2_Team2"),
+                                ("NLDS_1_Team1","NLDS_1_Team2"),
+                                ("NLDS_2_Team1","NLDS_2_Team2")],
+                    'Conference':[("ALCS_Team1","ALCS_Team2"),
+                                  ("NLCS_Team1","NLCS_Team2")],
+                    'World Series': [('WS_Team1',"WS_Team2")]}
+        #Set up which rounds feed into other rounds
+        advance_round = {'ALWC_1':'ALDS_1_Team2', 'ALWC_2':'ALDS_2_Team2',
+                         'NLWC_1':'NLDS_1_Team2', 'NLWC_2':'NLDS_2_Team2',
+                         'ALDS_1': 'ALCS_Team1', 'ALDS_2': 'ALCS_Team2',
+                         'NLDS_1': 'NLCS_Team1', 'NLDS_2': 'NLCS_Team2',
+                         'ALCS_T': 'WS_Team1', 'NLCS_T' : 'WS_Team2'}
         
+        #save number of games by type
+        n_games = {'Wildcard':3, 'Division':5, 'Conference':7,'World Series':7}
+        #Create results dictionarites
+        playoffs_full_results = {'Round':[], 'Iteration': [], 'Game':[],'Team1':[],'Team2':[],
+                                 'Series Record':[], 'Team1 Score':[], 'Team2 Score':[]}
+        summary_results = {'Round':[], 'Team1':[], 'Team2':[], 'Winner':[], 'Team1 Series Win %':[], 'Team2 Series Win %':[],
+                           'Team1 Avg Score':[], 'Team2 Avg Score':[], 'Avg Final Record':[]}
+        for round_type in matchups:
+            round_ngames = n_games[round_type]
+            
+            for matchup in matchups[round_type]:
+                #Save official name
+                summary_results['Round'].append(round_type)
+                if round_type == 'Wildcard':
+                    round_name =matchup[0][0:6]
+                elif round_type == 'Conference':
+                    round_name = matchup[0][0:4]
+                else:
+                    round_name = 'World Series'
+                
+                
+                round_team1 = bracket[matchup[0]]
+                round_team2 = bracket[matchup[1]]
+                
+                #Determine round winner
+                winner = run_series(run_playoffs, round_reps, team_roster_df_dict, round_team1, round_team2, round_ngames,
+                        batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df,
+                        fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids, playoffs_full_results,
+                        summary_results)
+                
+                #Add round name to results
+                while len(playoffs_full_results['Round']) < len(playoffs_full_results['Game']):
+                    playoffs_full_results['Round'].append(round_name)
+                
+                # Advance winning team in bracket
+                if round_type != 'World Series':
+                    bracket[advance_round[matchup[0][0:6]]]= winner
+                else:
+                    print(winner + ' Win!')
+        #Save results
+        playoff_results = pd.DataFrame(playoffs_full_results)
+        summary_results_df = pd.DataFrame(summary_results)
         
+        playoff_results.to_csv("playoffs_full_results.csv", encoding='utf-8-sig', index=False)
+        summary_results_df.to_csv("summary_results_df.csv", encoding='utf-8-sig', index=False)
 
 
         
