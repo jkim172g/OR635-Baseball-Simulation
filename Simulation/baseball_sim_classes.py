@@ -1667,7 +1667,8 @@ if __name__ == '__main__':
                     round_team2 = bracket[matchup[1]]
 
                     #Log observation of this matchup
-                    matchup_freq = matchup_frequencies[round_name]
+                    round_short_name = "WS" if round_name == "World Series" else round_name
+                    matchup_freq = matchup_frequencies[round_short_name]
                     if (round_team1, round_team2) in matchup_freq:
                         matchup_freq[(round_team1, round_team2)] += 1
                     else:
@@ -1703,10 +1704,10 @@ if __name__ == '__main__':
         summary_results_df.to_csv("summary_results_df.csv", encoding='utf-8-sig', index=False)
 
         matchup_freq_df = pd.DataFrame.from_dict(matchup_frequencies, orient="index")
-        matchup_freq_df.to_csv("matchup_freq_df.csv", )
+        matchup_freq_df.to_csv("matchup_freq_df.csv", encoding='utf-8-sig', index=True)
 
-        all_sims_df = pd.DataFrame(all_sims_results, encoding='utf-8-sig', index=False)
-        all_sims_df.to_csv("all_sims_df.csv", encoding='utf-8-sig', index=False)
+        all_sims_df = pd.DataFrame.from_dict(all_sims_results, orient="columns")
+        all_sims_df.to_csv("all_sims_df.csv", encoding='utf-8-sig', index=True)
     
     ### Some code below to run 100 games and compute team record, average score
     # scores = {i:[] for i in range(1,10)}
