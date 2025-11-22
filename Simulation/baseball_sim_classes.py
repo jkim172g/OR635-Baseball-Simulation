@@ -1407,16 +1407,13 @@ def run_games(run_playoffs, team_roster_df_dict, team1_name, team2_name, n_reps,
         team1.score = 0
         team2.score = 0
         if run_playoffs:
-            
-            
             if wins_by_rep[team1_name] > n_reps/2 or wins_by_rep[team2_name] > n_reps/2:
-          
                 break
             else:
                 game = Game(team1, team2)
                 winner = game.play_ball()
                 wins_by_rep[winner] += 1
-                #Save resuls
+                #Save results
                 playoffs_full_results['Game'].append(j+1)
                 playoffs_full_results['Team1'].append(team1.name)
                 playoffs_full_results['Team2'].append(team2.name)
@@ -1426,10 +1423,11 @@ def run_games(run_playoffs, team_roster_df_dict, team1_name, team2_name, n_reps,
                 team1_scores.append(team1.score)
                 team2_scores.append(team2.score)
            
-                # Save results
+                # Save event log, less useful in large runs
+                # event_log = pd.DataFrame(game.event_log)
+                # event_log.to_csv("event_log.csv", encoding='utf-8-sig', index=False)
                 
         else:
-            
             game = Game(team1, team2)
             winner = game.play_ball()
             wins_by_rep[winner] += 1
@@ -1516,7 +1514,7 @@ if __name__ == '__main__':
     parser.add_argument("--t2", type=str, default=None,
                         help="Team number 2 to grab the playoff roster for. If omitted, players picked randomly.")
     parser.add_argument("-p", "--playoffs", action="store_true",
-                        help="Flag to run the playoffs, ignoring other arguments. Default is False.")
+                        help="Flag to run the playoffs, ignoring team arguments. Default is False.")
     parser.add_argument("-n_playoffs", "--num_playoff_sims", type=int, default=1,
                         help="Number of times to simulate the entire playoffs. Default is 1")
 
@@ -1527,12 +1525,6 @@ if __name__ == '__main__':
     n_playoff_reps = args.num_playoff_sims
     n_series_reps = args.num_series_reps
     run_playoffs = args.playoffs
-    
-    # team1_name = args.t1
-    # team2_name = args.t2
-    # n_playoff_reps = 100
-    # n_series_reps = 1
-    # run_playoffs = True
  
     # Read & prep data
     batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df, team_roster_df_dict = read_data(team1_name, team2_name, run_playoffs)
@@ -1545,7 +1537,6 @@ if __name__ == '__main__':
     batter_ids = list(batter_df["PlayerId"])
     pitcher_ids = list(pitcher_df["PlayerId"])
     
-    # TODO event_log (and box_score if not commented out) only saved/created for the final run (early get overwritten)
     if not run_playoffs:
         # Not running playoffs, just run n reps for the given teams (or random teams)
         winner = run_games(run_playoffs, team_roster_df_dict, team1_name, team2_name, n_series_reps,
@@ -1557,14 +1548,16 @@ if __name__ == '__main__':
                             'Padres', 'Cubs', 'Mariners', 'Blue Jays','Phillies','Brewers']
         all_sims_results = {team: {'World Series Wins':0, 'Conference Championships':0, 'Division Championships':0, 'Wildcard Wins':0} 
                             for team in teams}
+        matchup_frequencies = { # will update with (team1_name, team2_name): +1 each time played
+                                "ALWC_1": {}, "ALWC_2": {}, "NLWC_1": {}, "NLWC_2": {},
+                                "ALDS_1": {}, "ALDS_2": {}, "NLDS_1": {}, "NLDS_2": {},
+                                "ALCS": {}, "NLCS": {}, "WS": {}
+                                }
+        
         for replication in tqdm(range(n_playoff_reps), 'Playoff Iteration'):
             round_reps = n_series_reps
-            # TODO set up loop here to organize the playoffs
-                # Below will select the batters as the first 9, so that is set
-                # It will pick one SP and shuffle the RP, which is also right game to game, but needs something to avoid same SP consecutively
-                # Then needs to run 3, 5, or 7 times depending on the round, and then return who wins, record that & any other stats/info
-                # Then go on to simulate the next pieces
-            # TODO need run_playoffs to be used as a flag in run_games to determine whether to try and avoid repeat SP
+            
+            # TODO SP limitations -- it will pick one SP and shuffle the RP, which is also right game to game, but needs something to avoid same SP consecutively
     
             bracket = {
                 "ALWC_1_Team1": "Tigers",
@@ -1603,8 +1596,9 @@ if __name__ == '__main__':
                                       ("NLCS_Team1","NLCS_Team2")],
                         'World Series': [('WS_Team1',"WS_Team2")]}
             #Set up which rounds feed into other rounds
-            advance_round = {'ALWC_1':'ALDS_1_Team2', 'ALWC_2':'ALDS_2_Team2',
-                             'NLWC_1':'NLDS_1_Team2', 'NLWC_2':'NLDS_2_Team2',
+            # TODO why is deterministic? Is it?
+            advance_round = {'ALWC_1': 'ALDS_1_Team2', 'ALWC_2': 'ALDS_2_Team2',
+                             'NLWC_1': 'NLDS_1_Team2', 'NLWC_2': 'NLDS_2_Team2',
                              'ALDS_1': 'ALCS_Team1', 'ALDS_2': 'ALCS_Team2',
                              'NLDS_1': 'NLCS_Team1', 'NLDS_2': 'NLCS_Team2',
                              'ALCS_T': 'WS_Team1', 'NLCS_T' : 'WS_Team2'}
@@ -1616,6 +1610,7 @@ if __name__ == '__main__':
                                      'Series Record':[], 'Team1 Score':[], 'Team2 Score':[]}
             summary_results = {'Round':[], 'Team1':[], 'Team2':[], 'Winner':[], 'Team1 Series Win %':[], 'Team2 Series Win %':[],
                                'Team1 Avg Score':[], 'Team2 Avg Score':[], 'Avg Final Record':[]}
+            
             for round_type in matchups:
                 round_ngames = n_games[round_type]
                 
@@ -1623,15 +1618,21 @@ if __name__ == '__main__':
                     #Save official name
                     summary_results['Round'].append(round_type)
                     if round_type == 'Wildcard' or round_type == 'Division':
-                        round_name =matchup[0][0:6]
+                        round_name = matchup[0][0:6]
                     elif round_type == 'Conference':
                         round_name = matchup[0][0:4]
                     else:
                         round_name = 'World Series'
                     
-                    
                     round_team1 = bracket[matchup[0]]
                     round_team2 = bracket[matchup[1]]
+
+                    #Log observation of this matchup
+                    matchup_freq = matchup_frequencies[round_name]
+                    if (round_team1, round_team2) in matchup_freq:
+                        matchup_freq[(round_team1, round_team2)] += 1
+                    else:
+                        matchup_freq[(round_team1, round_team2)] = 1
                     
                     #Determine round winner
                     winner = run_series(run_playoffs, round_reps, team_roster_df_dict, round_team1, round_team2, round_ngames,
@@ -1662,9 +1663,11 @@ if __name__ == '__main__':
         playoff_results.to_csv("playoffs_full_results.csv", encoding='utf-8-sig', index=False)
         summary_results_df.to_csv("summary_results_df.csv", encoding='utf-8-sig', index=False)
 
+        matchup_freq_df = pd.DataFrame.from_dict(matchup_frequencies, orient="index")
+        matchup_freq_df.to_csv("matchup_freq_df.csv", )
 
-    all_sims_df = pd.DataFrame(all_sims_results)
-    all_sims_df.to_csv("all_sims_df.csv", encoding='utf-8-sig', index=False)
+        all_sims_df = pd.DataFrame(all_sims_results, encoding='utf-8-sig', index=False)
+        all_sims_df.to_csv("all_sims_df.csv", encoding='utf-8-sig', index=False)
     
     ### Some code below to run 100 games and compute team record, average score
     # scores = {i:[] for i in range(1,10)}
