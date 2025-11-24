@@ -9,7 +9,7 @@ from tqdm import tqdm
 import argparse
 
 # Set seed
-np.random.seed(100)
+#np.random.seed(100)
 
 
 class Batter:
@@ -1248,20 +1248,21 @@ def get_aligned_value(pitcher_val, batter_val):
                         "Pitcher is ", type(pitcher_val), " and batter is ", type(batter_val))
     
 
-def read_data():
+def read_data(team1_name=None, team2_name=None, run_playoffs=False):
     # Read and prep data, returning dataframes
-    batter_df = pd.read_excel("./Data/Merged_Data_C.xlsx", sheet_name="Batting Data")
-    pitcher_df = pd.read_excel("./Data/Merged_Data_C.xlsx", sheet_name="Pitching Data")
-    hit_traj_df = pd.read_excel("./Data/hit_trajectory.xlsx", sheet_name="Worksheet", index_col=0)
+    batter_df = pd.read_excel("../Data/Merged_Data_C.xlsx", sheet_name="Batting Data")
+    pitcher_df = pd.read_excel("../Data/Merged_Data_C.xlsx", sheet_name="Pitching Data")
+    hit_traj_df = pd.read_excel("../Data/hit_trajectory.xlsx", sheet_name="Worksheet", index_col=0)
 
-    fb_disc_df_raw = pd.read_csv("./Data/Batter_FB_Discipline.csv") # fastball
+    fb_disc_df_raw = pd.read_csv("../Data/Batter_FB_Discipline.csv") # fastball
     fb_disc_df = fb_disc_df_raw.groupby("Name", as_index=False).mean(numeric_only=True).set_index("Name", drop=False)
-    ch_disc_df_raw = pd.read_csv("./Data/Batter_CH_Discipline.csv") # changeup
+    ch_disc_df_raw = pd.read_csv("../Data/Batter_CH_Discipline.csv") # changeup
     ch_disc_df = ch_disc_df_raw.groupby("Name", as_index=False).mean(numeric_only=True).set_index("Name", drop=False)
-    cu_disc_df_raw = pd.read_csv("./Data/Batter_CU_Discipline.csv") # curveball
+    cu_disc_df_raw = pd.read_csv("../Data/Batter_CU_Discipline.csv") # curveball
     cu_disc_df = cu_disc_df_raw.groupby("Name", as_index=False).mean(numeric_only=True).set_index("Name", drop=False)
-    sl_disc_df_raw = pd.read_csv("./Data/Batter_SL_Discipline.csv") # slider
+    sl_disc_df_raw = pd.read_csv("../Data/Batter_SL_Discipline.csv") # slider
     sl_disc_df = sl_disc_df_raw.groupby("Name", as_index=False).mean(numeric_only=True).set_index("Name", drop=False)
+
 
     pitcher_df.fillna(0, inplace=True)
     # pitcher_df[["FA%", "FT%", "FC%", "FS%", "FO%", "SI%", "SL%", "CU%", "KC%", "EP%", "CH%", "SC%", "KN%", "UN%"]] = pitcher_df[["FA%", "FT%", "FC%", "FS%", "FO%", "SI%", "SL%", "CU%", "KC%", "EP%", "CH%", "SC%", "KN%", "UN%"]].fillna(0)
