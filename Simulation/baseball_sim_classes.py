@@ -739,7 +739,7 @@ class Game:
     def play_ball(self):
         #pdb.set_trace()
         #Loop through innings
-        while self.inning <= 9 or (self.inning >=9 and team1.score == team2.score):
+        while self.inning <= 9 or (self.inning >=9 and self.team1.score == self.team2.score):
             self.outs = 0
             self.strikes = 0
             self.balls = 0
@@ -747,19 +747,148 @@ class Game:
             self.baserunners = [0,0,0]
             if self.inning_half == 'top':
                 #If top of the inning, team1 is batting and team2 is pitching
-                self.simulate_inning_half(team1, team2)    
+                self.simulate_inning_half(self.team1, self.team2)    
                 self.inning_half = 'bottom'
             else:
                 #If bottom of the inning, team2 is batting and team1 is pitching
-                if self.inning == 9 and team2.score > team1.score:
+                if self.inning == 9 and self.team2.score > self.team1.score:
                     self.inning += 1
                     pass
                 else:
-                    self.simulate_inning_half(team2, team1) 
+                    self.simulate_inning_half(self.team2, self.team1) 
                     self.inning_half = 'top'
                     self.inning += 1
             
         return self.event_log
+    
+
+    def run_game(self):
+        """
+        Wrapper method for play_ball() to match SeasonSimulator expectations
+        """
+        return self.play_ball()
+
+    def get_box_score(self):
+        """
+        Returns batting and pitching statistics from the game in a format
+        the SeasonSimulator can aggregate.
+        """
+        batting_stats = {}
+        pitching_stats = {}
+        
+        event_df = pd.DataFrame(self.event_log)
+        
+        # Process each event to build stats
+        for _, row in event_df.iterrows():
+            event = row["Event"]
+            
+            # Skip initialization events
+            if event in ["Init"]:
+                continue
+                
+            # Determine which team is batting
+            if row["Inning Half"] == "top":
+                batting_team = self.team1
+                pitching_team = self.team2
+            else:
+                batting_team = self.team2
+                pitching_team = self.team1
+                
+            batter_name = row["Batter"]
+            pitcher_name = row["Pitcher"]
+            
+            # Initialize batter stats if needed
+            if batter_name not in batting_stats:
+                batting_stats[batter_name] = {
+                    "PA": 0, "AB": 0, "H": 0, "1B": 0, "2B": 0, 
+                    "3B": 0, "HR": 0, "BB": 0, "SO": 0, "R": 0, "RBI": 0
+                }
+            
+            # Initialize pitcher stats if needed
+            if pitcher_name not in pitching_stats:
+                pitching_stats[pitcher_name] = {
+                    "BF": 0, "IP": 0.0, "H": 0, "ER": 0, "BB": 0, "SO": 0
+                }
+            
+            # Update batter stats
+            if event in ["single", "double", "triple", "home_run", "out", "strikeout", "walk"]:
+                batting_stats[batter_name]["PA"] += 1
+                pitching_stats[pitcher_name]["BF"] += 1
+                
+                if event in ["single", "double", "triple", "home_run", "out", "strikeout"]:
+                    batting_stats[batter_name]["AB"] += 1
+                
+                if event in ["single", "double", "triple", "home_run"]:
+                    batting_stats[batter_name]["H"] += 1
+                    pitching_stats[pitcher_name]["H"] += 1
+                    
+                    if event == "single":
+                        batting_stats[batter_name]["1B"] += 1
+                    elif event == "double":
+                        batting_stats[batter_name]["2B"] += 1
+                    elif event == "triple":
+                        batting_stats[batter_name]["3B"] += 1
+                    elif event == "home_run":
+                        batting_stats[batter_name]["HR"] += 1
+                
+                if event == "walk":
+                    batting_stats[batter_name]["BB"] += 1
+                    pitching_stats[pitcher_name]["BB"] += 1
+                
+                if event == "strikeout":
+                    batting_stats[batter_name]["SO"] += 1
+                    pitching_stats[pitcher_name]["SO"] += 1
+                    pitching_stats[pitcher_name]["IP"] += 0.333
+                
+                if event in ["out"]:
+                    pitching_stats[pitcher_name]["IP"] += 0.333
+        
+        # Calculate runs and RBIs from score changes
+        prev_team1_score = 0
+        prev_team2_score = 0
+        
+        for _, row in event_df.iterrows():
+            event = row["Event"]
+            if event in ["Init"]:
+                continue
+                
+            current_t1_score = row["Team 1 Score"]
+            current_t2_score = row["Team 2 Score"]
+            
+            if row["Inning Half"] == "top" and current_t1_score > prev_team1_score:
+                # Team 1 scored
+                runs_scored = current_t1_score - prev_team1_score
+                batter_name = row["Batter"]
+                if batter_name in batting_stats:
+                    batting_stats[batter_name]["RBI"] += runs_scored
+                
+                # Update pitcher ER
+                pitcher_name = row["Pitcher"]
+                if pitcher_name in pitching_stats:
+                    pitching_stats[pitcher_name]["ER"] += runs_scored
+            
+            elif row["Inning Half"] == "bottom" and current_t2_score > prev_team2_score:
+                # Team 2 scored
+                runs_scored = current_t2_score - prev_team2_score
+                batter_name = row["Batter"]
+                if batter_name in batting_stats:
+                    batting_stats[batter_name]["RBI"] += runs_scored
+                
+                # Update pitcher ER
+                pitcher_name = row["Pitcher"]
+                if pitcher_name in pitching_stats:
+                    pitching_stats[pitcher_name]["ER"] += runs_scored
+            
+            prev_team1_score = current_t1_score
+            prev_team2_score = current_t2_score
+        
+        return {
+            "batting": batting_stats,
+            "pitching": pitching_stats
+        }
+    
+
+
     
 
 def perturb_values(orig_val_dict, range):
@@ -946,18 +1075,20 @@ def get_aligned_value(pitcher_val, batter_val):
     
 
 def read_data():
-    # Read and prep data, returning dataframes
-    batter_df = pd.read_excel("../Data/Merged_Data_C.xlsx", sheet_name="Batting Data")
-    pitcher_df = pd.read_excel("../Data/Merged_Data_C.xlsx", sheet_name="Pitching Data")
-    hit_traj_df = pd.read_excel("../Data/hit_trajectory.xlsx", sheet_name="Worksheet", index_col=0)
 
-    fb_disc_df_raw = pd.read_csv("../Data/Batter_FB_Discipline.csv") # fastball
+
+    # Read and prep data, returning dataframes
+    batter_df = pd.read_excel("./Data/Merged_Data_C.xlsx", sheet_name="Batting Data")
+    pitcher_df = pd.read_excel("./Data/Merged_Data_C.xlsx", sheet_name="Pitching Data")
+    hit_traj_df = pd.read_excel("./Data/hit_trajectory.xlsx", sheet_name="Worksheet", index_col=0)
+
+    fb_disc_df_raw = pd.read_csv("./Data/Batter_FB_Discipline.csv") # fastball
     fb_disc_df = fb_disc_df_raw.groupby("Name", as_index=False).mean(numeric_only=True).set_index("Name", drop=False)
-    ch_disc_df_raw = pd.read_csv("../Data/Batter_CH_Discipline.csv") # changeup
+    ch_disc_df_raw = pd.read_csv("./Data/Batter_CH_Discipline.csv") # changeup
     ch_disc_df = ch_disc_df_raw.groupby("Name", as_index=False).mean(numeric_only=True).set_index("Name", drop=False)
-    cu_disc_df_raw = pd.read_csv("../Data/Batter_CU_Discipline.csv") # curveball
+    cu_disc_df_raw = pd.read_csv("./Data/Batter_CU_Discipline.csv") # curveball
     cu_disc_df = cu_disc_df_raw.groupby("Name", as_index=False).mean(numeric_only=True).set_index("Name", drop=False)
-    sl_disc_df_raw = pd.read_csv("../Data/Batter_SL_Discipline.csv") # slider
+    sl_disc_df_raw = pd.read_csv("./Data/Batter_SL_Discipline.csv") # slider
     sl_disc_df = sl_disc_df_raw.groupby("Name", as_index=False).mean(numeric_only=True).set_index("Name", drop=False)
 
     pitcher_df.fillna(0, inplace=True) # TODO is this ok? Or need to be more selective like below?

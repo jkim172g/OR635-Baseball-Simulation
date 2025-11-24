@@ -1,1 +1,6 @@
+@echo off
+call "C:\Program Files\ArcGIS\Pro\bin\Python\Scripts\proenv.bat"
+conda activate C:\ArcGIS\arcgispro-py3-clone
+spyder
+pause
  
