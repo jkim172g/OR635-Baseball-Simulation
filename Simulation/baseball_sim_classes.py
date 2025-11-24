@@ -1,13 +1,16 @@
 ## Project for GMU OR 635: Discrete System Simulation
 ## Authors: Jacob Kim, Noah Mecikalski, Bennett Miller, W.J. Moretz
 
+# Imports
 import pandas as pd
 import numpy as np
 import pdb
+from tqdm import tqdm
+import argparse
 
-np.random.seed(100) # TODO need to set any random streams/substreams?
+# Set seed
+np.random.seed(100)
 
-# TODO do we want to track stats of what happen in the Batters and Pitchers themselves as well?
 
 class Batter:
     
@@ -66,7 +69,7 @@ class Pitcher:
 
 class Team:
     
-    def __init__(self, batters, pitchers):
+    def __init__(self, batters, pitchers,name):
         
         self.batters = batters
         self.pitchers = pitchers
@@ -75,6 +78,7 @@ class Team:
         self.num_batters = len(batters)
         self.pitcher_index = 0
         self.num_pitchers = len(pitchers)
+        self.name = name
     
     def __str__(self):
         return "Team"
@@ -91,7 +95,7 @@ class Game:
         self.strikes = 0
         self.balls = 0
         self.bases = [0,0,0]
-        self.baserunners = [0,0,0] # TODO something other than 0 when empty? Dict instead with bases named?
+        self.baserunners = [0,0,0]
         self.team1_batter_index = 0
         self.team2_batter_index = 0
         self.team1_pitcher_index = 0
@@ -100,13 +104,47 @@ class Game:
         self.team1 = team1
         self.team2 = team2
         
-        self.event_log = {'Inning':[], 'Inning Half':[],'Event':[], 'Detailed Event':[], 'Pitch Type':[],
+        self.event_log = {'Inning':[], 'Inning Half':[],'Event':[], 'Detailed Event':[], 'Contact Power':[], 'Pitch Type':[],
                           'Pitch Outcome':[], 'Batter':[], 'Batter Number':[], 'Bases':[],
                           'Baserunners':[], 'Baserunning Event':[], 'Baserunning Result': [],'Balls':[], 'Strikes':[],
                           'Outs':[],'Team 1 Score':[], 'Team 2 Score':[], 'Pitcher':[],
                           }
     
     def pitch(self, batter, pitcher):
+
+        def steal(result, orig, dest):
+            # prob is (rate attempt, rate thrown out)
+            # Note -- unlike other baserunning, this doesn't handle the adding of an out if thrown out
+            probs = (0.0102, 0.203)
+            attempt = True if np.random.uniform() < probs[0] else False
+            if attempt:
+                result.append(f'steal {orig} to {dest} attempted')
+                thrown_out = True if np.random.uniform() < probs[1] else False
+                if thrown_out:
+                    result.extend(['thrown out', orig, dest])
+                else:
+                    result.extend(['safe', orig, dest])
+
+        def check_steal_attempt():
+            # This does not allow for double steal attempts
+            # Note -- this may also get overridden by the pitch resolving to result in a walk or strikeout
+            result = []
+            if self.outs == 2:
+                # Two outs
+                if self.bases[2] == 0 and self.bases[1] == 0 and self.bases[0] == 1:
+                    # Baserunner on first only
+                    steal(result, "first", "second")
+            else:
+                # Zero/one out
+                if self.bases[2] == 0 and self.bases[1] == 1:
+                    # Baserunner on second, third is empty
+                    steal(result, "second", "third")
+                elif self.bases[2] == 0 and self.bases[1] == 0 and self.bases[0] == 1:
+                    # Baserunner on first only
+                    steal(result, "first", "second")
+
+            return result
+
         # Get pitch details
         pitcher.num_pitch += 1
         pitch_type = np.random.choice(list(pitcher.pitch_type_prob.keys()), p=normalize_values(list(pitcher.pitch_type_prob.values()), 1))
@@ -114,6 +152,7 @@ class Game:
         #pitch_movement = np.random.choice(list(pitcher.movement_prob.keys()), p=normalize_values(list(pitcher.movement_prob.values()), 1))
         contact_cat = None
         power = None
+        steal_result = None
 
         #Calculate result
         batter_zone_prob = batter.zone_prob[pitch_type] or batter.zone_prob["na"]
@@ -125,7 +164,11 @@ class Game:
             #Adjust swing prob by half if 3 balls and less than two strikes
             # Uses Z-Swing%
             base_batter_swing_prob = batter.swing_prob[pitch_type]["strike"] or batter.swing_prob["na"]["strike"]
-            adj_batter_swing_prob = base_batter_swing_prob/2 if self.balls == 3 and self.strikes < 2 else base_batter_swing_prob
+            #adj_batter_swing_prob = base_batter_swing_prob/2 if self.balls == 3 and self.strikes < 2 else base_batter_swing_prob
+            if self.balls> self.strikes:
+                adj_batter_swing_prob = base_batter_swing_prob-((self.balls/3)*base_batter_swing_prob)
+            else:
+                adj_batter_swing_prob = base_batter_swing_prob
             swing_prob = get_aligned_value(pitcher.swing_prob['strike'], adj_batter_swing_prob)
             swing = True if np.random.uniform() < swing_prob else False
             if swing:
@@ -137,7 +180,11 @@ class Game:
                 #If contact was made, calculate result
                 if contact:
                     # If contact was made, check if foul
-                    foul = True if np.random.uniform() < batter.foul_prob['strike'] else False
+                    if self.strikes == 2:
+                        #If two strikes, foul is twice as likely
+                        foul = True if np.random.uniform() < min(0.9,batter.foul_prob['strike']*2) else False
+                    else:
+                        foul = True if np.random.uniform() < batter.foul_prob['strike'] else False
                     if foul:
                         result = 'foul'
                     else:
@@ -153,15 +200,24 @@ class Game:
                 else:
                     #If swung and missed, strike 
                     result = 'strike'
+                    steal_result = check_steal_attempt()
             else:
                 #If strike not swung at, strike
                 result = 'strike'
+                steal_result = check_steal_attempt()
         else:
             #If ball was thrown, check if it was swung at
             # Uses O-Swing%
             base_batter_swing_prob = batter.swing_prob[pitch_type]["ball"] or batter.swing_prob["na"]["ball"]
-            adj_batter_swing_prob = base_batter_swing_prob/2 if self.balls == 3 and self.strikes < 2 else base_batter_swing_prob
-            swing_prob = get_aligned_value(pitcher.swing_prob['ball'], adj_batter_swing_prob)
+            first_pitch = True if self.balls == 0 and self.strikes == 0 else False
+            if self.balls > self.strikes:
+                # more balls than strikes, adjust batter swing rate
+                adj_batter_swing_prob = (base_batter_swing_prob-((self.balls/3)*base_batter_swing_prob))
+            else:
+                # regular swing rate
+                adj_batter_swing_prob = base_batter_swing_prob
+            # find aligned between batter and pitcher, unless first pitch, then don't swing outside of zone
+            swing_prob = 0.0 if first_pitch else get_aligned_value(pitcher.swing_prob['ball'], adj_batter_swing_prob)
             swing = True if np.random.uniform() < swing_prob else False
             if swing:
                 # Pitch now considered a strike regardless of outcome
@@ -174,7 +230,11 @@ class Game:
                 #If contact was made, calculate result
                 if contact:
                     # If contact, check if foul
-                    foul = True if np.random.uniform() < batter.foul_prob['ball'] else False
+                    if self.strikes == 2:
+                        #If two strikes, foul is twice as likely
+                        foul = True if np.random.uniform() < min(0.9,batter.foul_prob['strike']*2.5) else False
+                    else:
+                        foul = True if np.random.uniform() < batter.foul_prob['strike'] else False
                     if foul:
                         result = 'foul'
                     else:
@@ -190,18 +250,21 @@ class Game:
                 else:
                     #If swung and missed, strike 
                     result = 'strike'
+                    steal_result = check_steal_attempt()
             else:
                 pitch_result= 'ball'
                 #if ball not swung at, result is a ball
-                result = 'ball'         
+                result = 'ball'
+                steal_result = check_steal_attempt()
         
-        return result, pitch_result, swing, pitch_type, contact_cat, power
+        return result, pitch_result, swing, pitch_type, contact_cat, power, steal_result
         
 
-    def move_bases(self, action, batting_team, current_batter, contact_cat, power, current_pitcher):
-        #Put logic here for moving bases based on the action
+    def move_bases(self, action, batting_team, current_batter, contact_cat, power, current_pitcher, steal_result=None):
+        # Logic for moving bases/baserunning, based on game state and actions/event results
         
-        def first_to_third(contact_cat, power, current_batter):
+        def first_to_third(contact_cat, power):
+            # prob is (rate attempt, rate thrown out)
             first_to_third_probs = {('soft','ground_ball'):(0.65,0.1),
                                      ('soft','line_drive'):(0.75,0.05),
                                      ('soft','fly_ball'):(0.1,0.01),
@@ -226,7 +289,8 @@ class Game:
 
             return result
         
-        def single_to_double(contact_cat, power, current_batter):
+        def single_to_double(contact_cat, power):
+            # prob is (rate attempt, rate thrown out)
             single_to_double_probs = {('soft','ground_ball'):(0,0),
                                      ('soft','line_drive'):(0,0),
                                      ('soft','fly_ball'):(0,0),
@@ -250,7 +314,9 @@ class Game:
                    result.append('safe')
 
             return result
-        def first_to_home_double(contact_cat, current_batter):
+        
+        def first_to_home_double(contact_cat):
+            # prob is (rate attempt, rate thrown out)
             num_outs = '2' if self.outs == 1 else '<2'
             run_diff = '>3' if abs(self.team1.score - self.team2.score) >3 else '<3'
             if num_outs != '2':
@@ -281,7 +347,8 @@ class Game:
 
             return result
         
-        def double_to_triple(contact_cat, power, current_batter):
+        def double_to_triple(contact_cat, power):
+            # prob is (rate attempt, rate thrown out)
             single_to_double_probs = {('soft','ground_ball'):(0,0),
                                      ('soft','line_drive'):(0,0),
                                      ('soft','fly_ball'):(0,0),
@@ -305,12 +372,89 @@ class Game:
                    result.append('safe')
 
             return result
+        
+        def tag_up_second_to_third(contact_cat, power):
+            # prob is (rate attempt, rate thrown out)
+            tag_up_second_to_third_probs = {('soft','ground_ball'):(0,0),
+                                     ('soft','line_drive'):(0,0),
+                                     ('soft','fly_ball'):(0,0),
+                                     ('medium','ground_ball'):(0,0),
+                                     ('medium','line_drive'):(0,0),
+                                     ('medium','fly_ball'):(0,0),
+                                     ('hard','ground_ball'):(0,0),
+                                     ('hard','line_drive'):(0,0),
+                                     ('hard','fly_ball'):(0.6,0.1)}
+            result = []
+            probs = tag_up_second_to_third_probs[(power, contact_cat)]
+            attempt = True if np.random.uniform() < probs[0] else False
+            if attempt:
+                result.append('tag up second to third attempted')
+                thrown_out = True if np.random.uniform() < probs[1] else False
+                if thrown_out:
+                    result.append('thrown out')
+                    self.outs += 1
+                    current_pitcher.outs += 1
+                else:
+                    result.append('safe')
+            
+            return result
+            
+        def tag_up_third_to_home(contact_cat, power):
+            # prob is (rate attempt, rate thrown out)
+            tag_up_third_to_home_probs = {('soft','ground_ball'):(0,0),
+                                     ('soft','line_drive'):(0,0),
+                                     ('soft','fly_ball'):(0,0),
+                                     ('medium','ground_ball'):(0,0),
+                                     ('medium','line_drive'):(0.6,0.2),
+                                     ('medium','fly_ball'):(0.6,0.2),
+                                     ('hard','ground_ball'):(0,0),
+                                     ('hard','line_drive'):(1,0),
+                                     ('hard','fly_ball'):(1,0)}
+            result = []
+            probs = tag_up_third_to_home_probs[(power, contact_cat)]
+            attempt = True if np.random.uniform() < probs[0] else False
+            if attempt:
+                result.append('tag up third to home attempted')
+                thrown_out = True if np.random.uniform() < probs[1] else False
+                if thrown_out:
+                    result.append('thrown out')
+                    self.outs += 1
+                    current_pitcher.outs += 1
+                else:
+                    result.append('safe')
+            
+            return result
                  
-                
         ## How do we determine whether a player already on base was out?
         #pdb.set_trace()
         baserunning_result = []
-        if action == 'home_run':
+        if action == 'steal':
+            # No contact made on pitch, at bat still ongoing (no strikeout or walk)
+            if len(steal_result) == 0:
+                # No steal attempt, shouldn't really have called this move_bases with event steal
+                pass
+            else:
+                base_map = {'first': 0,
+                            'second': 1,
+                            'third': 2}
+                orig = base_map.get(steal_result[2])
+                dest = base_map.get(steal_result[3])
+                if steal_result[1] == 'safe':
+                    # Base successfully stolen, update baserunners
+                    baserunning_result.append(steal_result[:2])
+                    self.bases[dest] = self.bases[orig]
+                    self.bases[orig] = 0
+                    self.baserunners[dest] = self.baserunners[orig]
+                    self.baserunners[orig] = 0
+                else:
+                    # Thrown out stealing, increase outs, remove baserunner
+                    baserunning_result.append(steal_result[:2])
+                    self.outs += 1
+                    current_pitcher.outs += 1
+                    self.bases[orig] = 0
+                    self.baserunners[orig] = 0
+        elif action == 'home_run':
+            # All baserunners score, bases clear
             batting_team.score += sum(self.bases) + 1
             current_pitcher.runs_allowed += sum(self.bases) + 1
             self.bases = [0,0,0]
@@ -346,10 +490,9 @@ class Game:
             # Check if runner on first
             if self.bases[0] == 1:
                 #If runner on first, check if runner attempts to third
-                first_to_third_result = first_to_third(contact_cat, power, current_batter)
+                first_to_third_result = first_to_third(contact_cat, power)
                 
                 if len(first_to_third_result) == 0:
-                    
                     #If not attempted, all runners advance one base
                     self.bases[2] = self.bases[1]
                     self.bases[1] = self.bases[0]
@@ -365,11 +508,10 @@ class Game:
                     current_pitcher.runs_allowed += self.bases[1]
                     self.baserunners[2] = self.baserunners[0]
                     # Check single to double
-                    single_to_double_result = single_to_double(contact_cat, power, current_batter)
+                    single_to_double_result = single_to_double(contact_cat, power)
                     
                     # If not single to double, batter just goes one base
                     if len(single_to_double_result) == 0:
-                        
                         self.bases[1] = 0
                         self.bases[0] = 1
                         self.baserunners[1] = 0
@@ -387,8 +529,7 @@ class Game:
                         self.bases[1] = 0
                         self.bases[0] = 0
                         self.baserunners[1] = 0
-                        self.baserunners[0] = 0
-                        
+                        self.baserunners[0] = 0    
                 else:
                     baserunning_result.append(first_to_third_result)
                     #If first to third not safe, then batter will NOT attempt to go to second. Update accordingly
@@ -400,10 +541,9 @@ class Game:
                     self.baserunners[0] = current_batter.name
             else:
                 #If no runner on first, check if batter attempts to go to second
-                single_to_double_result = single_to_double(contact_cat, power, current_batter)
+                single_to_double_result = single_to_double(contact_cat, power)
                 
                 if len(single_to_double_result) == 0:
-                    
                     #If no attempt to second, all baserunners move one base
                     self.bases[2] = self.bases[1]
                     self.bases[1] = self.bases[0]
@@ -429,18 +569,16 @@ class Game:
                     self.baserunners[2] = self.baserunners[1]
                     self.baserunners[1] = 0
                     self.baserunners[0] = 0
-            
-        elif action == 'double': # TODO update baserunning logic later
+        elif action == 'double':
             # Runners on third and second score
             batting_team.score += self.bases[2] + self.bases[1]
             current_pitcher.runs_allowed += self.bases[2] + self.bases[1]
             # Check if runner on first
             if self.bases[0] == 1:
                 #If runner on first, check if runner attempts to home
-                first_to_home_result = first_to_home_double(contact_cat, current_batter)
+                first_to_home_result = first_to_home_double(contact_cat)
                 
                 if len(first_to_home_result) == 0:
-                    
                     #If not attempted, all runners advance two bases
                     self.bases[2] = self.bases[0]
                     self.bases[1] = 1
@@ -455,8 +593,7 @@ class Game:
                     current_pitcher.runs_allowed += 1
                     
                     # Check double to triple
-                    double_to_triple_result = double_to_triple(contact_cat, power, current_batter)
-                    
+                    double_to_triple_result = double_to_triple(contact_cat, power)
                     
                     if len(double_to_triple_result) == 0:
                         # If not double to triple not attempted, batter goes two bases. First and third are empty
@@ -483,8 +620,7 @@ class Game:
                         self.bases[0] = 0
                         self.baserunners[2] = 0
                         self.baserunners[1] = 0
-                        self.baserunners[0] = 0
-                        
+                        self.baserunners[0] = 0      
                 else:
                     baserunning_result.append(first_to_home_result)
                     #If first to home not safe, then batter will NOT attempt to go to third. Update accordingly
@@ -496,10 +632,9 @@ class Game:
                     self.baserunners[0] = 0
             else:
                 #If no runner on first, check if batter attempts to go to third
-                double_to_triple_result = double_to_triple(contact_cat, power, current_batter)
+                double_to_triple_result = double_to_triple(contact_cat, power)
                 
                 if len(double_to_triple_result) == 0:
-                    
                     #If no attempt to third, batter ends at second. first and third empty
                     self.bases[2] = 0
                     self.bases[1] = 1
@@ -536,10 +671,57 @@ class Game:
             self.baserunners[1] = 0
             self.baserunners[0] = 0
         elif action == "out":
-            # TODO add tag-up logic for fly outs
             self.outs += 1
             current_pitcher.outs += 1
+            if self.outs < 3:
+                # inning not over, try tagging up from third
+                if self.bases[2] == 1:
+                    # runner on third, valid to try for home
+                    tag_up_third_to_home_result = tag_up_third_to_home(contact_cat, power)
+
+                    if len(tag_up_third_to_home_result) == 0:
+                        # If no tag up attempt, no movement
+                        pass
+                    elif tag_up_third_to_home_result[1] == 'safe':
+                        # If attempted and safe, runner on third scores, add score, clear third
+                        baserunning_result.append(tag_up_third_to_home_result)
+                        
+                        batting_team.score += 1
+                        current_pitcher.runs_allowed += 1
+
+                        self.bases[2] = 0
+                        self.baserunners[2] = 0
+                    else:
+                        # If attempted and out, clear third (out added in tag up method)
+                        baserunning_result.append(tag_up_third_to_home_result)
+
+                        self.bases[2] = 0
+                        self.baserunners[2] = 0
+            if self.outs < 3:
+                # inning still not over, try tagging up from second
+                if self.bases[1] == 1 and self.bases[2] == 0:
+                    # runner on second and not on third, valid to try for third
+                    tag_up_second_to_third_result = tag_up_second_to_third(contact_cat, power)
+
+                    if len(tag_up_second_to_third_result) == 0:
+                        # If no tag up attempt, no movement
+                        pass
+                    elif tag_up_second_to_third_result[1] == 'safe':
+                        # If attempted and safe, runner on second moves to third, second empty
+                        baserunning_result.append(tag_up_second_to_third_result)
+
+                        self.bases[2] = self.bases[1]
+                        self.bases[1] = 0
+                        self.baserunners[2] = self.baserunners[1]
+                        self.baserunners[1] = 0
+                    else:
+                        # If attempted and out, clear second (out added in tag up method)
+                        baserunning_result.append(tag_up_second_to_third_result)
+
+                        self.bases[1] = 0
+                        self.baserunners[1] = 0
         else:
+            # Shouldn't get here unless new outcomes are added
             raise NotImplementedError("Logic for this event action is not implemented yet.")
 
         return baserunning_result
@@ -547,100 +729,83 @@ class Game:
     def determine_pitch_change(self, pitching_team, batting_team, pitcher, prev_pitches,
                                prev_batting_score, runs_allowed, baserunner_count, starter):
         replace = False
-        if starter:
-            # logic for starters
-            if pitcher.num_pitch > np.random.normal(105,5)-3:
-                # reached high pitch count
-                if not (self.inning >= 9 and pitching_team.score > batting_team.score):
-                    # not winning in the 9th or after
-                    replace = True
-            elif pitcher.num_pitch - prev_pitches >= 35:
-                # threw 35+ pitches in an inning
-                replace = True
-            elif batting_team.score - prev_batting_score > 5:
-                # gave up over 5 runs in an inning
-                replace = True
-            elif self.inning < 4 and runs_allowed > 5:
-                # gave up over 5 runs total, and it's inside the first three innings
-                replace = True
-            elif 4 <= self.inning <= 6 and runs_allowed > 3:
-                # gave up over 3 runs total, and it's inside the middle three innings
-                replace = True
-            elif self.inning > 6 and baserunner_count > 2:
-                # gave up over 2 baserunners, and it's inside the final three innings (or extra innings)
-                replace = True
-            # elif self.inning > 6 and runs_allowed > 2:
-            #     # gave up over 2 runs total, and it's inside the last three innings (or extra innings)
-            #     replace = True
-        else:
-            # logic for bullpen
-            if pitcher.num_pitch > np.random.normal(25,5)-3:
-                # reached high pitch count
-                if self.outs < 2:
-                    # not one out away from ending the inning
-                    replace = True
-            elif pitcher.num_pitch - prev_pitches >= 35:
-                # threw 35+ pitches in an inning
-                replace = True
-            elif self.outs == 3 and pitcher.outs > 1:
-                # end of the inning, relief pitcher was in for more than one out
-                # intended to prevent (or at least mostly) pitching more than 4 outs
-                # new pitcher will start next inning
-                replace = True
-            elif batting_team.score - prev_batting_score > 3:
-                # gave up over 3 runs
-                replace = True
-            elif (4 <= pitching_team.score - prev_batting_score <= 6) and batting_team.score - prev_batting_score > 2:
-                # lead was 4-6 and gave up down up over 2 runs
-                replace = True
-            elif baserunner_count > 2 and pitching_team.score - batting_team.score < 3:
-                # gave up over 2 baserunners, with the lead currently less than 3 (after baserunners have possibly scored)
-                replace = True
-            # elif pitching_team.score - batting_team.score < 3 and batting_team.score - prev_batting_score > 2:
-            #     # lead down to less than 3 runs and has given up over 2 runs
-            #     replace = True
-            # elif 4 <= self.inning <= 6 and batting_team.score - prev_batting_score > 2:
-            #     # gave up over 2 runs, and it's inside the middle three innings
-            #     replace = True
-            # elif self.inning > 6 and batting_team.score - prev_batting_score > 1:
-            #     # gave up more than 1 run, and it's inside the last three innings (or extra innings)
-            #     replace = True
+
+        if pitcher.num_batters > 3:
+            if starter:
+                if pitcher.num_pitch > np.random.normal(105,5)-3:
                     
+                    if not (self.inning >= 9 and pitching_team.score > batting_team.score):
+                        replace = True
+                elif prev_pitches - pitcher.num_pitch >= 35:
+                    replace = True
+                elif self.inning < 4 and batting_team.score - prev_batting_score > 5:
+                    replace = True
+                elif 4 <= self.inning <= 6 and batting_team.score - prev_batting_score > 3:
+                    replace = True
+                elif self.inning > 6 and batting_team.score - prev_batting_score > 2:
+                    replace = True
+            else:
+                
+                if pitcher.num_pitch > np.random.normal(25,5)-3:
+                    if self.outs < 2:
+                        replace = True
+                elif prev_pitches - pitcher.num_pitch >= 35:
+                    replace = True
+                elif batting_team.score - prev_batting_score > 3:
+                    replace = True
+                elif pitching_team.score - batting_team.score < 3 and batting_team.score - prev_batting_score > 2:
+                    replace = True
+                elif 4 <= self.inning <= 6 and batting_team.score - prev_batting_score > 2:
+                    
+                    replace = True
+                elif self.inning > 6 and batting_team.score - prev_batting_score > 1:
+                    replace = True
+
         return replace
 
     def simulate_inning_half(self, batting_team, pitching_team):
         end_game = False
 
+
         # Reset at start of half inning, track for pitching changes based only on this inning's events
         prev_pitches = [pitching_team.pitchers[pitching_team.pitcher_index].num_pitch][0] # pitch count at start of inning
         prev_batting_score = [batting_team.score][0] # batting team's score at start of inning
         baserunner_count = 0 # baserunners this inning, updated on hit or walk
+        pitching_team.pitchers[pitching_team.pitcher_index].num_batters += 1
     
+
         while self.outs < 3 and not end_game:
             #Set batter and pitcher
             self.strikes = 0
             self.balls = 0
             current_batter = batting_team.batters[batting_team.batter_index]
             current_pitcher = pitching_team.pitchers[pitching_team.pitcher_index]
-            #Run through a pitch and update outcomes
+            #Simulate an at bat, runing through pitches and update outcomes
+            #(outs are checked again in case of a failed steal ending the inning, and thus the at bat)
             hit = False
-            while self.strikes < 3 and self.balls < 4 and not hit and not end_game:
+            while self.outs < 3 and self.strikes < 3 and self.balls < 4 and not hit and not end_game:
                 baserunning_result = []
                 #Get result of pitch
-                event, pitch_result, swing, pitch_type, contact_cat, power = self.pitch(current_batter, current_pitcher)
-                #Update stats
+                event, pitch_result, swing, pitch_type, contact_cat, power, steal_result = self.pitch(current_batter, current_pitcher)
+                #Update stats & move bases
                 if event == 'strike':
                         self.strikes += 1
                         #Record an out if strike out
                         if self.strikes == 3:
                             self.outs += 1
                             current_pitcher.outs += 1
+                        #Otherwise resolve potential steal
+                        else:
+                            baserunning_result = self.move_bases('steal', batting_team, current_batter, contact_cat, power, current_pitcher, steal_result)
                 elif event == 'ball':
                         self.balls += 1
                         #Record a walk if ball 4
                         if self.balls == 4:
                             baserunning_result = self.move_bases('walk', batting_team, current_batter, contact_cat, power, current_pitcher)
                             baserunner_count += 1
+                        #Otherwise resolve potential steal
+                        else:
+                            baserunning_result = self.move_bases('steal', batting_team, current_batter, contact_cat, power, current_pitcher, steal_result)
                 elif event == 'foul':
                     #Record a strike if foul and strikes < 2
                     if self.strikes < 2:
@@ -651,10 +816,10 @@ class Game:
                     if event != "out":
                         baserunner_count += 1
                     hit = True
-                #After each pitch, update current game state
                 
+                #After each pitch, update current game state
                 self.update_event_log(current_batter, batting_team.batter_index, current_pitcher, event,
-                                      swing, contact_cat, pitch_result, pitch_type, baserunning_result)
+                                      swing, contact_cat, power, pitch_result, pitch_type, baserunning_result)
                 
                 #If home team scored in the final inning to go ahead, end game
                 if self.inning >= 9 and self.inning_half == 'bottom' and batting_team.score > pitching_team.score:
@@ -664,7 +829,10 @@ class Game:
                 batting_team.batter_index += 1
             else:
                 batting_team.batter_index = 0
-            #Update pitcher, possibly
+
+            current_pitcher.num_batters += 1
+            #Update pitcher
+
             result = self.determine_pitch_change(pitching_team, batting_team, current_pitcher, prev_pitches, 
                                                  prev_batting_score, current_pitcher.runs_allowed,
                                                  baserunner_count, current_pitcher.starter)
@@ -680,7 +848,7 @@ class Game:
                 baserunner_count = 0 # reset baserunner count for new pitcher
         
     def update_event_log(self, current_batter, batter_index, current_pitcher, event, swing,
-                         contact_cat, pitch_result, pitch_type, baserunning_result):
+                         contact_cat, power, pitch_result, pitch_type, baserunning_result):
         #Add all current information to the event log
         self.event_log['Inning'].append(self.inning)
         self.event_log['Inning Half'].append(self.inning_half)
@@ -711,15 +879,21 @@ class Game:
             self.event_log['Baserunning Event'].append(b_event[:-1])
             self.event_log['Baserunning Result'].append(b_result[:-1])
         if self.strikes == 3:
+            self.event_log['Contact Power'].append('NA')
             self.event_log['Event'].append('strikeout')
             if swing:
                 self.event_log['Detailed Event'].append('strikeout swinging')
             else:
                 self.event_log['Detailed Event'].append('strikeout looking')
         elif self.balls == 4:
+            self.event_log['Contact Power'].append('NA')
             self.event_log['Event'].append('walk')
             self.event_log['Detailed Event'].append('walk')
         else:
+            if power is None:
+                self.event_log['Contact Power'].append('NA')
+            else:
+                self.event_log['Contact Power'].append(power)
             self.event_log['Event'].append(event)
             if event == "strike":
                 if swing:
@@ -758,8 +932,8 @@ class Game:
                     self.simulate_inning_half(self.team2, self.team1) 
                     self.inning_half = 'top'
                     self.inning += 1
-            
-        return self.event_log
+        winner = self.team1.name if self.team1.score > self.team2.score else self.team2.name
+        return winner
     
 
     def run_game(self):
@@ -1075,8 +1249,6 @@ def get_aligned_value(pitcher_val, batter_val):
     
 
 def read_data():
-
-
     # Read and prep data, returning dataframes
     batter_df = pd.read_excel("./Data/Merged_Data_C.xlsx", sheet_name="Batting Data")
     pitcher_df = pd.read_excel("./Data/Merged_Data_C.xlsx", sheet_name="Pitching Data")
@@ -1091,7 +1263,7 @@ def read_data():
     sl_disc_df_raw = pd.read_csv("./Data/Batter_SL_Discipline.csv") # slider
     sl_disc_df = sl_disc_df_raw.groupby("Name", as_index=False).mean(numeric_only=True).set_index("Name", drop=False)
 
-    pitcher_df.fillna(0, inplace=True) # TODO is this ok? Or need to be more selective like below?
+    pitcher_df.fillna(0, inplace=True)
     # pitcher_df[["FA%", "FT%", "FC%", "FS%", "FO%", "SI%", "SL%", "CU%", "KC%", "EP%", "CH%", "SC%", "KN%", "UN%"]] = pitcher_df[["FA%", "FT%", "FC%", "FS%", "FO%", "SI%", "SL%", "CU%", "KC%", "EP%", "CH%", "SC%", "KN%", "UN%"]].fillna(0)
     hit_traj_df["1B"] = hit_traj_df["H"] - hit_traj_df["2B"] - hit_traj_df["3B"] - hit_traj_df["HR"]
     hit_traj_df["Out"] = hit_traj_df["AB"] - hit_traj_df["H"]
@@ -1100,13 +1272,431 @@ def read_data():
     hit_traj_df["3B%"] = hit_traj_df["3B"] / hit_traj_df["AB"]
     hit_traj_df["HR%"] = hit_traj_df["HR"] / hit_traj_df["AB"]
     hit_traj_df["Out%"] = hit_traj_df["Out"] / hit_traj_df["AB"]
+
+    # Read roster data, drop entries with no Player ID, and check pitcher quantity
+    # NOTE -- will count any positionless players as field players & as such, batters
+    teams = ["Phillies", "Brewers", "Dodgers", "Reds", "Padres", "Cubs", "Blue Jays",
+             "Mariners", "Yankees", "Tigers", "Guardians", "Red Sox"]
+    team_roster_df_dict = {}
+    if not run_playoffs:
+        for team_name in [team1_name, team2_name]:
+            if team_name is not None:
+                team_roster_df = pd.read_excel("../Data/Playoff Rosters Reformatted.xlsx", sheet_name=team_name)
+                team_roster_df.dropna(subset=["PlayerId"], inplace=True)
+                if len(team_roster_df[team_roster_df["Position"] == "SP"]) == 0:
+                    raise ValueError(f"Roster for {team_name} does not have any specified starting pitchers; should list SP in Position column.")
+                if len(team_roster_df[team_roster_df["Position"].isin(["RP", "CP"])]) == 0:
+                    raise ValueError(f"Roster for {team_name} does not have any specified relief/closing pitchers; should list RP or CP in Position column.")
+            else:
+                team_roster_df = None
+            team_roster_df_dict[team_name] = team_roster_df
+    else:
+        for team_name in teams:
+            team_roster_df = pd.read_excel("../Data/Playoff Rosters Reformatted.xlsx", sheet_name=team_name)
+            team_roster_df.dropna(subset=["PlayerId"], inplace=True)
+            if len(team_roster_df[team_roster_df["Position"] == "SP"]) == 0:
+                raise ValueError(f"Roster for {team_name} does not have any specified starting pitchers; should list SP in Position column.")
+            if len(team_roster_df[team_roster_df["Position"].isin(["RP", "CP"])]) == 0:
+                raise ValueError(f"Roster for {team_name} does not have any specified relief/closing pitchers; should list RP or CP in Position column.")
+            team_roster_df_dict[team_name] = team_roster_df
+        
+    return batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df, team_roster_df_dict
+
+
+def run_games(run_playoffs, team_roster_df_dict, team1_name, team2_name, n_reps,
+              batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df,
+              fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids, playoffs_full_results = None):
+    # Construct teams, from inputs or randomly
+    # Set player id lists
+    if team_roster_df_dict[team1_name] is None and team_roster_df_dict[team2_name] is None:
+        # No specified teams, all random
+        # Batters
+        game_batter_ids = np.random.choice(batter_ids, 18, replace=False) # samples w/o replacement
+        team1_batter_ids = game_batter_ids[:9]
+        team2_batter_ids = game_batter_ids[9:]
+        # Pitchers
+        game_pitcher_ids = np.random.choice(pitcher_ids, 26, replace=False) # samples w/o replacement
+        team1_pitcher_ids = game_pitcher_ids[:13]
+        team2_pitcher_ids = game_pitcher_ids[13:]
+        unused_team1_sps = []
+        unused_team2_sps = []
+    elif team_roster_df_dict[team1_name] is not None and team_roster_df_dict[team2_name] is None:
+        # Only team 1 specified
+        team1_roster_df = team_roster_df_dict[team1_name]
+        # Batters
+        team1_batters = list(team1_roster_df[~team1_roster_df["Position"].isin(["SP", "RP", "CP"])]["PlayerId"])
+        team1_batter_ids = team1_batters[:9]
+        # team1_batter_ids = np.random.choice(team1_batters, 9, replace=False) # samples w/o replacement
+        other_batters = list(set(batter_ids) - set(team1_batters))
+        team2_batter_ids = np.random.choice(other_batters, 9, replace=False) # samples w/o replacement
+        # Pitchers -- choose one starter, shuffle RP/CPs, insert SP at front
+        team1_sps = list(team1_roster_df[team1_roster_df["Position"] == "SP"]["PlayerId"])
+        team1_sp = np.random.choice(team1_sps, 1, replace=False)[0]
+        unused_team1_sps = list(set(team1_sps) - {team1_sp})
+        team1_rps = list(team1_roster_df[team1_roster_df["Position"].isin(["RP", "CP"])]["PlayerId"])
+        team1_rps_shuffled = list(np.random.permutation(team1_rps))
+        team1_pitcher_ids = [team1_sp] + team1_rps_shuffled
+        other_pitchers = list(set(pitcher_ids) - set(team1_sps + team1_rps))
+        team2_pitcher_ids = np.random.choice(other_pitchers, 13, replace=False) # samples w/o replacement
+        unused_team2_sps = []
+    elif team_roster_df_dict[team1_name] is None and team_roster_df_dict[team2_name] is not None:
+        # Only team 2 specified
+        team2_roster_df = team_roster_df_dict[team2_name]
+        # Batters
+        team2_batters = list(team2_roster_df[~team2_roster_df["Position"].isin(["SP", "RP", "CP"])]["PlayerId"])
+        team2_batter_ids = team2_batters[:9]
+        # team2_batter_ids = np.random.choice(team2_batters, 9, replace=False) # samples w/o replacement
+        other_batters = list(set(batter_ids) - set(team2_batters))
+        team1_batter_ids = np.random.choice(other_batters, 9, replace=False) # samples w/o replacement
+        # Pitchers -- choose one starter, shuffle RP/CPs, insert SP at front
+        team2_sps = list(team2_roster_df[team2_roster_df["Position"] == "SP"]["PlayerId"])
+        team2_sp = np.random.choice(team2_sps, 1, replace=False)[0]
+        unused_team2_sps = list(set(team2_sps) - {team2_sp})
+        team2_rps = list(team2_roster_df[team2_roster_df["Position"].isin(["RP", "CP"])]["PlayerId"])
+        team2_rps_shuffled = list(np.random.permutation(team2_rps))
+        team2_pitcher_ids = [team2_sp] + team2_rps_shuffled
+        other_pitchers = list(set(pitcher_ids) - set(team2_sps + team2_rps))
+        team1_pitcher_ids = np.random.choice(other_pitchers, 13, replace=False) # samples w/o replacement
+        unused_team1_sps = []
+    else:
+        # Both specified
+        team1_roster_df = team_roster_df_dict[team1_name]
+        team2_roster_df = team_roster_df_dict[team2_name]
+        # Batters
+        team1_batters = list(team1_roster_df[~team1_roster_df["Position"].isin(["SP", "RP", "CP"])]["PlayerId"])
+        team1_batter_ids = team1_batters[:9]
+        # team1_batter_ids = np.random.choice(team1_batters, 9, replace=False) # samples w/o replacement
+        team2_batters = list(team2_roster_df[~team2_roster_df["Position"].isin(["SP", "RP", "CP"])]["PlayerId"])
+        team2_batter_ids = team2_batters[:9]
+        # team2_batter_ids = np.random.choice(team2_batters, 9, replace=False) # samples w/o replacement
+        # Pitchers
+        team1_sps = list(team1_roster_df[team1_roster_df["Position"] == "SP"]["PlayerId"])
+        team1_sp = np.random.choice(team1_sps, 1, replace=False)[0]
+        unused_team1_sps = list(set(team1_sps) - {team1_sp})
+        team1_rps = list(team1_roster_df[team1_roster_df["Position"].isin(["RP", "CP"])]["PlayerId"])
+        team1_rps_shuffled = list(np.random.permutation(team1_rps))
+        team1_pitcher_ids = [team1_sp] + team1_rps_shuffled
+        team2_sps = list(team2_roster_df[team2_roster_df["Position"] == "SP"]["PlayerId"])
+        team2_sp = np.random.choice(team2_sps, 1, replace=False)[0]
+        unused_team2_sps = list(set(team2_sps) - {team2_sp})
+        team2_rps = list(team2_roster_df[team2_roster_df["Position"].isin(["RP", "CP"])]["PlayerId"])
+        team2_rps_shuffled = list(np.random.permutation(team2_rps))
+        team2_pitcher_ids = [team2_sp] + team2_rps_shuffled
     
-    return batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df
+    # Construct/fill batter and pitcher data
+    batter_data_dict = {}
+    for batter_team, selected_batter_ids in {"team1": team1_batter_ids, "team2": team2_batter_ids}.items():
+        batter_data = [ 
+            (lambda row:
+                {'name': row["Name"],
+                'id': row["PlayerId"],
+                'team': row["Team"],
+                'zone_prob': {
+                            "na": row["Zone%"],
+                            "fastball": fb_disc_df.loc[row["Name"], "Zone%"] if row["Name"] in fb_names else None, 
+                            "curveball": cu_disc_df.loc[row["Name"], "Zone%"] if row["Name"] in cu_names else None,
+                            "slider": sl_disc_df.loc[row["Name"], "Zone%"] if row["Name"] in sl_names else None,
+                            "changeup": ch_disc_df.loc[row["Name"], "Zone%"] if row["Name"] in ch_names else None 
+                            },
+                'swing_prob': {
+                                "na": {'strike': row["Z-Swing%"], 'ball': row["O-Swing%"]},
+                                "fastball": {'strike': fb_disc_df.loc[row["Name"], "Z-Swing%"] if row["Name"] in fb_names else None,
+                                            'ball': fb_disc_df.loc[row["Name"], "O-Swing%"] if row["Name"] in fb_names else None},
+                                "curveball": {'strike': cu_disc_df.loc[row["Name"], "Z-Swing%"] if row["Name"] in cu_names else None,
+                                            'ball': cu_disc_df.loc[row["Name"], "O-Swing%"] if row["Name"] in cu_names else None},
+                                "slider": {'strike': sl_disc_df.loc[row["Name"], "Z-Swing%"] if row["Name"] in sl_names else None,
+                                            'ball': sl_disc_df.loc[row["Name"], "O-Swing%"] if row["Name"] in sl_names else None},
+                                "changeup": {'strike': ch_disc_df.loc[row["Name"], "Z-Swing%"] if row["Name"] in ch_names else None,
+                                            'ball': ch_disc_df.loc[row["Name"], "O-Swing%"] if row["Name"] in ch_names else None},
+                            },
+                'contact_prob': {
+                                "na": {'strike': row["Z-Contact%"], 'ball': row["O-Contact%"]},
+                                "fastball": {'strike': fb_disc_df.loc[row["Name"], "Z-Contact%"] if row["Name"] in fb_names else None,
+                                            'ball': fb_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in fb_names else None},
+                                "curveball": {'strike': cu_disc_df.loc[row["Name"], "Z-Contact%"] if row["Name"] in cu_names else None,
+                                            'ball': cu_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in cu_names else None},
+                                "slider": {'strike': sl_disc_df.loc[row["Name"], "Z-Contact%"] if row["Name"] in sl_names else None,
+                                            'ball': sl_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in sl_names else None},
+                                "changeup": {'strike': ch_disc_df.loc[row["Name"], "Z-Contact%"] if row["Name"] in ch_names else None,
+                                            'ball': ch_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in ch_names else None},
+                            },
+                'foul_prob': {'strike': 0.22, 'ball': 0.22}, # TODO add this by-player? Also add foul-out chance/rate
+                #  'int_walk_prob': row["IBB"] / row["PA"],
+                #  'hit_by_pitch_prob': row["HBP"] / row["PA"],
+                #  'sac_fly_prob': row["SF"] / row["PA"],
+                #  'sac_bunt_prob': row["SH"] / row["PA"],
+                # TODO add GDP rate/logic
+                'contact_cat_prob': {
+                                "ground_ball": row["GB%"],
+                                "line_drive": row["LD%"],
+                                "fly_ball": row["FB%"],
+                                # TODO eventually, add Bunts? Split off from GB% somehow?
+                                },
+                'outcome_prob': {
+                                "ground_ball": {
+                                                "single": hit_traj_df.loc["Ground Balls", "1B%"],
+                                                "double": hit_traj_df.loc["Ground Balls", "2B%"],
+                                                "triple": hit_traj_df.loc["Ground Balls", "3B%"],
+                                                "home_run": hit_traj_df.loc["Ground Balls", "HR%"], # this should always be 0
+                                                "out": hit_traj_df.loc["Ground Balls", "Out%"]
+                                                },
+                                "line_drive": {
+                                                "single": hit_traj_df.loc["Line Drives", "1B%"],
+                                                "double": hit_traj_df.loc["Line Drives", "2B%"],
+                                                "triple": hit_traj_df.loc["Line Drives", "3B%"],
+                                                "home_run": hit_traj_df.loc["Line Drives", "HR%"],
+                                                "out": hit_traj_df.loc["Line Drives", "Out%"]
+                                                },
+                                "fly_ball": { # TODO incorporate IFFB% somehow? Also from pitcher side
+                                                "single": hit_traj_df.loc["Fly Balls", "1B%"],
+                                                "double": hit_traj_df.loc["Fly Balls", "2B%"],
+                                                "triple": hit_traj_df.loc["Fly Balls", "3B%"],
+                                                "home_run": row["HR/FB"], # Note, this will make sum likely not 1, which is normalized later
+                                                "out": hit_traj_df.loc["Fly Balls", "Out%"]
+                                                },
+                                # "bunt": {
+                                #                 "single": hit_traj_df.loc["Bunts", "1B%"],
+                                #                 "double": hit_traj_df.loc["Bunts", "2B%"],
+                                #                 "triple": hit_traj_df.loc["Bunts", "3B%"],
+                                #                 "home_run": hit_traj_df.loc["Bunts", "HR%"], # this should always be 0
+                                #                 "out": hit_traj_df.loc["Bunts", "Out%"] # this should always be 0
+                                #                 }
+                                },
+                'outcome_power_prob': {
+                                    "soft": row["Soft%"],
+                                    "medium": row["Med%"],
+                                    "hard": row["Hard%"]
+                                },
+                # TODO add wild pitches, errors?
+                # TODO pull from distribution for distance of a ball hit, or power, for chances of tagging up or multiple bases?
+                })
+            (batter_df[batter_df["PlayerId"] == bid].iloc[0])
+                for bid in selected_batter_ids
+        ]
+        batter_data_dict[batter_team] = batter_data
+
+    base_velocity_dist = {95:0.5,
+                        100:0.5}
+    base_movement_prob = {'straight': 0.25,
+                          'down': 0.25,
+                          'side': 0.25,
+                          'fade': 0.25}
+    
+    pitcher_data_dict = {}
+    for pitcher_team, selected_pitcher_ids in {"team1": team1_pitcher_ids,
+                                               "team2": team2_pitcher_ids,
+                                               "unused_team1_sps": unused_team1_sps,
+                                               "unused_team2_sps": unused_team2_sps}.items():
+        pitcher_data = [
+            (lambda row:
+                {'name': row["Name"],
+                'id': row["PlayerId"],
+                'team': row["Team"],
+                'pitch_type_prob': {'fastball': row["FA%"], # + row["FT%"], # Adding 4-seam, 2-seam, and unclassified tgr
+                                    'curveball': row["CU%"],
+                                    'slider': row["SL%"],
+                                    'changeup': row["CH%"]},
+                                    # TODO eventually, add Bunts? Split off from GB% somehow?
+                'swing_prob': {'strike': row["Z-Swing%"], 'ball': row["O-Swing%"]},
+                'contact_prob': {'strike': row["Z-Contact%"], 'ball': row["O-Contact%"]},
+                'contact_cat_prob': {
+                                "ground_ball": row["GB%"],
+                                "line_drive": row["LD%"],
+                                "fly_ball": row["FB%"],
+                                # TODO eventually, add Bunts?
+                                },
+                'outcome_power_prob': {
+                                    "soft": row["Soft%"],
+                                    "medium": row["Med%"],
+                                    "hard": row["Hard%"]
+                                },
+                'velocity_dist': perturb_values(base_velocity_dist, 0.05), # not used right now
+                'movement_prob': perturb_values(base_movement_prob, 0.05), # not used right now
+                'strike_prob': row["Zone%"], # prob inside zone, not of being a strike bc of zone/swing/foul
+                'starter': False # Whether this pitcher is a starter, is updated after assigned to teams
+                }
+            )(pitcher_df[pitcher_df["PlayerId"] == pid].iloc[0])
+                for pid in selected_pitcher_ids
+        ]
+        pitcher_data_dict[pitcher_team] = pitcher_data
+    
+    # Construct actual Batters and Pitchers, and label first pitcher as the starter
+    batters1 = [Batter(batter) for batter in batter_data_dict["team1"]]
+    batters2 = [Batter(batter) for batter in batter_data_dict["team2"]]
+    
+    pitchers1 = [Pitcher(pitcher) for pitcher in pitcher_data_dict["team1"]]
+    pitchers1[0].starter = True
+    orig_spitcher_1 = pitchers1[0]
+    unused_spitchers1 = [Pitcher(pitcher) for pitcher in pitcher_data_dict["unused_team1_sps"]]
+    for p in unused_spitchers1:
+        p.starter = True
+    pitchers2 = [Pitcher(pitcher) for pitcher in pitcher_data_dict["team2"]]
+    pitchers2[0].starter = True
+    orig_spitcher_2 = pitchers2[0]
+    unused_spitchers2 = [Pitcher(pitcher) for pitcher in pitcher_data_dict["unused_team2_sps"]]
+    for p in unused_spitchers2:
+        p.starter = True
+
+    # Init trackers
+    wins_by_rep = {
+        team1_name: 0,
+        team2_name: 0
+    }
+    team1_scores = []
+    team2_scores = []
+
+    # Play n_reps games
+    for j in range(n_reps):
+        if j > 0:
+            # Not first game, update SP
+            p1_idx = j % len(unused_spitchers1) + 1 # game index mod total num SPs
+            # e.g. when j == total num pitchers, means in game j + 1, so back to first SP
+            if p1_idx == 0:
+                # back to first SP
+                pitchers1[0] = orig_spitcher_1
+            else:
+                # go to next, get by index (note unused spitchers is 1 shorter)
+                pitchers1[0] = unused_spitchers1[p1_idx - 1]
+
+            # Same for team 2, but could have diff # SPs
+            p2_idx = j % len(unused_spitchers2) + 1
+            if p2_idx == 0:
+                pitchers2[0] = orig_spitcher_2
+            else:
+                pitchers2[0] = unused_spitchers2[p2_idx - 1]
+
+        # Create teams
+        team1 = Team(batters1, pitchers1, team1_name)
+        team2 = Team(batters2, pitchers2, team2_name)
+
+        # Initialize scores
+        team1.score = 0
+        team2.score = 0
+
+        if run_playoffs:
+            # Check if series has been won
+            if wins_by_rep[team1_name] > n_reps/2 or wins_by_rep[team2_name] > n_reps/2:
+                break
+            else:
+                # Create & run game
+                game = Game(team1, team2)
+                winner = game.play_ball()
+                wins_by_rep[winner] += 1
+                #Save results
+                playoffs_full_results['Game'].append(j+1)
+                playoffs_full_results['Team1'].append(team1.name)
+                playoffs_full_results['Team2'].append(team2.name)
+                playoffs_full_results['Series Record'].append(str(wins_by_rep[team1.name]) + '-' + str(wins_by_rep[team2.name]))
+                playoffs_full_results['Team1 Score'].append(team1.score)
+                playoffs_full_results['Team2 Score'].append(team2.score)
+                team1_scores.append(team1.score)
+                team2_scores.append(team2.score)
+           
+                # Save event log, less useful in large runs
+                # event_log = pd.DataFrame(game.event_log)
+                # event_log.to_csv("event_log.csv", encoding='utf-8-sig', index=False)
+        else:
+            # Create & run game
+            game = Game(team1, team2)
+            winner = game.play_ball()
+            wins_by_rep[winner] += 1
+            
+            # Save results
+            event_log = pd.DataFrame(game.event_log)
+            event_log.to_csv("event_log.csv", encoding='utf-8-sig', index=False)
+
+        # make_box_score(event_log)
+
+    if wins_by_rep[team1_name] > wins_by_rep[team2_name]:
+        # Team 1 won more games
+        return team1_name, [team1_scores, team2_scores], wins_by_rep
+    elif wins_by_rep[team2_name] > wins_by_rep[team1_name]:
+        # Team 2 won more games
+        return team2_name,[team1_scores, team2_scores], wins_by_rep
+    else:
+        # They won an equal number of games, play one more to tie-break
+        game = Game(team1, team2)
+        final_winner = game.play_ball()
+        return final_winner,[team1_scores, team2_scores], wins_by_rep
+
+
+def run_series(run_playoffs, round_reps, team_roster_df_dict, round_team1, round_team2, round_ngames,
+                batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df,
+                fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids, playoffs_full_results, summary_results):
+    wins = {
+        round_team1: 0,
+        round_team2: 0
+    }
+    team1_scores = []
+    team2_scores = []
+    final_records = []
+    for i in range(round_reps):
+        
+        winner, scores, records = run_games(run_playoffs, team_roster_df_dict, round_team1, round_team2, round_ngames,
+                batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df,
+                fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids, playoffs_full_results)
+        
+        team1_scores += scores[0]
+        team2_scores += scores[1]
+        final_records.append(records)
+        #Add iterations to full results
+        while len(playoffs_full_results['Iteration']) < len(playoffs_full_results['Game']):
+            playoffs_full_results['Iteration'].append(i+1)
+        wins[winner] += 1
+    #Add summary results
+    summary_results['Team1'].append(round_team1)
+    summary_results['Team2'].append(round_team2)
+    summary_results['Team1 Series Win %'].append(wins[round_team1]/(sum(wins.values())))
+    summary_results['Team2 Series Win %'].append(wins[round_team2]/(sum(wins.values())))
+    summary_results['Team1 Avg Score'].append(np.average(team1_scores))
+    summary_results['Team2 Avg Score'].append(np.average(team2_scores))
+    
+    team1_avg_wins = str(round(np.average([final_records[k][round_team1] for k in range(round_reps)]),2))
+    team2_avg_wins = str(round(np.average([final_records[k][round_team2] for k in range(round_reps)]),2))
+    summary_results['Avg Final Record'].append(str(team1_avg_wins) + '-' + str(team2_avg_wins))
+   
+    if wins[round_team1] > wins[round_team2]:
+        # Team 1 wins the series more often
+        summary_results['Winner'].append(winner)
+        return round_team1
+    elif wins[round_team2] > wins[round_team1]:
+        # Team 2 wins the series more often
+        summary_results['Winner'].append(winner)
+        return round_team2
+    else:
+        # They won an equal number of times, run one more to tie-break
+        final_winner, scores, records = run_games(run_playoffs, team_roster_df_dict, round_team1, round_team2, round_ngames,
+                batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df,
+                fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids, playoffs_full_results)
+        summary_results['Winner'].append(final_winner)
+        return final_winner
 
 
 if __name__ == '__main__':
-    
-    batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df = read_data()
+    # Collect runtime arguments
+    parser = argparse.ArgumentParser(description="A baseball simulation for OR 635 class project.")
+
+    parser.add_argument("-n_series", "--num_series_reps", type=int, default=1,
+                        help="The number of series replications to perform. Default is 1.")
+    parser.add_argument("--t1", type=str, default=None,
+                        help="Team number 1 to grab the playoff roster for. If omitted, players picked randomly.")
+    parser.add_argument("--t2", type=str, default=None,
+                        help="Team number 2 to grab the playoff roster for. If omitted, players picked randomly.")
+    parser.add_argument("-p", "--playoffs", action="store_true",
+                        help="Flag to run the playoffs, ignoring team arguments. Default is False.")
+    parser.add_argument("-n_playoffs", "--num_playoff_sims", type=int, default=1,
+                        help="Number of times to simulate the entire playoffs. Default is 1")
+
+    args = parser.parse_args()
+
+    team1_name = args.t1
+    team2_name = args.t2
+    n_playoff_reps = args.num_playoff_sims
+    n_series_reps = args.num_series_reps
+    run_playoffs = args.playoffs
+ 
+    # Read & prep data
+    batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df, team_roster_df_dict = read_data(team1_name, team2_name, run_playoffs)
 
     fb_names = set(fb_disc_df.index)
     cu_names = set(cu_disc_df.index)
@@ -1115,170 +1705,146 @@ if __name__ == '__main__':
 
     batter_ids = list(batter_df["PlayerId"])
     pitcher_ids = list(pitcher_df["PlayerId"])
-    # TODO add pitching changes, relief pitching. Currently just selecting a starting pitcher for each side to pitch the whole game
-    selected_batter_ids = np.random.choice(batter_ids, 18, replace=False) # samples w/o replacement
-    selected_pitcher_ids = np.random.choice(pitcher_ids, 26, replace=False) # samples w/o replacemnet
     
-    batter_data = [ 
-        (lambda row:
-            {'name': row["Name"],
-             'id': row["PlayerId"],
-             'team': row["Team"],
-             'zone_prob': {
-                           "na": row["Zone%"],
-                           "fastball": fb_disc_df.loc[row["Name"], "Zone%"] if row["Name"] in fb_names else None, 
-                           "curveball": cu_disc_df.loc[row["Name"], "Zone%"] if row["Name"] in cu_names else None,
-                           "slider": sl_disc_df.loc[row["Name"], "Zone%"] if row["Name"] in sl_names else None,
-                           "changeup": ch_disc_df.loc[row["Name"], "Zone%"] if row["Name"] in ch_names else None 
-                        },
-             'swing_prob': {
-                            "na": {'strike': row["Z-Swing%"], 'ball': row["O-Swing%"]},
-                            "fastball": {'strike': fb_disc_df.loc[row["Name"], "Z-Swing%"] if row["Name"] in fb_names else None,
-                                         'ball': fb_disc_df.loc[row["Name"], "O-Swing%"] if row["Name"] in fb_names else None},
-                            "curveball": {'strike': cu_disc_df.loc[row["Name"], "Z-Swing%"] if row["Name"] in cu_names else None,
-                                         'ball': cu_disc_df.loc[row["Name"], "O-Swing%"] if row["Name"] in cu_names else None},
-                            "slider": {'strike': sl_disc_df.loc[row["Name"], "Z-Swing%"] if row["Name"] in sl_names else None,
-                                         'ball': sl_disc_df.loc[row["Name"], "O-Swing%"] if row["Name"] in sl_names else None},
-                            "changeup": {'strike': ch_disc_df.loc[row["Name"], "Z-Swing%"] if row["Name"] in ch_names else None,
-                                         'ball': ch_disc_df.loc[row["Name"], "O-Swing%"] if row["Name"] in ch_names else None},
-                        },
-             'contact_prob': {
-                            "na": {'strike': row["Z-Contact%"], 'ball': row["O-Contact%"]},
-                            "fastball": {'strike': fb_disc_df.loc[row["Name"], "Z-Contact%"] if row["Name"] in fb_names else None,
-                                         'ball': fb_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in fb_names else None},
-                            "curveball": {'strike': cu_disc_df.loc[row["Name"], "Z-Contact%"] if row["Name"] in cu_names else None,
-                                         'ball': cu_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in cu_names else None},
-                            "slider": {'strike': sl_disc_df.loc[row["Name"], "Z-Contact%"] if row["Name"] in sl_names else None,
-                                         'ball': sl_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in sl_names else None},
-                            "changeup": {'strike': ch_disc_df.loc[row["Name"], "Z-Contact%"] if row["Name"] in ch_names else None,
-                                         'ball': ch_disc_df.loc[row["Name"], "O-Contact%"] if row["Name"] in ch_names else None},
-                        },
-             'foul_prob': {'strike': 0.22, 'ball': 0.22}, # TODO add this by-player? Also add foul-out chance/rate
-            #  'int_walk_prob': row["IBB"] / row["PA"], # TODO no longer in merged data for these 4
-            #  'hit_by_pitch_prob': row["HBP"] / row["PA"],
-            #  'sac_fly_prob': row["SF"] / row["PA"],
-            #  'sac_bunt_prob': row["SH"] / row["PA"],
-             # TODO add GDP rate/logic
-             'contact_cat_prob': {
-                            "ground_ball": row["GB%"],
-                            "line_drive": row["LD%"],
-                            "fly_ball": row["FB%"],
-                            # TODO eventually, add Bunts? Split off from GB% somehow?
-                            },
-             'outcome_prob': {
-                            # TODO add way to track what type of single/double/triple/hr/out it was for event log
-                            "ground_ball": {
-                                            "single": hit_traj_df.loc["Ground Balls", "1B%"],
-                                            "double": hit_traj_df.loc["Ground Balls", "2B%"],
-                                            "triple": hit_traj_df.loc["Ground Balls", "3B%"],
-                                            "home_run": hit_traj_df.loc["Ground Balls", "HR%"], # this should always be 0
-                                            "out": hit_traj_df.loc["Ground Balls", "Out%"]
-                                            },
-                            "line_drive": {
-                                            "single": hit_traj_df.loc["Line Drives", "1B%"],
-                                            "double": hit_traj_df.loc["Line Drives", "2B%"],
-                                            "triple": hit_traj_df.loc["Line Drives", "3B%"],
-                                            "home_run": hit_traj_df.loc["Line Drives", "HR%"],
-                                            "out": hit_traj_df.loc["Line Drives", "Out%"]
-                                            },
-                            "fly_ball": { # TODO incorporate IFFB% somehow? Also from pitcher side
-                                            "single": hit_traj_df.loc["Fly Balls", "1B%"],
-                                            "double": hit_traj_df.loc["Fly Balls", "2B%"],
-                                            "triple": hit_traj_df.loc["Fly Balls", "3B%"],
-                                            "home_run": row["HR/FB"], # Note, this will make sum likely not 1, which is normalized later
-                                            "out": hit_traj_df.loc["Fly Balls", "Out%"]
-                                            },
-                            # "bunt": {
-                            #                 "single": hit_traj_df.loc["Bunts", "1B%"],
-                            #                 "double": hit_traj_df.loc["Bunts", "2B%"],
-                            #                 "triple": hit_traj_df.loc["Bunts", "3B%"],
-                            #                 "home_run": hit_traj_df.loc["Bunts", "HR%"], # this should always be 0
-                            #                 "out": hit_traj_df.loc["Bunts", "Out%"] # this should always be 0
-                            #                 }
-                            },
-             'outcome_power_prob': {
-                                "soft": row["Soft%"],
-                                "medium": row["Med%"],
-                                "hard": row["Hard%"]
-                              },
-            # TODO add stolen bases, wild pitches, errors?
-            # TODO pull from distribution for distance of a ball hit, or power, for chances of tagging up or multiple bases?
-            })
-        (batter_df[batter_df["PlayerId"] == bid].iloc[0])
-            for bid in selected_batter_ids
-    ]
-
-    base_velocity_dist = {95:0.5,
-                        100:0.5}
-    base_movement_prob = {'straight': 0.25,
-                          'down': 0.25,
-                          'side': 0.25,
-                          'fade': 0.25}
-    pitcher_data = [
-        (lambda row:
-            {'name': row["Name"],
-             'id': row["PlayerId"],
-             'team': row["Team"],
-             'pitch_type_prob': {'fastball': row["FA%"], # + row["FT%"], # Adding 4-seam, 2-seam, and unclassified tgr
-                                 'curveball': row["CU%"],
-                                 'slider': row["SL%"],
-                                 'changeup': row["CH%"]},
-                                 # TODO eventually, add Bunts? Split off from GB% somehow?
-             'swing_prob': {'strike': row["Z-Swing%"], 'ball': row["O-Swing%"]},
-             'contact_prob': {'strike': row["Z-Contact%"], 'ball': row["O-Contact%"]},
-             'contact_cat_prob': {
-                            "ground_ball": row["GB%"],
-                            "line_drive": row["LD%"],
-                            "fly_ball": row["FB%"],
-                            # TODO eventually, add Bunts?
-                            },
-             'outcome_power_prob': {
-                                "soft": row["Soft%"],
-                                "medium": row["Med%"],
-                                "hard": row["Hard%"]
-                              },
-             'velocity_dist': perturb_values(base_velocity_dist, 0.05), # TODO replace with params for some other RN pull on pitch
-             'movement_prob': perturb_values(base_movement_prob, 0.05), # TODO replace with params for some other RN pull on pitch
-             'strike_prob': row["Zone%"], # prob inside zone, not of being a strike bc of zone/swing/foul
-             'starter': False # Whether this pitcher is a starter, is updated after assigned to teams
+    if not run_playoffs:
+        # Not running playoffs, just run n reps for the given teams (or random teams)
+        winner = run_games(run_playoffs, team_roster_df_dict, team1_name, team2_name, n_series_reps,
+                batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df,
+                fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids)
+    else:
+        # Run the playoff
+        teams = ['Tigers','Guardians', 'Red Sox', 'Yankees', 'Reds', 'Dodgers',
+                            'Padres', 'Cubs', 'Mariners', 'Blue Jays','Phillies','Brewers']
+        all_sims_results = {team: {'World Series Wins':0, 'Conference Championships':0, 'Division Championships':0, 'Wildcard Wins':0} 
+                            for team in teams}
+        matchup_frequencies = { # will update with (team1_name, team2_name): +1 each time played
+                                "ALWC_1": {}, "ALWC_2": {}, "NLWC_1": {}, "NLWC_2": {},
+                                "ALDS_1": {}, "ALDS_2": {}, "NLDS_1": {}, "NLDS_2": {},
+                                "ALCS": {}, "NLCS": {}, "WS": {}
+                                }
+        
+        for replication in tqdm(range(n_playoff_reps), 'Playoff Iteration'):
+            round_reps = n_series_reps
+            
+            # TODO SP limitations -- it will pick one SP and shuffle the RP, which is also right game to game, but needs something to avoid same SP consecutively
+    
+            bracket = {
+                "ALWC_1_Team1": "Tigers",
+                "ALWC_1_Team2": "Guardians",
+                "ALWC_2_Team1": "Red Sox",
+                "ALWC_2_Team2": "Yankees",
+                "NLWC_1_Team1": "Reds",
+                "NLWC_1_Team2": "Dodgers",
+                "NLWC_2_Team1": "Padres",
+                "NLWC_2_Team2": "Cubs",
+                "ALDS_1_Team1": "Mariners",
+                "ALDS_1_Team2": None,
+                "ALDS_2_Team1": "Blue Jays",
+                "ALDS_2_Team2": None,
+                "NLDS_1_Team1": "Phillies",
+                "NLDS_1_Team2": None,
+                "NLDS_2_Team1": "Brewers",
+                "NLDS_2_Team2": None,
+                "ALCS_Team1": None,
+                "ALCS_Team2": None,
+                "NLCS_Team1": None,
+                "NLCS_Team2": None,
+                "WS_Team1": None,
+                "WS_Team2": None,
             }
-        )(pitcher_df[pitcher_df["PlayerId"] == pid].iloc[0])
-            for pid in selected_pitcher_ids
-    ]
-    
-    batters1 = [Batter(batter) for batter in batter_data[0:9]]
-    batters2 = [Batter(batter) for batter in batter_data[9:]]
+            #Set the matchups to be played
+            matchups = {'Wildcard':[("ALWC_1_Team1","ALWC_1_Team2"),
+                                    ("ALWC_2_Team1","ALWC_2_Team2"),
+                                    ("NLWC_1_Team1","NLWC_1_Team2"),
+                                    ("NLWC_2_Team1","NLWC_2_Team2")],
+                        'Division':[("ALDS_1_Team1","ALDS_1_Team2"),
+                                    ("ALDS_2_Team1","ALDS_2_Team2"),
+                                    ("NLDS_1_Team1","NLDS_1_Team2"),
+                                    ("NLDS_2_Team1","NLDS_2_Team2")],
+                        'Conference':[("ALCS_Team1","ALCS_Team2"),
+                                      ("NLCS_Team1","NLCS_Team2")],
+                        'World Series': [('WS_Team1',"WS_Team2")]}
+            #Set up which rounds feed into other rounds
+            advance_round = {'ALWC_1': 'ALDS_1_Team2', 'ALWC_2': 'ALDS_2_Team2',
+                             'NLWC_1': 'NLDS_1_Team2', 'NLWC_2': 'NLDS_2_Team2',
+                             'ALDS_1': 'ALCS_Team1', 'ALDS_2': 'ALCS_Team2',
+                             'NLDS_1': 'NLCS_Team1', 'NLDS_2': 'NLCS_Team2',
+                             'ALCS_T': 'WS_Team1', 'NLCS_T' : 'WS_Team2'}
+            
+            #save number of games by type
+            n_games = {'Wildcard':3, 'Division':5, 'Conference':7,'World Series':7}
+            #Create results dictionarites
+            playoffs_full_results = {'Round':[], 'Iteration': [], 'Game':[],'Team1':[],'Team2':[],
+                                     'Series Record':[], 'Team1 Score':[], 'Team2 Score':[]}
+            summary_results = {'Round':[], 'Team1':[], 'Team2':[], 'Winner':[], 'Team1 Series Win %':[], 'Team2 Series Win %':[],
+                               'Team1 Avg Score':[], 'Team2 Avg Score':[], 'Avg Final Record':[]}
+            
+            for round_type in matchups:
+                round_ngames = n_games[round_type]
+                
+                for matchup in matchups[round_type]:
+                    #Save official name
+                    summary_results['Round'].append(round_type)
+                    if round_type == 'Wildcard' or round_type == 'Division':
+                        round_name = matchup[0][0:6]
+                    elif round_type == 'Conference':
+                        round_name = matchup[0][0:4]
+                    else:
+                        round_name = 'World Series'
+                    
+                    round_team1 = bracket[matchup[0]]
+                    round_team2 = bracket[matchup[1]]
 
-    
-    pitchers1 = [Pitcher(pitcher) for pitcher in pitcher_data[0:13]]
-    #Label first pitcher as the starter
-    pitchers1[0].starter = True
+                    #Log observation of this matchup
+                    round_short_name = "WS" if round_name == "World Series" else round_name
+                    matchup_freq = matchup_frequencies[round_short_name]
+                    if (round_team1, round_team2) in matchup_freq:
+                        matchup_freq[(round_team1, round_team2)] += 1
+                    else:
+                        matchup_freq[(round_team1, round_team2)] = 1
+                    
+                    #Determine round winner
+                    winner = run_series(run_playoffs, round_reps, team_roster_df_dict, round_team1, round_team2, round_ngames,
+                            batter_df, fb_disc_df, ch_disc_df, cu_disc_df, sl_disc_df, pitcher_df, hit_traj_df,
+                            fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids, playoffs_full_results,
+                            summary_results)
+                    # Save wins to all sims dictionary
+                    if round_type == 'Wildcard':
+                        all_sims_results[winner]['Wildcard Wins'] += 1
+                    elif round_type == 'Division':
+                        all_sims_results[winner]['Division Championships'] += 1
+                    elif round_type == 'Conference':
+                        all_sims_results[winner]['Conference Championships'] += 1
+                    else:
+                        all_sims_results[winner]['World Series Wins'] += 1
+                    #Add round name to results
+                    while len(playoffs_full_results['Round']) < len(playoffs_full_results['Game']):
+                        playoffs_full_results['Round'].append(round_name)
+                    
+                    # Advance winning team in bracket
+                    if round_type != 'World Series':
+                        bracket[advance_round[matchup[0][0:6]]]= winner
 
-    
-    pitchers2 = [Pitcher(pitcher) for pitcher in pitcher_data[13:]]
-    #Label first pitcher as the starter
-    pitchers2[0].starter = True
+            #Save results
+            playoff_results = pd.DataFrame(playoffs_full_results)
+            summary_results_df = pd.DataFrame(summary_results)
+            
+        playoff_results.to_csv("playoffs_full_results.csv", encoding='utf-8-sig', index=False)
+        summary_results_df.to_csv("summary_results_df.csv", encoding='utf-8-sig', index=False)
 
-        
-    team1 = Team(batters1,pitchers1)
-    team2 = Team(batters2,pitchers2)
-    
-    game = Game(team1, team2)
-    game.play_ball()
+        matchup_freq_df = pd.DataFrame.from_dict(matchup_frequencies, orient="index")
+        matchup_freq_df.to_csv("matchup_freq_df.csv", encoding='utf-8-sig', index=True)
 
-    event_log = pd.DataFrame(game.event_log)
-    event_log.to_csv("event_log.csv", encoding='utf-8-sig', index=False)
-    
-    make_box_score(event_log)
-        
+        all_sims_df = pd.DataFrame.from_dict(all_sims_results, orient="columns")
+        all_sims_df.to_csv("all_sims_df.csv", encoding='utf-8-sig', index=True)
     
     ### Some code below to run 100 games and compute team record, average score
     # scores = {i:[] for i in range(1,10)}
     # team1_record = [0,0,0]
     # team2_record = [0,0,0]
-    # for i in range(1000):
-    #     team1 = Team(batters1,[pitcher1])
-    #     team2 = Team(batters2,[pitcher1])
+    # for i in range(100):
+    #     team1 = Team(batters1,pitchers1)
+    #     team2 = Team(batters2,pitchers2)
         
     #     game = Game(team1, team2)   
     #     game.play_ball()
@@ -1304,6 +1870,3 @@ if __name__ == '__main__':
     #         scores[j].append(event_log.at[max_index, 'Team 2 Score'])
             
     # avg_scores_by_inning = {i:np.average(scores[i]) for i in range(1,10)}    
-
-
-# TODO do v&v by looking at values vs avg hits, runs, pitches, etc. per game, but also at BB%, R, AVG, etc. for players over many games
