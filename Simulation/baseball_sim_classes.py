@@ -8,6 +8,10 @@ import pdb
 from tqdm import tqdm
 import argparse
 
+
+playoff_batter_stats = {}
+playoff_pitcher_stats = {}
+playoff_game_stats = {"total_pitches": 0, "total_runs": 0, "num_games": 0}
 # Set seed
 #np.random.seed(100)
 
@@ -1582,6 +1586,7 @@ def run_games(run_playoffs, team_roster_df_dict, team1_name, team2_name, n_reps,
                 # Create & run game
                 game = Game(team1, team2)
                 winner = game.play_ball()
+                update_playoff_stats(game, team1_name, team2_name)
                 wins_by_rep[winner] += 1
                 #Save results
                 playoffs_full_results['Game'].append(j+1)
@@ -1671,6 +1676,105 @@ def run_series(run_playoffs, round_reps, team_roster_df_dict, round_team1, round
                 fb_names, cu_names, sl_names, ch_names, batter_ids, pitcher_ids, playoffs_full_results)
         summary_results['Winner'].append(final_winner)
         return final_winner
+    
+def update_playoff_stats(game, team1_name, team2_name):
+    """Track batting and pitching stats from a playoff game."""
+    box_score = game.get_box_score()
+    
+    # Update batting stats
+    for player_name, game_stats in box_score["batting"].items():
+        if player_name not in playoff_batter_stats:
+            playoff_batter_stats[player_name] = {
+                "PA": 0, "AB": 0, "H": 0, "1B": 0, "2B": 0,
+                "3B": 0, "HR": 0, "BB": 0, "SO": 0, "R": 0, "RBI": 0
+            }
+        for stat in ["PA", "AB", "H", "1B", "2B", "3B", "HR", "BB", "SO", "R", "RBI"]:
+            if stat in game_stats:
+                playoff_batter_stats[player_name][stat] += game_stats[stat]
+    
+    # Update pitching stats
+    for player_name, game_stats in box_score["pitching"].items():
+        if player_name not in playoff_pitcher_stats:
+            playoff_pitcher_stats[player_name] = {
+                "BF": 0, "Outs": 0, "H": 0, "R": 0, "BB": 0, "SO": 0
+            }
+        for stat in ["BF", "H", "BB", "SO"]:
+            if stat in game_stats:
+                playoff_pitcher_stats[player_name][stat] += game_stats[stat]
+        
+        # Convert IP to Outs
+        if "IP" in game_stats:
+            outs = int(round(game_stats["IP"] * 3))
+            playoff_pitcher_stats[player_name]["Outs"] += outs
+        
+        if "ER" in game_stats:
+            playoff_pitcher_stats[player_name]["R"] += game_stats["ER"]
+    
+    # Track game-level stats
+    playoff_game_stats["num_games"] += 1
+    
+    # Count total pitches and runs from the event log
+    event_df = pd.DataFrame(game.event_log)
+    playoff_game_stats["total_pitches"] += len(event_df)  # Each row is a pitch
+    playoff_game_stats["total_runs"] += game.team1.score + game.team2.score
+
+
+def export_playoff_stats(n_playoff_reps):
+    """Export aggregated playoff statistics to CSV."""
+    print("\n" + "="*70)
+    print("EXPORTING PLAYOFF STATISTICS")
+    print("="*70)
+    
+    # Calculate and print game averages
+    if playoff_game_stats["num_games"] > 0:
+        avg_pitches = playoff_game_stats["total_pitches"] / playoff_game_stats["num_games"]
+        avg_runs = playoff_game_stats["total_runs"] / playoff_game_stats["num_games"]
+        
+        print(f"\nGAME AVERAGES (across {playoff_game_stats['num_games']} games):")
+        print(f"  Average Pitches per Game: {avg_pitches:.1f}")
+        print(f"  Average Runs per Game: {avg_runs:.1f}")
+        print()
+    
+    # Batting stats
+    bat_df = pd.DataFrame(playoff_batter_stats).T
+    if len(bat_df) > 0:
+        bat_df = bat_df[bat_df["PA"] > 0].copy()
+        bat_df["AVG"] = (bat_df["H"] / bat_df["AB"].replace(0, pd.NA)).fillna(0).round(3)
+        bat_df["OBP"] = ((bat_df["H"] + bat_df["BB"]) / bat_df["PA"]).fillna(0).round(3)
+        bat_df["TB"] = bat_df["1B"] + (2 * bat_df["2B"]) + (3 * bat_df["3B"]) + (4 * bat_df["HR"])
+        bat_df["SLG"] = (bat_df["TB"] / bat_df["AB"].replace(0, pd.NA)).fillna(0).round(3)
+        bat_df["OPS"] = (bat_df["OBP"] + bat_df["SLG"]).round(3)
+        
+        # Average across simulations
+        for col in ["PA", "AB", "H", "1B", "2B", "3B", "HR", "BB", "SO", "R", "RBI"]:
+            bat_df[col] = (bat_df[col] / n_playoff_reps).round(1)
+        
+        bat_df = bat_df.sort_values("OPS", ascending=False)
+        bat_df = bat_df[["PA", "AB", "H", "1B", "2B", "3B", "HR", "BB", "SO", "R", "RBI", "AVG", "OBP", "SLG", "OPS"]]
+        bat_df.to_csv("playoff_batting_stats.csv")
+        print("✓ playoff_batting_stats.csv")
+    
+    # Pitching stats
+    pit_df = pd.DataFrame(playoff_pitcher_stats).T
+    if len(pit_df) > 0:
+        pit_df = pit_df[pit_df["Outs"] > 0].copy()
+        
+        # Average across simulations first
+        for col in ["BF", "Outs", "H", "R", "BB", "SO"]:
+            pit_df[col] = (pit_df[col] / n_playoff_reps).round(1)
+        
+        # Then calculate rate stats
+        pit_df["IP"] = (pit_df["Outs"] / 3).round(1)
+        pit_df["RA9"] = ((pit_df["R"] * 9) / pit_df["IP"]).fillna(0).round(2)
+        pit_df["WHIP"] = ((pit_df["H"] + pit_df["BB"]) / pit_df["IP"]).fillna(0).round(2)
+        pit_df["K/9"] = ((pit_df["SO"] * 9) / pit_df["IP"]).fillna(0).round(2)
+        
+        pit_df = pit_df.sort_values("IP", ascending=False)
+        pit_df = pit_df[["IP", "H", "R", "BB", "SO", "BF", "RA9", "WHIP", "K/9"]]
+        pit_df.to_csv("playoff_pitching_stats.csv")
+        print("✓ playoff_pitching_stats.csv")
+
+
 
 
 if __name__ == '__main__':
@@ -1838,6 +1942,7 @@ if __name__ == '__main__':
 
         all_sims_df = pd.DataFrame.from_dict(all_sims_results, orient="columns")
         all_sims_df.to_csv("all_sims_df.csv", encoding='utf-8-sig', index=True)
+        export_playoff_stats(n_playoff_reps)
     
     ### Some code below to run 100 games and compute team record, average score
     # scores = {i:[] for i in range(1,10)}

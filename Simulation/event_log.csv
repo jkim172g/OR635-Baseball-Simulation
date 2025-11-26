@@ -1,254 +1,265 @@
-﻿Inning,Inning Half,Event,Detailed Event,Pitch Type,Pitch Outcome,Batter,Batter Number,Bases,Baserunners,Baserunning Event,Baserunning Result,Balls,Strikes,Outs,Team 1 Score,Team 2 Score,Pitcher
-1,top,strike,called strike,slider,strike,Mark Vientos,1,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,0,0,0,Mike Clevinger
-1,top,ball,ball,fastball,ball,Mark Vientos,1,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,0,0,0,Mike Clevinger
-1,top,out,fly out,fastball,strike,Mark Vientos,1,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,1,0,0,Mike Clevinger
-1,top,out,ground out,fastball,strike,Luken Baker,2,"[0, 0, 0]","[0, 0, 0]",None,NA,0,0,2,0,0,J.P. France
-1,top,strike,swinging strike,curveball,strike,Curtis Mead,3,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,2,0,0,J.P. France
-1,top,double,line drive double,changeup,strike,Curtis Mead,3,"[0, 1, 0]","[0, 'Curtis Mead', 0]",None,safe,0,1,2,0,0,J.P. France
-1,top,strike,called strike,fastball,strike,Hunter Feduccia,4,"[0, 1, 0]","[0, 'Curtis Mead', 0]",None,safe,0,1,2,0,0,J.P. France
-1,top,ball,ball,slider,ball,Hunter Feduccia,4,"[0, 1, 0]","[0, 'Curtis Mead', 0]",None,safe,1,1,2,0,0,J.P. France
-1,top,ball,ball,curveball,ball,Hunter Feduccia,4,"[0, 1, 0]","[0, 'Curtis Mead', 0]",None,safe,2,1,2,0,0,J.P. France
-1,top,ball,ball,fastball,ball,Hunter Feduccia,4,"[0, 1, 0]","[0, 'Curtis Mead', 0]",None,safe,3,1,2,0,0,J.P. France
-1,top,walk,walk,fastball,ball,Hunter Feduccia,4,"[1, 1, 0]","['Hunter Feduccia', 'Curtis Mead', 0]",None,safe,4,1,2,0,0,J.P. France
-1,top,ball,ball,slider,ball,Andrew Benintendi,5,"[1, 1, 0]","['Hunter Feduccia', 'Curtis Mead', 0]",None,safe,1,0,2,0,0,J.P. France
-1,top,ball,ball,fastball,ball,Andrew Benintendi,5,"[1, 1, 0]","['Hunter Feduccia', 'Curtis Mead', 0]",None,safe,2,0,2,0,0,J.P. France
-1,top,strike,swinging strike,fastball,strike,Andrew Benintendi,5,"[1, 1, 0]","['Hunter Feduccia', 'Curtis Mead', 0]",None,safe,2,1,2,0,0,J.P. France
-1,top,strike,called strike,fastball,strike,Andrew Benintendi,5,"[1, 1, 0]","['Hunter Feduccia', 'Curtis Mead', 0]",None,safe,2,2,2,0,0,J.P. France
-1,top,ball,ball,fastball,ball,Andrew Benintendi,5,"[1, 1, 0]","['Hunter Feduccia', 'Curtis Mead', 0]",None,safe,3,2,2,0,0,J.P. France
-1,top,walk,walk,fastball,ball,Andrew Benintendi,5,"[1, 1, 1]","['Andrew Benintendi', 'Hunter Feduccia', 'Curtis Mead']",None,safe,4,2,2,0,0,J.P. France
-1,top,out,fly out,changeup,strike,Matt Thaiss,6,"[1, 1, 1]","['Andrew Benintendi', 'Hunter Feduccia', 'Curtis Mead']",None,safe,0,0,3,0,0,J.P. France
-1,bottom,foul,foul,slider,strike,Tyrone Taylor,1,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,0,0,0,Clarke Schmidt
-1,bottom,ball,ball,curveball,ball,Tyrone Taylor,1,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,0,0,0,Clarke Schmidt
-1,bottom,strike,swinging strike,curveball,strike,Tyrone Taylor,1,"[0, 0, 0]","[0, 0, 0]",None,NA,1,2,0,0,0,Clarke Schmidt
-1,bottom,ball,ball,slider,ball,Tyrone Taylor,1,"[0, 0, 0]","[0, 0, 0]",None,NA,2,2,0,0,0,Clarke Schmidt
-1,bottom,foul,foul,slider,strike,Tyrone Taylor,1,"[0, 0, 0]","[0, 0, 0]",None,NA,2,2,0,0,0,Clarke Schmidt
-1,bottom,ball,ball,slider,ball,Tyrone Taylor,1,"[0, 0, 0]","[0, 0, 0]",None,NA,3,2,0,0,0,Clarke Schmidt
-1,bottom,strikeout,strikeout looking,curveball,strike,Tyrone Taylor,1,"[0, 0, 0]","[0, 0, 0]",None,NA,3,3,1,0,0,Clarke Schmidt
-1,bottom,ball,ball,slider,ball,Griffin Conine,2,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,0,0,Jay Jackson
-1,bottom,ball,ball,slider,ball,Griffin Conine,2,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,1,0,0,Jay Jackson
-1,bottom,ball,ball,slider,ball,Griffin Conine,2,"[0, 0, 0]","[0, 0, 0]",None,NA,3,0,1,0,0,Jay Jackson
-1,bottom,walk,walk,slider,ball,Griffin Conine,2,"[1, 0, 0]","['Griffin Conine', 0, 0]",None,safe,4,0,1,0,0,Jay Jackson
-1,bottom,ball,ball,fastball,ball,Marcelo Mayer,3,"[1, 0, 0]","['Griffin Conine', 0, 0]",None,safe,1,0,1,0,0,Luis Medina
-1,bottom,out,fly out,fastball,strike,Marcelo Mayer,3,"[1, 0, 0]","['Griffin Conine', 0, 0]",None,safe,1,0,2,0,0,Luis Medina
-1,bottom,ball,ball,slider,ball,Michael Conforto,4,"[1, 0, 0]","['Griffin Conine', 0, 0]",None,safe,1,0,2,0,0,Luis Medina
-1,bottom,strike,swinging strike,fastball,strike,Michael Conforto,4,"[1, 0, 0]","['Griffin Conine', 0, 0]",None,safe,1,1,2,0,0,Luis Medina
-1,bottom,foul,foul,fastball,strike,Michael Conforto,4,"[1, 0, 0]","['Griffin Conine', 0, 0]",None,safe,1,2,2,0,0,Luis Medina
-1,bottom,ball,ball,curveball,ball,Michael Conforto,4,"[1, 0, 0]","['Griffin Conine', 0, 0]",None,safe,2,2,2,0,0,Luis Medina
-1,bottom,ball,ball,slider,ball,Michael Conforto,4,"[1, 0, 0]","['Griffin Conine', 0, 0]",None,safe,3,2,2,0,0,Luis Medina
-1,bottom,strikeout,strikeout swinging,fastball,strike,Michael Conforto,4,"[1, 0, 0]","['Griffin Conine', 0, 0]",None,safe,3,3,3,0,0,Luis Medina
-2,top,out,ground out,changeup,strike,Colby Thomas,7,"[0, 0, 0]","[0, 0, 0]",None,NA,0,0,1,0,0,J.P. France
-2,top,home_run,fly ball home run,fastball,strike,Gio Urshela,8,"[0, 0, 0]","[0, 0, 0]",None,NA,0,0,1,1,0,Ronny Henriquez
-2,top,ball,ball,fastball,ball,Bryan Reynolds,9,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,1,0,Reid Detmers
-2,top,ball,ball,slider,ball,Bryan Reynolds,9,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,1,1,0,Reid Detmers
-2,top,ball,ball,curveball,ball,Bryan Reynolds,9,"[0, 0, 0]","[0, 0, 0]",None,NA,3,0,1,1,0,Reid Detmers
-2,top,strike,called strike,fastball,strike,Bryan Reynolds,9,"[0, 0, 0]","[0, 0, 0]",None,NA,3,1,1,1,0,Reid Detmers
-2,top,walk,walk,slider,ball,Bryan Reynolds,9,"[1, 0, 0]","['Bryan Reynolds', 0, 0]",None,safe,4,1,1,1,0,Reid Detmers
-2,top,ball,ball,fastball,ball,Mark Vientos,1,"[1, 0, 0]","['Bryan Reynolds', 0, 0]",None,safe,1,0,1,1,0,Eli Morgan
-2,top,strike,called strike,fastball,strike,Mark Vientos,1,"[1, 0, 0]","['Bryan Reynolds', 0, 0]",None,safe,1,1,1,1,0,Eli Morgan
-2,top,single,fly ball single,changeup,strike,Mark Vientos,1,"[1, 0, 1]","['Mark Vientos', 0, 'Bryan Reynolds']",first to third attempted,safe,1,1,1,1,0,Eli Morgan
-2,top,ball,ball,slider,ball,Luken Baker,2,"[1, 0, 1]","['Mark Vientos', 0, 'Bryan Reynolds']",None,safe,1,0,1,1,0,Austin Pruitt
-2,top,strike,called strike,curveball,strike,Luken Baker,2,"[1, 0, 1]","['Mark Vientos', 0, 'Bryan Reynolds']",None,safe,1,1,1,1,0,Austin Pruitt
-2,top,ball,ball,slider,ball,Luken Baker,2,"[1, 0, 1]","['Mark Vientos', 0, 'Bryan Reynolds']",None,safe,2,1,1,1,0,Austin Pruitt
-2,top,foul,foul,slider,strike,Luken Baker,2,"[1, 0, 1]","['Mark Vientos', 0, 'Bryan Reynolds']",None,safe,2,2,1,1,0,Austin Pruitt
-2,top,ball,ball,slider,ball,Luken Baker,2,"[1, 0, 1]","['Mark Vientos', 0, 'Bryan Reynolds']",None,safe,3,2,1,1,0,Austin Pruitt
-2,top,walk,walk,changeup,ball,Luken Baker,2,"[1, 1, 1]","['Luken Baker', 'Mark Vientos', 'Bryan Reynolds']",None,safe,4,2,1,1,0,Austin Pruitt
-2,top,ball,ball,slider,ball,Curtis Mead,3,"[1, 1, 1]","['Luken Baker', 'Mark Vientos', 'Bryan Reynolds']",None,safe,1,0,1,1,0,Zack Greinke
-2,top,strike,called strike,fastball,strike,Curtis Mead,3,"[1, 1, 1]","['Luken Baker', 'Mark Vientos', 'Bryan Reynolds']",None,safe,1,1,1,1,0,Zack Greinke
-2,top,ball,ball,changeup,ball,Curtis Mead,3,"[1, 1, 1]","['Luken Baker', 'Mark Vientos', 'Bryan Reynolds']",None,safe,2,1,1,1,0,Zack Greinke
-2,top,ball,ball,curveball,ball,Curtis Mead,3,"[1, 1, 1]","['Luken Baker', 'Mark Vientos', 'Bryan Reynolds']",None,safe,3,1,1,1,0,Zack Greinke
-2,top,walk,walk,slider,ball,Curtis Mead,3,"[1, 1, 1]","['Curtis Mead', 'Luken Baker', 'Mark Vientos']",None,safe,4,1,1,2,0,Zack Greinke
-2,top,out,line out,slider,strike,Hunter Feduccia,4,"[1, 1, 1]","['Curtis Mead', 'Luken Baker', 'Mark Vientos']",None,safe,0,0,2,2,0,Lance McCullers Jr.
-2,top,out,ground out,curveball,strike,Andrew Benintendi,5,"[1, 1, 1]","['Curtis Mead', 'Luken Baker', 'Mark Vientos']",None,safe,0,0,3,2,0,Lance McCullers Jr.
-2,bottom,strike,called strike,fastball,strike,Alex Verdugo,5,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,0,2,0,Luis Medina
-2,bottom,ball,ball,fastball,ball,Alex Verdugo,5,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,0,2,0,Luis Medina
-2,bottom,strike,swinging strike,slider,strike,Alex Verdugo,5,"[0, 0, 0]","[0, 0, 0]",None,NA,1,2,0,2,0,Luis Medina
-2,bottom,ball,ball,fastball,ball,Alex Verdugo,5,"[0, 0, 0]","[0, 0, 0]",None,NA,2,2,0,2,0,Luis Medina
-2,bottom,foul,foul,slider,strike,Alex Verdugo,5,"[0, 0, 0]","[0, 0, 0]",None,NA,2,2,0,2,0,Luis Medina
-2,bottom,ball,ball,fastball,ball,Alex Verdugo,5,"[0, 0, 0]","[0, 0, 0]",None,NA,3,2,0,2,0,Luis Medina
-2,bottom,out,ground out,fastball,strike,Alex Verdugo,5,"[0, 0, 0]","[0, 0, 0]",None,NA,3,2,1,2,0,Luis Medina
-2,bottom,strike,swinging strike,fastball,strike,Leo Jiménez,6,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,1,2,0,Beau Brieske
-2,bottom,ball,ball,fastball,ball,Leo Jiménez,6,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,1,2,0,Beau Brieske
-2,bottom,home_run,fly ball home run,slider,strike,Leo Jiménez,6,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,1,2,1,Beau Brieske
-2,bottom,strike,called strike,slider,strike,Jonathan Davis,7,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,1,2,1,Shawn Armstrong
-2,bottom,single,ground ball single,slider,strike,Jonathan Davis,7,"[1, 0, 0]","['Jonathan Davis', 0, 0]",None,safe,0,1,1,2,1,Shawn Armstrong
-2,bottom,single,ground ball single,slider,strike,Brandon Nimmo,8,"[1, 0, 1]","['Brandon Nimmo', 0, 'Jonathan Davis']",first to third attempted,safe,0,0,1,2,1,Nick Mears
-2,bottom,strike,swinging strike,fastball,strike,Graham Pauley,9,"[1, 0, 1]","['Brandon Nimmo', 0, 'Jonathan Davis']",None,safe,0,1,1,2,1,Garrett Crochet
-2,bottom,double,ground ball double,fastball,strike,Graham Pauley,9,"[0, 1, 0]","[0, 'Graham Pauley', 0]",first to home attempted,safe,0,1,1,2,3,Garrett Crochet
-2,bottom,foul,foul,fastball,strike,Tyrone Taylor,1,"[0, 1, 0]","[0, 'Graham Pauley', 0]",None,safe,0,1,1,2,3,Jalen Beeks
-2,bottom,ball,ball,changeup,ball,Tyrone Taylor,1,"[0, 1, 0]","[0, 'Graham Pauley', 0]",None,safe,1,1,1,2,3,Jalen Beeks
-2,bottom,strike,swinging strike,fastball,strike,Tyrone Taylor,1,"[0, 1, 0]","[0, 'Graham Pauley', 0]",None,safe,1,2,1,2,3,Jalen Beeks
-2,bottom,strikeout,strikeout looking,fastball,strike,Tyrone Taylor,1,"[0, 1, 0]","[0, 'Graham Pauley', 0]",None,safe,1,3,2,2,3,Jalen Beeks
-2,bottom,strike,swinging strike,fastball,strike,Griffin Conine,2,"[0, 1, 0]","[0, 'Graham Pauley', 0]",None,safe,0,1,2,2,3,Jalen Beeks
-2,bottom,strike,swinging strike,slider,strike,Griffin Conine,2,"[0, 1, 0]","[0, 'Graham Pauley', 0]",None,safe,0,2,2,2,3,Jalen Beeks
-2,bottom,foul,foul,fastball,strike,Griffin Conine,2,"[0, 1, 0]","[0, 'Graham Pauley', 0]",None,safe,0,2,2,2,3,Jalen Beeks
-2,bottom,ball,ball,fastball,ball,Griffin Conine,2,"[0, 1, 0]","[0, 'Graham Pauley', 0]",None,safe,1,2,2,2,3,Jalen Beeks
-2,bottom,ball,ball,changeup,ball,Griffin Conine,2,"[0, 1, 0]","[0, 'Graham Pauley', 0]",None,safe,2,2,2,2,3,Jalen Beeks
-2,bottom,strikeout,strikeout looking,fastball,strike,Griffin Conine,2,"[0, 1, 0]","[0, 'Graham Pauley', 0]",None,safe,2,3,3,2,3,Jalen Beeks
-3,top,ball,ball,changeup,ball,Matt Thaiss,6,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,0,2,3,Lance McCullers Jr.
-3,top,out,ground out,fastball,strike,Matt Thaiss,6,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,2,3,Lance McCullers Jr.
-3,top,strike,swinging strike,fastball,strike,Colby Thomas,7,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,1,2,3,Keynan Middleton
-3,top,out,fly out,slider,strike,Colby Thomas,7,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,2,2,3,Keynan Middleton
-3,top,strike,swinging strike,changeup,strike,Gio Urshela,8,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,2,2,3,Keynan Middleton
-3,top,single,fly ball single,changeup,strike,Gio Urshela,8,"[1, 0, 0]","['Gio Urshela', 0, 0]",None,safe,0,1,2,2,3,Keynan Middleton
-3,top,double,line drive double,fastball,strike,Bryan Reynolds,9,"[0, 1, 1]","[0, 'Bryan Reynolds', 'Gio Urshela']",None,safe,0,0,2,2,3,Keynan Middleton
-3,top,out,fly out,slider,strike,Mark Vientos,1,"[0, 1, 1]","[0, 'Bryan Reynolds', 'Gio Urshela']",None,safe,0,0,3,2,3,Keynan Middleton
-3,bottom,strike,swinging strike,changeup,strike,Marcelo Mayer,3,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,0,2,3,Jalen Beeks
-3,bottom,strike,swinging strike,fastball,strike,Marcelo Mayer,3,"[0, 0, 0]","[0, 0, 0]",None,NA,0,2,0,2,3,Jalen Beeks
-3,bottom,strikeout,strikeout looking,fastball,strike,Marcelo Mayer,3,"[0, 0, 0]","[0, 0, 0]",None,NA,0,3,1,2,3,Jalen Beeks
-3,bottom,ball,ball,fastball,ball,Michael Conforto,4,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,2,3,Ken Waldichuk
-3,bottom,ball,ball,slider,ball,Michael Conforto,4,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,1,2,3,Ken Waldichuk
-3,bottom,strike,swinging strike,fastball,strike,Michael Conforto,4,"[0, 0, 0]","[0, 0, 0]",None,NA,2,1,1,2,3,Ken Waldichuk
-3,bottom,ball,ball,slider,ball,Michael Conforto,4,"[0, 0, 0]","[0, 0, 0]",None,NA,3,1,1,2,3,Ken Waldichuk
-3,bottom,single,line drive single,fastball,strike,Michael Conforto,4,"[1, 0, 0]","['Michael Conforto', 0, 0]",None,safe,3,1,1,2,3,Ken Waldichuk
-3,bottom,foul,foul,slider,strike,Alex Verdugo,5,"[1, 0, 0]","['Michael Conforto', 0, 0]",None,safe,0,1,1,2,3,Zach Pop
-3,bottom,foul,foul,slider,strike,Alex Verdugo,5,"[1, 0, 0]","['Michael Conforto', 0, 0]",None,safe,0,2,1,2,3,Zach Pop
-3,bottom,single,line drive single,slider,strike,Alex Verdugo,5,"[1, 0, 1]","['Alex Verdugo', 0, 'Michael Conforto']",first to third attempted,safe,0,2,1,2,3,Zach Pop
-3,bottom,ball,ball,fastball,ball,Leo Jiménez,6,"[1, 0, 1]","['Alex Verdugo', 0, 'Michael Conforto']",None,safe,1,0,1,2,3,Griffin Jax
-3,bottom,strike,swinging strike,curveball,strike,Leo Jiménez,6,"[1, 0, 1]","['Alex Verdugo', 0, 'Michael Conforto']",None,safe,1,1,1,2,3,Griffin Jax
-3,bottom,strike,called strike,slider,strike,Leo Jiménez,6,"[1, 0, 1]","['Alex Verdugo', 0, 'Michael Conforto']",None,safe,1,2,1,2,3,Griffin Jax
-3,bottom,out,line out,fastball,strike,Leo Jiménez,6,"[1, 0, 0]","['Alex Verdugo', 0, 0]",tag up third to home attempted,safe,1,2,2,2,4,Griffin Jax
-3,bottom,foul,foul,slider,strike,Jonathan Davis,7,"[1, 0, 0]","['Alex Verdugo', 0, 0]",None,safe,0,1,2,2,4,Griffin Jax
-3,bottom,strike,swinging strike,changeup,strike,Jonathan Davis,7,"[1, 0, 0]","['Alex Verdugo', 0, 0]",None,safe,0,2,2,2,4,Griffin Jax
-3,bottom,ball,ball,slider,ball,Jonathan Davis,7,"[1, 0, 0]","['Alex Verdugo', 0, 0]",None,safe,1,2,2,2,4,Griffin Jax
-3,bottom,ball,ball,fastball,ball,Jonathan Davis,7,"[1, 0, 0]","['Alex Verdugo', 0, 0]",None,safe,2,2,2,2,4,Griffin Jax
-3,bottom,strikeout,strikeout looking,changeup,strike,Jonathan Davis,7,"[1, 0, 0]","['Alex Verdugo', 0, 0]",None,safe,2,3,3,2,4,Griffin Jax
-4,top,out,ground out,slider,strike,Luken Baker,2,"[0, 0, 0]","[0, 0, 0]",None,NA,0,0,1,2,4,Keynan Middleton
-4,top,foul,foul,slider,strike,Curtis Mead,3,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,1,2,4,Scott Alexander
-4,top,ball,ball,slider,ball,Curtis Mead,3,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,1,2,4,Scott Alexander
-4,top,ball,ball,slider,ball,Curtis Mead,3,"[0, 0, 0]","[0, 0, 0]",None,NA,2,1,1,2,4,Scott Alexander
-4,top,strike,called strike,slider,strike,Curtis Mead,3,"[0, 0, 0]","[0, 0, 0]",None,NA,2,2,1,2,4,Scott Alexander
-4,top,ball,ball,changeup,ball,Curtis Mead,3,"[0, 0, 0]","[0, 0, 0]",None,NA,3,2,1,2,4,Scott Alexander
-4,top,walk,walk,slider,ball,Curtis Mead,3,"[1, 0, 0]","['Curtis Mead', 0, 0]",None,safe,4,2,1,2,4,Scott Alexander
-4,top,foul,foul,changeup,strike,Hunter Feduccia,4,"[1, 0, 0]","['Curtis Mead', 0, 0]",None,safe,0,1,1,2,4,Jakob Junis
-4,top,out,line out,slider,strike,Hunter Feduccia,4,"[1, 0, 0]","['Curtis Mead', 0, 0]",None,safe,0,1,2,2,4,Jakob Junis
-4,top,ball,ball,slider,ball,Andrew Benintendi,5,"[1, 0, 0]","['Curtis Mead', 0, 0]",None,safe,1,0,2,2,4,Jakob Junis
-4,top,ball,ball,changeup,ball,Andrew Benintendi,5,"[1, 0, 0]","['Curtis Mead', 0, 0]",None,safe,2,0,2,2,4,Jakob Junis
-4,top,strike,called strike,slider,strike,Andrew Benintendi,5,"[1, 0, 0]","['Curtis Mead', 0, 0]",None,safe,2,1,2,2,4,Jakob Junis
-4,top,foul,foul,slider,strike,Andrew Benintendi,5,"[1, 0, 0]","['Curtis Mead', 0, 0]",None,safe,2,2,2,2,4,Jakob Junis
-4,top,strikeout,strikeout looking,fastball,strike,Andrew Benintendi,5,"[1, 0, 0]","['Curtis Mead', 0, 0]",None,safe,2,3,3,2,4,Jakob Junis
-4,bottom,out,fly out,fastball,strike,Brandon Nimmo,8,"[0, 0, 0]","[0, 0, 0]",None,NA,0,0,1,2,4,Griffin Jax
-4,bottom,out,ground out,slider,strike,Graham Pauley,9,"[0, 0, 0]","[0, 0, 0]",None,NA,0,0,2,2,4,Alex Young
-4,bottom,strike,swinging strike,changeup,strike,Tyrone Taylor,1,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,2,2,4,Alex Young
-4,bottom,single,ground ball single,fastball,strike,Tyrone Taylor,1,"[1, 0, 0]","['Tyrone Taylor', 0, 0]",None,safe,0,1,2,2,4,Alex Young
-4,bottom,ball,ball,fastball,ball,Griffin Conine,2,"[1, 0, 0]","['Tyrone Taylor', 0, 0]",None,safe,1,0,2,2,4,Alex Young
-4,bottom,foul,foul,changeup,strike,Griffin Conine,2,"[1, 0, 0]","['Tyrone Taylor', 0, 0]",None,safe,1,1,2,2,4,Alex Young
-4,bottom,strike,called strike,changeup,strike,Griffin Conine,2,"[1, 0, 0]","['Tyrone Taylor', 0, 0]",None,safe,1,2,2,2,4,Alex Young
-4,bottom,ball,ball,fastball,ball,Griffin Conine,2,"[1, 0, 0]","['Tyrone Taylor', 0, 0]",None,safe,2,2,2,2,4,Alex Young
-4,bottom,out,ground out,changeup,strike,Griffin Conine,2,"[1, 0, 0]","['Tyrone Taylor', 0, 0]",None,safe,2,2,3,2,4,Alex Young
-5,top,ball,ball,slider,ball,Matt Thaiss,6,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,0,2,4,Jakob Junis
-5,top,ball,ball,slider,ball,Matt Thaiss,6,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,0,2,4,Jakob Junis
-5,top,ball,ball,slider,ball,Matt Thaiss,6,"[0, 0, 0]","[0, 0, 0]",None,NA,3,0,0,2,4,Jakob Junis
-5,top,strike,called strike,slider,strike,Matt Thaiss,6,"[0, 0, 0]","[0, 0, 0]",None,NA,3,1,0,2,4,Jakob Junis
-5,top,strike,swinging strike,slider,strike,Matt Thaiss,6,"[0, 0, 0]","[0, 0, 0]",None,NA,3,2,0,2,4,Jakob Junis
-5,top,walk,walk,fastball,ball,Matt Thaiss,6,"[1, 0, 0]","['Matt Thaiss', 0, 0]",None,safe,4,2,0,2,4,Jakob Junis
-5,top,ball,ball,fastball,ball,Colby Thomas,7,"[1, 0, 0]","['Matt Thaiss', 0, 0]",None,safe,1,0,0,2,4,Matthew Boyd
-5,top,strike,called strike,slider,strike,Colby Thomas,7,"[1, 0, 0]","['Matt Thaiss', 0, 0]",None,safe,1,1,0,2,4,Matthew Boyd
-5,top,single,line drive single,changeup,strike,Colby Thomas,7,"[1, 1, 0]","['Colby Thomas', 'Matt Thaiss', 0]",None,safe,1,1,0,2,4,Matthew Boyd
-5,top,out,ground out,fastball,strike,Gio Urshela,8,"[1, 1, 0]","['Colby Thomas', 'Matt Thaiss', 0]",None,safe,0,0,1,2,4,Josiah Gray
-5,top,double,fly ball double,fastball,strike,Bryan Reynolds,9,"[0, 1, 0]","[0, 'Bryan Reynolds', 0]",first to home attempted,safe,0,0,1,4,4,Mike Clevinger
-5,top,out,line out,fastball,strike,Mark Vientos,1,"[0, 1, 0]","[0, 'Bryan Reynolds', 0]",None,safe,0,0,2,4,4,J.P. France
-5,top,strike,called strike,changeup,strike,Luken Baker,2,"[0, 1, 0]","[0, 'Bryan Reynolds', 0]",None,safe,0,1,2,4,4,J.P. France
-5,top,out,fly out,slider,strike,Luken Baker,2,"[0, 1, 0]","[0, 'Bryan Reynolds', 0]",None,safe,0,1,3,4,4,J.P. France
-5,bottom,strike,called strike,changeup,strike,Marcelo Mayer,3,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,0,4,4,Alex Young
-5,bottom,ball,ball,slider,ball,Marcelo Mayer,3,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,0,4,4,Alex Young
-5,bottom,ball,ball,slider,ball,Marcelo Mayer,3,"[0, 0, 0]","[0, 0, 0]",None,NA,2,1,0,4,4,Alex Young
-5,bottom,strike,called strike,changeup,strike,Marcelo Mayer,3,"[0, 0, 0]","[0, 0, 0]",None,NA,2,2,0,4,4,Alex Young
-5,bottom,strikeout,strikeout swinging,slider,strike,Marcelo Mayer,3,"[0, 0, 0]","[0, 0, 0]",None,NA,2,3,1,4,4,Alex Young
-5,bottom,ball,ball,curveball,ball,Michael Conforto,4,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,4,4,Rich Hill
-5,bottom,ball,ball,curveball,ball,Michael Conforto,4,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,1,4,4,Rich Hill
-5,bottom,ball,ball,curveball,ball,Michael Conforto,4,"[0, 0, 0]","[0, 0, 0]",None,NA,3,0,1,4,4,Rich Hill
-5,bottom,walk,walk,curveball,ball,Michael Conforto,4,"[1, 0, 0]","['Michael Conforto', 0, 0]",None,safe,4,0,1,4,4,Rich Hill
-5,bottom,out,line out,curveball,strike,Alex Verdugo,5,"[1, 0, 0]","['Michael Conforto', 0, 0]",None,safe,0,0,2,4,4,Clarke Schmidt
-5,bottom,ball,ball,slider,ball,Leo Jiménez,6,"[1, 0, 0]","['Michael Conforto', 0, 0]",None,safe,1,0,2,4,4,Jay Jackson
-5,bottom,ball,ball,slider,ball,Leo Jiménez,6,"[1, 0, 0]","['Michael Conforto', 0, 0]",None,safe,2,0,2,4,4,Jay Jackson
-5,bottom,ball,ball,slider,ball,Leo Jiménez,6,"[1, 0, 0]","['Michael Conforto', 0, 0]",None,safe,3,0,2,4,4,Jay Jackson
-5,bottom,walk,walk,slider,ball,Leo Jiménez,6,"[1, 1, 0]","['Leo Jiménez', 'Michael Conforto', 0]",None,safe,4,0,2,4,4,Jay Jackson
-5,bottom,strike,swinging strike,fastball,strike,Jonathan Davis,7,"[1, 1, 0]","['Leo Jiménez', 'Michael Conforto', 0]",None,safe,0,1,2,4,4,Jay Jackson
-5,bottom,strike,swinging strike,slider,strike,Jonathan Davis,7,"[1, 1, 0]","['Leo Jiménez', 'Michael Conforto', 0]",None,safe,0,2,2,4,4,Jay Jackson
-5,bottom,ball,ball,fastball,ball,Jonathan Davis,7,"[1, 1, 0]","['Leo Jiménez', 'Michael Conforto', 0]",None,safe,1,2,2,4,4,Jay Jackson
-5,bottom,ball,ball,slider,ball,Jonathan Davis,7,"[1, 1, 0]","['Leo Jiménez', 'Michael Conforto', 0]",None,safe,2,2,2,4,4,Jay Jackson
-5,bottom,out,ground out,fastball,strike,Jonathan Davis,7,"[1, 1, 0]","['Leo Jiménez', 'Michael Conforto', 0]",None,safe,2,2,3,4,4,Jay Jackson
-6,top,ball,ball,curveball,ball,Curtis Mead,3,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,0,4,4,J.P. France
-6,top,ball,ball,fastball,ball,Curtis Mead,3,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,0,4,4,J.P. France
-6,top,ball,ball,fastball,ball,Curtis Mead,3,"[0, 0, 0]","[0, 0, 0]",None,NA,3,0,0,4,4,J.P. France
-6,top,walk,walk,fastball,ball,Curtis Mead,3,"[1, 0, 0]","['Curtis Mead', 0, 0]",None,safe,4,0,0,4,4,J.P. France
-6,top,strike,called strike,slider,strike,Hunter Feduccia,4,"[0, 1, 0]","[0, 'Curtis Mead', 0]",steal first to second attempted,safe,0,1,0,4,4,Ronny Henriquez
-6,top,out,ground out,fastball,strike,Hunter Feduccia,4,"[0, 1, 0]","[0, 'Curtis Mead', 0]",None,safe,0,1,1,4,4,Ronny Henriquez
-6,top,ball,ball,fastball,ball,Andrew Benintendi,5,"[0, 1, 0]","[0, 'Curtis Mead', 0]",None,safe,1,0,1,4,4,Reid Detmers
-6,top,ball,ball,slider,ball,Andrew Benintendi,5,"[0, 1, 0]","[0, 'Curtis Mead', 0]",None,safe,2,0,1,4,4,Reid Detmers
-6,top,ball,ball,slider,ball,Andrew Benintendi,5,"[0, 1, 0]","[0, 'Curtis Mead', 0]",None,safe,3,0,1,4,4,Reid Detmers
-6,top,single,line drive single,slider,strike,Andrew Benintendi,5,"[1, 0, 1]","['Andrew Benintendi', 0, 'Curtis Mead']",None,safe,3,0,1,4,4,Reid Detmers
-6,top,strike,swinging strike,fastball,strike,Matt Thaiss,6,"[1, 0, 1]","['Andrew Benintendi', 0, 'Curtis Mead']",None,safe,0,1,1,4,4,Eli Morgan
-6,top,ball,ball,fastball,ball,Matt Thaiss,6,"[1, 0, 1]","['Andrew Benintendi', 0, 'Curtis Mead']",None,safe,1,1,1,4,4,Eli Morgan
-6,top,strike,swinging strike,fastball,strike,Matt Thaiss,6,"[1, 0, 1]","['Andrew Benintendi', 0, 'Curtis Mead']",None,safe,1,2,1,4,4,Eli Morgan
-6,top,ball,ball,slider,ball,Matt Thaiss,6,"[1, 0, 1]","['Andrew Benintendi', 0, 'Curtis Mead']",None,safe,2,2,1,4,4,Eli Morgan
-6,top,ball,ball,fastball,ball,Matt Thaiss,6,"[1, 0, 1]","['Andrew Benintendi', 0, 'Curtis Mead']",None,safe,3,2,1,4,4,Eli Morgan
-6,top,walk,walk,slider,ball,Matt Thaiss,6,"[1, 1, 1]","['Matt Thaiss', 'Andrew Benintendi', 'Curtis Mead']",None,safe,4,2,1,4,4,Eli Morgan
-6,top,out,fly out,fastball,strike,Colby Thomas,7,"[1, 1, 0]","['Matt Thaiss', 'Andrew Benintendi', 0]",tag up third to home attempted,thrown out,0,0,3,4,4,Austin Pruitt
-6,bottom,ball,ball,slider,ball,Brandon Nimmo,8,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,0,4,4,Jay Jackson
-6,bottom,out,fly out,slider,strike,Brandon Nimmo,8,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,4,4,Jay Jackson
-6,bottom,strike,swinging strike,fastball,strike,Graham Pauley,9,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,1,4,4,Luis Medina
-6,bottom,out,fly out,changeup,strike,Graham Pauley,9,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,2,4,4,Luis Medina
-6,bottom,ball,ball,fastball,ball,Tyrone Taylor,1,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,2,4,4,Luis Medina
-6,bottom,ball,ball,slider,ball,Tyrone Taylor,1,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,2,4,4,Luis Medina
-6,bottom,foul,foul,changeup,strike,Tyrone Taylor,1,"[0, 0, 0]","[0, 0, 0]",None,NA,2,1,2,4,4,Luis Medina
-6,bottom,ball,ball,slider,ball,Tyrone Taylor,1,"[0, 0, 0]","[0, 0, 0]",None,NA,3,1,2,4,4,Luis Medina
-6,bottom,strike,called strike,fastball,strike,Tyrone Taylor,1,"[0, 0, 0]","[0, 0, 0]",None,NA,3,2,2,4,4,Luis Medina
-6,bottom,strikeout,strikeout looking,slider,strike,Tyrone Taylor,1,"[0, 0, 0]","[0, 0, 0]",None,NA,3,3,3,4,4,Luis Medina
-7,top,ball,ball,slider,ball,Gio Urshela,8,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,0,4,4,Austin Pruitt
-7,top,ball,ball,slider,ball,Gio Urshela,8,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,0,4,4,Austin Pruitt
-7,top,out,ground out,slider,strike,Gio Urshela,8,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,1,4,4,Austin Pruitt
-7,top,out,fly out,fastball,strike,Bryan Reynolds,9,"[0, 0, 0]","[0, 0, 0]",None,NA,0,0,2,4,4,Zack Greinke
-7,top,strike,called strike,fastball,strike,Mark Vientos,1,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,2,4,4,Zack Greinke
-7,top,foul,foul,changeup,strike,Mark Vientos,1,"[0, 0, 0]","[0, 0, 0]",None,NA,0,2,2,4,4,Zack Greinke
-7,top,foul,foul,slider,strike,Mark Vientos,1,"[0, 0, 0]","[0, 0, 0]",None,NA,0,2,2,4,4,Zack Greinke
-7,top,out,ground out,fastball,strike,Mark Vientos,1,"[0, 0, 0]","[0, 0, 0]",None,NA,0,2,3,4,4,Zack Greinke
-7,bottom,strike,swinging strike,fastball,strike,Griffin Conine,2,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,0,4,4,Luis Medina
-7,bottom,strike,swinging strike,fastball,strike,Griffin Conine,2,"[0, 0, 0]","[0, 0, 0]",None,NA,0,2,0,4,4,Luis Medina
-7,bottom,strikeout,strikeout looking,fastball,strike,Griffin Conine,2,"[0, 0, 0]","[0, 0, 0]",None,NA,0,3,1,4,4,Luis Medina
-7,bottom,ball,ball,changeup,ball,Marcelo Mayer,3,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,4,4,Beau Brieske
-7,bottom,strike,called strike,changeup,strike,Marcelo Mayer,3,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,1,4,4,Beau Brieske
-7,bottom,out,fly out,fastball,strike,Marcelo Mayer,3,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,2,4,4,Beau Brieske
-7,bottom,ball,ball,fastball,ball,Michael Conforto,4,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,2,4,4,Beau Brieske
-7,bottom,ball,ball,fastball,ball,Michael Conforto,4,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,2,4,4,Beau Brieske
-7,bottom,strike,called strike,fastball,strike,Michael Conforto,4,"[0, 0, 0]","[0, 0, 0]",None,NA,2,1,2,4,4,Beau Brieske
-7,bottom,strike,called strike,fastball,strike,Michael Conforto,4,"[0, 0, 0]","[0, 0, 0]",None,NA,2,2,2,4,4,Beau Brieske
-7,bottom,ball,ball,fastball,ball,Michael Conforto,4,"[0, 0, 0]","[0, 0, 0]",None,NA,3,2,2,4,4,Beau Brieske
-7,bottom,strikeout,strikeout looking,changeup,strike,Michael Conforto,4,"[0, 0, 0]","[0, 0, 0]",None,NA,3,3,3,4,4,Beau Brieske
-8,top,ball,ball,changeup,ball,Luken Baker,2,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,0,4,4,Zack Greinke
-8,top,out,ground out,curveball,strike,Luken Baker,2,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,4,4,Zack Greinke
-8,top,strike,called strike,slider,strike,Curtis Mead,3,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,1,4,4,Lance McCullers Jr.
-8,top,ball,ball,slider,ball,Curtis Mead,3,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,1,4,4,Lance McCullers Jr.
-8,top,strike,called strike,slider,strike,Curtis Mead,3,"[0, 0, 0]","[0, 0, 0]",None,NA,1,2,1,4,4,Lance McCullers Jr.
-8,top,strikeout,strikeout looking,changeup,strike,Curtis Mead,3,"[0, 0, 0]","[0, 0, 0]",None,NA,1,3,2,4,4,Lance McCullers Jr.
-8,top,ball,ball,curveball,ball,Hunter Feduccia,4,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,2,4,4,Lance McCullers Jr.
-8,top,ball,ball,slider,ball,Hunter Feduccia,4,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,2,4,4,Lance McCullers Jr.
-8,top,ball,ball,slider,ball,Hunter Feduccia,4,"[0, 0, 0]","[0, 0, 0]",None,NA,3,0,2,4,4,Lance McCullers Jr.
-8,top,strike,called strike,slider,strike,Hunter Feduccia,4,"[0, 0, 0]","[0, 0, 0]",None,NA,3,1,2,4,4,Lance McCullers Jr.
-8,top,out,fly out,slider,strike,Hunter Feduccia,4,"[0, 0, 0]","[0, 0, 0]",None,NA,3,1,3,4,4,Lance McCullers Jr.
-8,bottom,strike,swinging strike,slider,strike,Alex Verdugo,5,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,0,4,4,Beau Brieske
-8,bottom,strike,called strike,changeup,strike,Alex Verdugo,5,"[0, 0, 0]","[0, 0, 0]",None,NA,0,2,0,4,4,Beau Brieske
-8,bottom,out,line out,changeup,strike,Alex Verdugo,5,"[0, 0, 0]","[0, 0, 0]",None,NA,0,2,1,4,4,Beau Brieske
-8,bottom,out,ground out,slider,strike,Leo Jiménez,6,"[0, 0, 0]","[0, 0, 0]",None,NA,0,0,2,4,4,Shawn Armstrong
-8,bottom,strike,called strike,fastball,strike,Jonathan Davis,7,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,2,4,4,Shawn Armstrong
-8,bottom,ball,ball,slider,ball,Jonathan Davis,7,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,2,4,4,Shawn Armstrong
-8,bottom,out,ground out,slider,strike,Jonathan Davis,7,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,3,4,4,Shawn Armstrong
-9,top,ball,ball,slider,ball,Andrew Benintendi,5,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,0,4,4,Lance McCullers Jr.
-9,top,ball,ball,curveball,ball,Andrew Benintendi,5,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,0,4,4,Lance McCullers Jr.
-9,top,ball,ball,slider,ball,Andrew Benintendi,5,"[0, 0, 0]","[0, 0, 0]",None,NA,3,0,0,4,4,Lance McCullers Jr.
-9,top,out,ground out,curveball,strike,Andrew Benintendi,5,"[0, 0, 0]","[0, 0, 0]",None,NA,3,0,1,4,4,Lance McCullers Jr.
-9,top,strike,swinging strike,changeup,strike,Matt Thaiss,6,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,1,4,4,Keynan Middleton
-9,top,ball,ball,fastball,ball,Matt Thaiss,6,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,1,4,4,Keynan Middleton
-9,top,out,ground out,fastball,strike,Matt Thaiss,6,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,2,4,4,Keynan Middleton
-9,top,ball,ball,changeup,ball,Colby Thomas,7,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,2,4,4,Keynan Middleton
-9,top,foul,foul,changeup,strike,Colby Thomas,7,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,2,4,4,Keynan Middleton
-9,top,home_run,fly ball home run,changeup,strike,Colby Thomas,7,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,2,5,4,Keynan Middleton
-9,top,out,fly out,slider,strike,Gio Urshela,8,"[0, 0, 0]","[0, 0, 0]",None,NA,0,0,3,5,4,Keynan Middleton
-9,bottom,strike,swinging strike,slider,strike,Brandon Nimmo,8,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,0,5,4,Shawn Armstrong
-9,bottom,out,fly out,fastball,strike,Brandon Nimmo,8,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,1,5,4,Shawn Armstrong
-9,bottom,ball,ball,fastball,ball,Graham Pauley,9,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,5,4,Nick Mears
-9,bottom,single,line drive single,fastball,strike,Graham Pauley,9,"[1, 0, 0]","['Graham Pauley', 0, 0]",None,safe,1,0,1,5,4,Nick Mears
-9,bottom,out,ground out,fastball,strike,Tyrone Taylor,1,"[1, 0, 0]","['Graham Pauley', 0, 0]",None,safe,0,0,2,5,4,Garrett Crochet
-9,bottom,ball,ball,fastball,ball,Griffin Conine,2,"[1, 0, 0]","['Graham Pauley', 0, 0]",None,safe,1,0,2,5,4,Garrett Crochet
-9,bottom,ball,ball,slider,ball,Griffin Conine,2,"[1, 0, 0]","['Graham Pauley', 0, 0]",None,safe,2,0,2,5,4,Garrett Crochet
-9,bottom,out,fly out,fastball,strike,Griffin Conine,2,"[1, 0, 0]","['Graham Pauley', 0, 0]",None,safe,2,0,3,5,4,Garrett Crochet
+﻿Inning,Inning Half,Event,Detailed Event,Contact Power,Pitch Type,Pitch Outcome,Batter,Batter Number,Bases,Baserunners,Baserunning Event,Baserunning Result,Balls,Strikes,Outs,Team 1 Score,Team 2 Score,Pitcher
+1,top,strike,called strike,NA,slider,strike,William Contreras,1,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,0,0,0,Fernando Cruz
+1,top,ball,ball,NA,slider,ball,William Contreras,1,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,0,0,0,Fernando Cruz
+1,top,foul,foul,NA,fastball,strike,William Contreras,1,"[0, 0, 0]","[0, 0, 0]",None,NA,1,2,0,0,0,Fernando Cruz
+1,top,ball,ball,NA,slider,ball,William Contreras,1,"[0, 0, 0]","[0, 0, 0]",None,NA,2,2,0,0,0,Fernando Cruz
+1,top,strikeout,strikeout swinging,NA,fastball,strike,William Contreras,1,"[0, 0, 0]","[0, 0, 0]",None,NA,2,3,1,0,0,Fernando Cruz
+1,top,ball,ball,NA,fastball,ball,Trayce Thompson,2,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,0,0,Fernando Cruz
+1,top,strike,swinging strike,NA,fastball,strike,Trayce Thompson,2,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,1,0,0,Fernando Cruz
+1,top,single,line drive single,medium,fastball,strike,Trayce Thompson,2,"[1, 0, 0]","['Trayce Thompson', 0, 0]",None,safe,1,1,1,0,0,Fernando Cruz
+1,top,ball,ball,NA,fastball,ball,Austin Wells,3,"[1, 0, 0]","['Trayce Thompson', 0, 0]",None,safe,1,0,1,0,0,Fernando Cruz
+1,top,ball,ball,NA,fastball,ball,Austin Wells,3,"[1, 0, 0]","['Trayce Thompson', 0, 0]",None,safe,2,0,1,0,0,Fernando Cruz
+1,top,ball,ball,NA,slider,ball,Austin Wells,3,"[1, 0, 0]","['Trayce Thompson', 0, 0]",None,safe,3,0,1,0,0,Fernando Cruz
+1,top,strike,called strike,NA,slider,strike,Austin Wells,3,"[1, 0, 0]","['Trayce Thompson', 0, 0]",None,safe,3,1,1,0,0,Fernando Cruz
+1,top,strike,called strike,NA,slider,strike,Austin Wells,3,"[1, 0, 0]","['Trayce Thompson', 0, 0]",None,safe,3,2,1,0,0,Fernando Cruz
+1,top,walk,walk,NA,fastball,ball,Austin Wells,3,"[1, 1, 0]","['Austin Wells', 'Trayce Thompson', 0]",None,safe,4,2,1,0,0,Fernando Cruz
+1,top,ball,ball,NA,slider,ball,Daniel Johnson,4,"[1, 1, 0]","['Austin Wells', 'Trayce Thompson', 0]",None,safe,1,0,1,0,0,Fernando Cruz
+1,top,strike,called strike,NA,slider,strike,Daniel Johnson,4,"[1, 1, 0]","['Austin Wells', 'Trayce Thompson', 0]",None,safe,1,1,1,0,0,Fernando Cruz
+1,top,out,fly out,medium,slider,strike,Daniel Johnson,4,"[1, 1, 0]","['Austin Wells', 'Trayce Thompson', 0]",None,safe,1,1,2,0,0,Fernando Cruz
+1,top,ball,ball,NA,slider,ball,Owen Miller,5,"[1, 1, 0]","['Austin Wells', 'Trayce Thompson', 0]",None,safe,1,0,2,0,0,Fernando Cruz
+1,top,strike,called strike,NA,fastball,strike,Owen Miller,5,"[1, 1, 0]","['Austin Wells', 'Trayce Thompson', 0]",None,safe,1,1,2,0,0,Fernando Cruz
+1,top,strike,called strike,NA,slider,strike,Owen Miller,5,"[1, 1, 0]","['Austin Wells', 'Trayce Thompson', 0]",None,safe,1,2,2,0,0,Fernando Cruz
+1,top,ball,ball,NA,slider,ball,Owen Miller,5,"[1, 1, 0]","['Austin Wells', 'Trayce Thompson', 0]",None,safe,2,2,2,0,0,Fernando Cruz
+1,top,single,line drive single,hard,fastball,strike,Owen Miller,5,"[1, 0, 1]","['Owen Miller', 0, 'Austin Wells']",first to third attempted,safe,2,2,2,1,0,Fernando Cruz
+1,top,strike,called strike,NA,fastball,strike,Jordan Lawlar,6,"[1, 0, 1]","['Owen Miller', 0, 'Austin Wells']",None,safe,0,1,2,1,0,Fernando Cruz
+1,top,strike,swinging strike,NA,slider,strike,Jordan Lawlar,6,"[1, 0, 1]","['Owen Miller', 0, 'Austin Wells']",None,safe,0,2,2,1,0,Fernando Cruz
+1,top,ball,ball,NA,slider,ball,Jordan Lawlar,6,"[1, 0, 1]","['Owen Miller', 0, 'Austin Wells']",None,safe,1,2,2,1,0,Fernando Cruz
+1,top,strikeout,strikeout swinging,NA,fastball,strike,Jordan Lawlar,6,"[1, 0, 1]","['Owen Miller', 0, 'Austin Wells']",None,safe,1,3,3,1,0,Fernando Cruz
+1,bottom,ball,ball,NA,fastball,ball,Aaron Schunk,1,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,0,1,0,George Kirby
+1,bottom,ball,ball,NA,fastball,ball,Aaron Schunk,1,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,0,1,0,George Kirby
+1,bottom,ball,ball,NA,fastball,ball,Aaron Schunk,1,"[0, 0, 0]","[0, 0, 0]",None,NA,3,0,0,1,0,George Kirby
+1,bottom,strike,called strike,NA,fastball,strike,Aaron Schunk,1,"[0, 0, 0]","[0, 0, 0]",None,NA,3,1,0,1,0,George Kirby
+1,bottom,out,line out,hard,fastball,strike,Aaron Schunk,1,"[0, 0, 0]","[0, 0, 0]",None,NA,3,1,1,1,0,George Kirby
+1,bottom,ball,ball,NA,fastball,ball,Richie Palacios,2,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,1,0,George Kirby
+1,bottom,ball,ball,NA,fastball,ball,Richie Palacios,2,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,1,1,0,George Kirby
+1,bottom,ball,ball,NA,curveball,ball,Richie Palacios,2,"[0, 0, 0]","[0, 0, 0]",None,NA,3,0,1,1,0,George Kirby
+1,bottom,strike,called strike,NA,fastball,strike,Richie Palacios,2,"[0, 0, 0]","[0, 0, 0]",None,NA,3,1,1,1,0,George Kirby
+1,bottom,out,ground out,hard,fastball,strike,Richie Palacios,2,"[0, 0, 0]","[0, 0, 0]",None,NA,3,1,2,1,0,George Kirby
+1,bottom,ball,ball,NA,fastball,ball,Blaze Alexander,3,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,2,1,0,George Kirby
+1,bottom,ball,ball,NA,slider,ball,Blaze Alexander,3,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,2,1,0,George Kirby
+1,bottom,ball,ball,NA,slider,ball,Blaze Alexander,3,"[0, 0, 0]","[0, 0, 0]",None,NA,3,0,2,1,0,George Kirby
+1,bottom,foul,foul,NA,fastball,strike,Blaze Alexander,3,"[0, 0, 0]","[0, 0, 0]",None,NA,3,1,2,1,0,George Kirby
+1,bottom,double,fly ball double,hard,fastball,strike,Blaze Alexander,3,"[0, 1, 0]","[0, 'Blaze Alexander', 0]",None,safe,3,1,2,1,0,George Kirby
+1,bottom,out,ground out,medium,fastball,strike,Elehuris Montero,4,"[0, 1, 0]","[0, 'Blaze Alexander', 0]",None,safe,0,0,3,1,0,George Kirby
+2,top,ball,ball,NA,fastball,ball,Mike Tauchman,7,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,0,1,0,Fernando Cruz
+2,top,ball,ball,NA,fastball,ball,Mike Tauchman,7,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,0,1,0,Fernando Cruz
+2,top,ball,ball,NA,fastball,ball,Mike Tauchman,7,"[0, 0, 0]","[0, 0, 0]",None,NA,3,0,0,1,0,Fernando Cruz
+2,top,walk,walk,NA,slider,ball,Mike Tauchman,7,"[1, 0, 0]","['Mike Tauchman', 0, 0]",None,safe,4,0,0,1,0,Fernando Cruz
+2,top,strike,called strike,NA,fastball,strike,Andrew Benintendi,8,"[1, 0, 0]","['Mike Tauchman', 0, 0]",None,safe,0,1,0,1,0,Fernando Cruz
+2,top,ball,ball,NA,fastball,ball,Andrew Benintendi,8,"[1, 0, 0]","['Mike Tauchman', 0, 0]",None,safe,1,1,0,1,0,Fernando Cruz
+2,top,single,line drive single,hard,fastball,strike,Andrew Benintendi,8,"[1, 0, 1]","['Andrew Benintendi', 0, 'Mike Tauchman']",first to third attempted,safe,1,1,0,1,0,Fernando Cruz
+2,top,single,line drive single,hard,slider,strike,Gleyber Torres,9,"[1, 0, 1]","['Gleyber Torres', 0, 'Andrew Benintendi']",first to third attempted,safe,0,0,0,2,0,Fernando Cruz
+2,top,out,fly out,medium,fastball,strike,William Contreras,1,"[1, 0, 0]","['Gleyber Torres', 0, 0]",tag up third to home attempted,safe,0,0,1,3,0,Fernando Cruz
+2,top,ball,ball,NA,fastball,ball,Trayce Thompson,2,"[1, 0, 0]","['Gleyber Torres', 0, 0]",None,safe,1,0,1,3,0,Fernando Cruz
+2,top,ball,ball,NA,fastball,ball,Trayce Thompson,2,"[1, 0, 0]","['Gleyber Torres', 0, 0]",None,safe,2,0,1,3,0,Fernando Cruz
+2,top,strike,called strike,NA,slider,strike,Trayce Thompson,2,"[1, 0, 0]","['Gleyber Torres', 0, 0]",None,safe,2,1,1,3,0,Fernando Cruz
+2,top,strike,called strike,NA,slider,strike,Trayce Thompson,2,"[1, 0, 0]","['Gleyber Torres', 0, 0]",None,safe,2,2,1,3,0,Fernando Cruz
+2,top,out,ground out,medium,fastball,strike,Trayce Thompson,2,"[1, 0, 0]","['Gleyber Torres', 0, 0]",None,safe,2,2,2,3,0,Fernando Cruz
+2,top,out,fly out,hard,fastball,strike,Austin Wells,3,"[1, 0, 0]","['Gleyber Torres', 0, 0]",None,safe,0,0,3,3,0,Fernando Cruz
+2,bottom,ball,ball,NA,slider,ball,Wilyer Abreu,5,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,0,3,0,George Kirby
+2,bottom,ball,ball,NA,slider,ball,Wilyer Abreu,5,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,0,3,0,George Kirby
+2,bottom,strike,called strike,NA,slider,strike,Wilyer Abreu,5,"[0, 0, 0]","[0, 0, 0]",None,NA,2,1,0,3,0,George Kirby
+2,bottom,strike,called strike,NA,curveball,strike,Wilyer Abreu,5,"[0, 0, 0]","[0, 0, 0]",None,NA,2,2,0,3,0,George Kirby
+2,bottom,foul,foul,NA,fastball,strike,Wilyer Abreu,5,"[0, 0, 0]","[0, 0, 0]",None,NA,2,2,0,3,0,George Kirby
+2,bottom,foul,foul,NA,fastball,strike,Wilyer Abreu,5,"[0, 0, 0]","[0, 0, 0]",None,NA,2,2,0,3,0,George Kirby
+2,bottom,ball,ball,NA,fastball,ball,Wilyer Abreu,5,"[0, 0, 0]","[0, 0, 0]",None,NA,3,2,0,3,0,George Kirby
+2,bottom,walk,walk,NA,fastball,ball,Wilyer Abreu,5,"[1, 0, 0]","['Wilyer Abreu', 0, 0]",None,safe,4,2,0,3,0,George Kirby
+2,bottom,ball,ball,NA,fastball,ball,Brandon Marsh,6,"[1, 0, 0]","['Wilyer Abreu', 0, 0]",None,safe,1,0,0,3,0,George Kirby
+2,bottom,strike,called strike,NA,fastball,strike,Brandon Marsh,6,"[1, 0, 0]","['Wilyer Abreu', 0, 0]",None,safe,1,1,0,3,0,George Kirby
+2,bottom,strike,called strike,NA,curveball,strike,Brandon Marsh,6,"[1, 0, 0]","['Wilyer Abreu', 0, 0]",None,safe,1,2,0,3,0,George Kirby
+2,bottom,ball,ball,NA,fastball,ball,Brandon Marsh,6,"[1, 0, 0]","['Wilyer Abreu', 0, 0]",None,safe,2,2,0,3,0,George Kirby
+2,bottom,strikeout,strikeout looking,NA,slider,strike,Brandon Marsh,6,"[1, 0, 0]","['Wilyer Abreu', 0, 0]",None,safe,2,3,1,3,0,George Kirby
+2,bottom,ball,ball,NA,slider,ball,Jerar Encarnacion,7,"[1, 0, 0]","['Wilyer Abreu', 0, 0]",None,safe,1,0,1,3,0,George Kirby
+2,bottom,strike,called strike,NA,curveball,strike,Jerar Encarnacion,7,"[1, 0, 0]","['Wilyer Abreu', 0, 0]",None,safe,1,1,1,3,0,George Kirby
+2,bottom,foul,foul,NA,fastball,strike,Jerar Encarnacion,7,"[1, 0, 0]","['Wilyer Abreu', 0, 0]",None,safe,1,2,1,3,0,George Kirby
+2,bottom,ball,ball,NA,fastball,ball,Jerar Encarnacion,7,"[1, 0, 0]","['Wilyer Abreu', 0, 0]",None,safe,2,2,1,3,0,George Kirby
+2,bottom,strikeout,strikeout swinging,NA,fastball,strike,Jerar Encarnacion,7,"[1, 0, 0]","['Wilyer Abreu', 0, 0]",None,safe,2,3,2,3,0,George Kirby
+2,bottom,strike,swinging strike,NA,curveball,strike,Jasson Domínguez,8,"[1, 0, 0]","['Wilyer Abreu', 0, 0]",None,safe,0,1,2,3,0,George Kirby
+2,bottom,single,line drive single,medium,fastball,strike,Jasson Domínguez,8,"[1, 1, 0]","['Jasson Domínguez', 'Wilyer Abreu', 0]",None,safe,0,1,2,3,0,George Kirby
+2,bottom,ball,ball,NA,slider,ball,Brandon Crawford,9,"[1, 1, 0]","['Jasson Domínguez', 'Wilyer Abreu', 0]",None,safe,1,0,2,3,0,George Kirby
+2,bottom,strike,called strike,NA,slider,strike,Brandon Crawford,9,"[1, 1, 0]","['Jasson Domínguez', 'Wilyer Abreu', 0]",None,safe,1,1,2,3,0,George Kirby
+2,bottom,ball,ball,NA,slider,ball,Brandon Crawford,9,"[1, 1, 0]","['Jasson Domínguez', 'Wilyer Abreu', 0]",None,safe,2,1,2,3,0,George Kirby
+2,bottom,home_run,fly ball home run,medium,slider,strike,Brandon Crawford,9,"[0, 0, 0]","[0, 0, 0]",None,NA,2,1,2,3,3,George Kirby
+2,bottom,ball,ball,NA,fastball,ball,Aaron Schunk,1,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,2,3,3,George Kirby
+2,bottom,ball,ball,NA,fastball,ball,Aaron Schunk,1,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,2,3,3,George Kirby
+2,bottom,out,line out,soft,fastball,strike,Aaron Schunk,1,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,3,3,3,George Kirby
+3,top,ball,ball,NA,fastball,ball,Daniel Johnson,4,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,0,3,3,Fernando Cruz
+3,top,ball,ball,NA,fastball,ball,Daniel Johnson,4,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,0,3,3,Fernando Cruz
+3,top,ball,ball,NA,fastball,ball,Daniel Johnson,4,"[0, 0, 0]","[0, 0, 0]",None,NA,3,0,0,3,3,Fernando Cruz
+3,top,walk,walk,NA,fastball,ball,Daniel Johnson,4,"[1, 0, 0]","['Daniel Johnson', 0, 0]",None,safe,4,0,0,3,3,Fernando Cruz
+3,top,out,fly out,hard,fastball,strike,Owen Miller,5,"[1, 0, 0]","['Daniel Johnson', 0, 0]",None,safe,0,0,1,3,3,Fernando Cruz
+3,top,out,line out,medium,fastball,strike,Jordan Lawlar,6,"[1, 0, 0]","['Daniel Johnson', 0, 0]",None,safe,0,0,2,3,3,Fernando Cruz
+3,top,ball,ball,NA,fastball,ball,Mike Tauchman,7,"[1, 0, 0]","['Daniel Johnson', 0, 0]",None,safe,1,0,2,3,3,Fernando Cruz
+3,top,out,ground out,medium,fastball,strike,Mike Tauchman,7,"[1, 0, 0]","['Daniel Johnson', 0, 0]",None,safe,1,0,3,3,3,Fernando Cruz
+3,bottom,ball,ball,NA,fastball,ball,Richie Palacios,2,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,0,3,3,George Kirby
+3,bottom,out,fly out,hard,slider,strike,Richie Palacios,2,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,3,3,George Kirby
+3,bottom,ball,ball,NA,slider,ball,Blaze Alexander,3,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,3,3,George Kirby
+3,bottom,ball,ball,NA,fastball,ball,Blaze Alexander,3,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,1,3,3,George Kirby
+3,bottom,ball,ball,NA,fastball,ball,Blaze Alexander,3,"[0, 0, 0]","[0, 0, 0]",None,NA,3,0,1,3,3,George Kirby
+3,bottom,out,ground out,soft,fastball,strike,Blaze Alexander,3,"[0, 0, 0]","[0, 0, 0]",None,NA,3,0,2,3,3,George Kirby
+3,bottom,strike,swinging strike,NA,slider,strike,Elehuris Montero,4,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,2,3,3,George Kirby
+3,bottom,out,fly out,medium,slider,strike,Elehuris Montero,4,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,3,3,3,George Kirby
+4,top,out,fly out,medium,fastball,strike,Andrew Benintendi,8,"[0, 0, 0]","[0, 0, 0]",None,NA,0,0,1,3,3,Fernando Cruz
+4,top,out,ground out,medium,slider,strike,Gleyber Torres,9,"[0, 0, 0]","[0, 0, 0]",None,NA,0,0,2,3,3,Fernando Cruz
+4,top,ball,ball,NA,fastball,ball,William Contreras,1,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,2,3,3,Fernando Cruz
+4,top,out,ground out,medium,slider,strike,William Contreras,1,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,3,3,3,Fernando Cruz
+4,bottom,strike,called strike,NA,slider,strike,Wilyer Abreu,5,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,0,3,3,George Kirby
+4,bottom,out,fly out,medium,slider,strike,Wilyer Abreu,5,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,1,3,3,George Kirby
+4,bottom,ball,ball,NA,curveball,ball,Brandon Marsh,6,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,3,3,George Kirby
+4,bottom,strike,called strike,NA,fastball,strike,Brandon Marsh,6,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,1,3,3,George Kirby
+4,bottom,single,ground ball single,medium,curveball,strike,Brandon Marsh,6,"[1, 0, 0]","['Brandon Marsh', 0, 0]",None,safe,1,1,1,3,3,George Kirby
+4,bottom,strike,called strike,NA,fastball,strike,Jerar Encarnacion,7,"[1, 0, 0]","['Brandon Marsh', 0, 0]",None,safe,0,1,1,3,3,George Kirby
+4,bottom,foul,foul,NA,fastball,strike,Jerar Encarnacion,7,"[1, 0, 0]","['Brandon Marsh', 0, 0]",None,safe,0,2,1,3,3,George Kirby
+4,bottom,double,ground ball double,medium,slider,strike,Jerar Encarnacion,7,"[0, 1, 0]","[0, 'Jerar Encarnacion', 0]",first to home attempted,safe,0,2,1,3,4,George Kirby
+4,bottom,ball,ball,NA,fastball,ball,Jasson Domínguez,8,"[0, 1, 0]","[0, 'Jerar Encarnacion', 0]",None,safe,1,0,1,3,4,George Kirby
+4,bottom,out,fly out,medium,fastball,strike,Jasson Domínguez,8,"[0, 1, 0]","[0, 'Jerar Encarnacion', 0]",None,safe,1,0,2,3,4,George Kirby
+4,bottom,ball,ball,NA,fastball,ball,Brandon Crawford,9,"[0, 1, 0]","[0, 'Jerar Encarnacion', 0]",None,safe,1,0,2,3,4,George Kirby
+4,bottom,ball,ball,NA,curveball,ball,Brandon Crawford,9,"[0, 1, 0]","[0, 'Jerar Encarnacion', 0]",None,safe,2,0,2,3,4,George Kirby
+4,bottom,strike,called strike,NA,slider,strike,Brandon Crawford,9,"[0, 1, 0]","[0, 'Jerar Encarnacion', 0]",None,safe,2,1,2,3,4,George Kirby
+4,bottom,ball,ball,NA,curveball,ball,Brandon Crawford,9,"[0, 1, 0]","[0, 'Jerar Encarnacion', 0]",None,safe,3,1,2,3,4,George Kirby
+4,bottom,walk,walk,NA,curveball,ball,Brandon Crawford,9,"[1, 1, 0]","['Brandon Crawford', 'Jerar Encarnacion', 0]",None,safe,4,1,2,3,4,George Kirby
+4,bottom,out,line out,medium,curveball,strike,Aaron Schunk,1,"[1, 1, 0]","['Brandon Crawford', 'Jerar Encarnacion', 0]",None,safe,0,0,3,3,4,George Kirby
+5,top,ball,ball,NA,slider,ball,Trayce Thompson,2,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,0,3,4,Fernando Cruz
+5,top,strike,swinging strike,NA,slider,strike,Trayce Thompson,2,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,0,3,4,Fernando Cruz
+5,top,ball,ball,NA,slider,ball,Trayce Thompson,2,"[0, 0, 0]","[0, 0, 0]",None,NA,2,1,0,3,4,Fernando Cruz
+5,top,strike,swinging strike,NA,fastball,strike,Trayce Thompson,2,"[0, 0, 0]","[0, 0, 0]",None,NA,2,2,0,3,4,Fernando Cruz
+5,top,ball,ball,NA,fastball,ball,Trayce Thompson,2,"[0, 0, 0]","[0, 0, 0]",None,NA,3,2,0,3,4,Fernando Cruz
+5,top,strikeout,strikeout looking,NA,fastball,strike,Trayce Thompson,2,"[0, 0, 0]","[0, 0, 0]",None,NA,3,3,1,3,4,Fernando Cruz
+5,top,ball,ball,NA,slider,ball,Austin Wells,3,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,3,4,Fernando Cruz
+5,top,strike,swinging strike,NA,fastball,strike,Austin Wells,3,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,1,3,4,Fernando Cruz
+5,top,strike,called strike,NA,fastball,strike,Austin Wells,3,"[0, 0, 0]","[0, 0, 0]",None,NA,1,2,1,3,4,Fernando Cruz
+5,top,strikeout,strikeout swinging,NA,slider,strike,Austin Wells,3,"[0, 0, 0]","[0, 0, 0]",None,NA,1,3,2,3,4,Fernando Cruz
+5,top,ball,ball,NA,fastball,ball,Daniel Johnson,4,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,2,3,4,Fernando Cruz
+5,top,strike,swinging strike,NA,slider,strike,Daniel Johnson,4,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,2,3,4,Fernando Cruz
+5,top,ball,ball,NA,slider,ball,Daniel Johnson,4,"[0, 0, 0]","[0, 0, 0]",None,NA,2,1,2,3,4,Fernando Cruz
+5,top,out,ground out,soft,fastball,strike,Daniel Johnson,4,"[0, 0, 0]","[0, 0, 0]",None,NA,2,1,3,3,4,Fernando Cruz
+5,bottom,out,fly out,medium,fastball,strike,Richie Palacios,2,"[0, 0, 0]","[0, 0, 0]",None,NA,0,0,1,3,4,George Kirby
+5,bottom,ball,ball,NA,slider,ball,Blaze Alexander,3,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,3,4,George Kirby
+5,bottom,strike,called strike,NA,fastball,strike,Blaze Alexander,3,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,1,3,4,George Kirby
+5,bottom,ball,ball,NA,slider,ball,Blaze Alexander,3,"[0, 0, 0]","[0, 0, 0]",None,NA,2,1,1,3,4,George Kirby
+5,bottom,strike,called strike,NA,fastball,strike,Blaze Alexander,3,"[0, 0, 0]","[0, 0, 0]",None,NA,2,2,1,3,4,George Kirby
+5,bottom,ball,ball,NA,fastball,ball,Blaze Alexander,3,"[0, 0, 0]","[0, 0, 0]",None,NA,3,2,1,3,4,George Kirby
+5,bottom,strikeout,strikeout looking,NA,fastball,strike,Blaze Alexander,3,"[0, 0, 0]","[0, 0, 0]",None,NA,3,3,2,3,4,George Kirby
+5,bottom,ball,ball,NA,fastball,ball,Elehuris Montero,4,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,2,3,4,George Kirby
+5,bottom,ball,ball,NA,slider,ball,Elehuris Montero,4,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,2,3,4,George Kirby
+5,bottom,strike,called strike,NA,curveball,strike,Elehuris Montero,4,"[0, 0, 0]","[0, 0, 0]",None,NA,2,1,2,3,4,George Kirby
+5,bottom,ball,ball,NA,fastball,ball,Elehuris Montero,4,"[0, 0, 0]","[0, 0, 0]",None,NA,3,1,2,3,4,George Kirby
+5,bottom,strike,called strike,NA,fastball,strike,Elehuris Montero,4,"[0, 0, 0]","[0, 0, 0]",None,NA,3,2,2,3,4,George Kirby
+5,bottom,walk,walk,NA,fastball,ball,Elehuris Montero,4,"[1, 0, 0]","['Elehuris Montero', 0, 0]",None,safe,4,2,2,3,4,George Kirby
+5,bottom,strike,called strike,NA,slider,strike,Wilyer Abreu,5,"[1, 0, 0]","['Elehuris Montero', 0, 0]",None,safe,0,1,2,3,4,George Kirby
+5,bottom,out,ground out,medium,slider,strike,Wilyer Abreu,5,"[1, 0, 0]","['Elehuris Montero', 0, 0]",None,safe,0,1,3,3,4,George Kirby
+6,top,ball,ball,NA,fastball,ball,Owen Miller,5,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,0,3,4,Fernando Cruz
+6,top,ball,ball,NA,fastball,ball,Owen Miller,5,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,0,3,4,Fernando Cruz
+6,top,out,fly out,medium,slider,strike,Owen Miller,5,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,1,3,4,Fernando Cruz
+6,top,ball,ball,NA,fastball,ball,Jordan Lawlar,6,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,3,4,Fernando Cruz
+6,top,strike,called strike,NA,slider,strike,Jordan Lawlar,6,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,1,3,4,Fernando Cruz
+6,top,strike,called strike,NA,fastball,strike,Jordan Lawlar,6,"[0, 0, 0]","[0, 0, 0]",None,NA,1,2,1,3,4,Fernando Cruz
+6,top,strikeout,strikeout looking,NA,fastball,strike,Jordan Lawlar,6,"[0, 0, 0]","[0, 0, 0]",None,NA,1,3,2,3,4,Fernando Cruz
+6,top,ball,ball,NA,fastball,ball,Mike Tauchman,7,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,2,3,4,Fernando Cruz
+6,top,out,ground out,medium,fastball,strike,Mike Tauchman,7,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,3,3,4,Fernando Cruz
+6,bottom,ball,ball,NA,fastball,ball,Brandon Marsh,6,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,0,3,4,George Kirby
+6,bottom,ball,ball,NA,slider,ball,Brandon Marsh,6,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,0,3,4,George Kirby
+6,bottom,out,ground out,medium,fastball,strike,Brandon Marsh,6,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,1,3,4,George Kirby
+6,bottom,ball,ball,NA,slider,ball,Jerar Encarnacion,7,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,3,4,George Kirby
+6,bottom,out,ground out,hard,slider,strike,Jerar Encarnacion,7,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,2,3,4,George Kirby
+6,bottom,double,line drive double,medium,fastball,strike,Jasson Domínguez,8,"[0, 1, 0]","[0, 'Jasson Domínguez', 0]",None,safe,0,0,2,3,4,George Kirby
+6,bottom,ball,ball,NA,slider,ball,Brandon Crawford,9,"[0, 1, 0]","[0, 'Jasson Domínguez', 0]",None,safe,1,0,2,3,4,George Kirby
+6,bottom,strike,swinging strike,NA,curveball,strike,Brandon Crawford,9,"[0, 1, 0]","[0, 'Jasson Domínguez', 0]",None,safe,1,1,2,3,4,George Kirby
+6,bottom,foul,foul,NA,curveball,strike,Brandon Crawford,9,"[0, 1, 0]","[0, 'Jasson Domínguez', 0]",None,safe,1,2,2,3,4,George Kirby
+6,bottom,foul,foul,NA,slider,strike,Brandon Crawford,9,"[0, 1, 0]","[0, 'Jasson Domínguez', 0]",None,safe,1,2,2,3,4,George Kirby
+6,bottom,ball,ball,NA,changeup,ball,Brandon Crawford,9,"[0, 1, 0]","[0, 'Jasson Domínguez', 0]",None,safe,2,2,2,3,4,George Kirby
+6,bottom,ball,ball,NA,slider,ball,Brandon Crawford,9,"[0, 1, 0]","[0, 'Jasson Domínguez', 0]",None,safe,3,2,2,3,4,George Kirby
+6,bottom,walk,walk,NA,slider,ball,Brandon Crawford,9,"[1, 1, 0]","['Brandon Crawford', 'Jasson Domínguez', 0]",None,safe,4,2,2,3,4,George Kirby
+6,bottom,ball,ball,NA,fastball,ball,Aaron Schunk,1,"[1, 1, 0]","['Brandon Crawford', 'Jasson Domínguez', 0]",None,safe,1,0,2,3,4,George Kirby
+6,bottom,foul,foul,NA,fastball,strike,Aaron Schunk,1,"[1, 1, 0]","['Brandon Crawford', 'Jasson Domínguez', 0]",None,safe,1,1,2,3,4,George Kirby
+6,bottom,strike,called strike,NA,fastball,strike,Aaron Schunk,1,"[1, 1, 0]","['Brandon Crawford', 'Jasson Domínguez', 0]",None,safe,1,2,2,3,4,George Kirby
+6,bottom,foul,foul,NA,fastball,strike,Aaron Schunk,1,"[1, 1, 0]","['Brandon Crawford', 'Jasson Domínguez', 0]",None,safe,1,2,2,3,4,George Kirby
+6,bottom,foul,foul,NA,slider,strike,Aaron Schunk,1,"[1, 1, 0]","['Brandon Crawford', 'Jasson Domínguez', 0]",None,safe,1,2,2,3,4,George Kirby
+6,bottom,foul,foul,NA,slider,strike,Aaron Schunk,1,"[1, 1, 0]","['Brandon Crawford', 'Jasson Domínguez', 0]",None,safe,1,2,2,3,4,George Kirby
+6,bottom,out,fly out,medium,fastball,strike,Aaron Schunk,1,"[1, 1, 0]","['Brandon Crawford', 'Jasson Domínguez', 0]",None,safe,1,2,3,3,4,George Kirby
+7,top,strike,called strike,NA,fastball,strike,Andrew Benintendi,8,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,0,3,4,Fernando Cruz
+7,top,ball,ball,NA,fastball,ball,Andrew Benintendi,8,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,0,3,4,Fernando Cruz
+7,top,strike,called strike,NA,slider,strike,Andrew Benintendi,8,"[0, 0, 0]","[0, 0, 0]",None,NA,1,2,0,3,4,Fernando Cruz
+7,top,strikeout,strikeout looking,NA,fastball,strike,Andrew Benintendi,8,"[0, 0, 0]","[0, 0, 0]",None,NA,1,3,1,3,4,Fernando Cruz
+7,top,foul,foul,NA,fastball,strike,Gleyber Torres,9,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,1,3,4,Fernando Cruz
+7,top,out,fly out,hard,fastball,strike,Gleyber Torres,9,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,2,3,4,Fernando Cruz
+7,top,ball,ball,NA,fastball,ball,William Contreras,1,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,2,3,4,Fernando Cruz
+7,top,home_run,fly ball home run,hard,slider,strike,William Contreras,1,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,2,4,4,Fernando Cruz
+7,top,strike,called strike,NA,fastball,strike,Trayce Thompson,2,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,2,4,4,Fernando Cruz
+7,top,ball,ball,NA,fastball,ball,Trayce Thompson,2,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,2,4,4,Fernando Cruz
+7,top,ball,ball,NA,slider,ball,Trayce Thompson,2,"[0, 0, 0]","[0, 0, 0]",None,NA,2,1,2,4,4,Fernando Cruz
+7,top,strike,called strike,NA,fastball,strike,Trayce Thompson,2,"[0, 0, 0]","[0, 0, 0]",None,NA,2,2,2,4,4,Fernando Cruz
+7,top,ball,ball,NA,fastball,ball,Trayce Thompson,2,"[0, 0, 0]","[0, 0, 0]",None,NA,3,2,2,4,4,Fernando Cruz
+7,top,walk,walk,NA,slider,ball,Trayce Thompson,2,"[1, 0, 0]","['Trayce Thompson', 0, 0]",None,safe,4,2,2,4,4,Fernando Cruz
+7,top,out,fly out,soft,slider,strike,Austin Wells,3,"[1, 0, 0]","['Trayce Thompson', 0, 0]",None,safe,0,0,3,4,4,Fernando Cruz
+7,bottom,ball,ball,NA,changeup,ball,Richie Palacios,2,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,0,4,4,Angel Chivilli
+7,bottom,ball,ball,NA,fastball,ball,Richie Palacios,2,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,0,4,4,Angel Chivilli
+7,bottom,out,fly out,medium,fastball,strike,Richie Palacios,2,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,1,4,4,Angel Chivilli
+7,bottom,strike,called strike,NA,changeup,strike,Blaze Alexander,3,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,1,4,4,Angel Chivilli
+7,bottom,out,ground out,hard,changeup,strike,Blaze Alexander,3,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,2,4,4,Angel Chivilli
+7,bottom,strike,swinging strike,NA,changeup,strike,Elehuris Montero,4,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,2,4,4,Angel Chivilli
+7,bottom,strike,called strike,NA,changeup,strike,Elehuris Montero,4,"[0, 0, 0]","[0, 0, 0]",None,NA,0,2,2,4,4,Angel Chivilli
+7,bottom,strikeout,strikeout looking,NA,fastball,strike,Elehuris Montero,4,"[0, 0, 0]","[0, 0, 0]",None,NA,0,3,3,4,4,Angel Chivilli
+8,top,strike,swinging strike,NA,fastball,strike,Daniel Johnson,4,"[0, 0, 0]","[0, 0, 0]",None,NA,0,1,0,4,4,Fernando Cruz
+8,top,strike,called strike,NA,slider,strike,Daniel Johnson,4,"[0, 0, 0]","[0, 0, 0]",None,NA,0,2,0,4,4,Fernando Cruz
+8,top,strikeout,strikeout swinging,NA,slider,strike,Daniel Johnson,4,"[0, 0, 0]","[0, 0, 0]",None,NA,0,3,1,4,4,Fernando Cruz
+8,top,ball,ball,NA,slider,ball,Owen Miller,5,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,4,4,Fernando Cruz
+8,top,ball,ball,NA,fastball,ball,Owen Miller,5,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,1,4,4,Fernando Cruz
+8,top,out,ground out,medium,fastball,strike,Owen Miller,5,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,2,4,4,Fernando Cruz
+8,top,ball,ball,NA,slider,ball,Jordan Lawlar,6,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,2,4,4,Fernando Cruz
+8,top,ball,ball,NA,fastball,ball,Jordan Lawlar,6,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,2,4,4,Fernando Cruz
+8,top,ball,ball,NA,fastball,ball,Jordan Lawlar,6,"[0, 0, 0]","[0, 0, 0]",None,NA,3,0,2,4,4,Fernando Cruz
+8,top,strike,called strike,NA,fastball,strike,Jordan Lawlar,6,"[0, 0, 0]","[0, 0, 0]",None,NA,3,1,2,4,4,Fernando Cruz
+8,top,strike,called strike,NA,fastball,strike,Jordan Lawlar,6,"[0, 0, 0]","[0, 0, 0]",None,NA,3,2,2,4,4,Fernando Cruz
+8,top,walk,walk,NA,slider,ball,Jordan Lawlar,6,"[1, 0, 0]","['Jordan Lawlar', 0, 0]",None,safe,4,2,2,4,4,Fernando Cruz
+8,top,ball,ball,NA,fastball,ball,Mike Tauchman,7,"[1, 0, 0]","['Jordan Lawlar', 0, 0]",None,safe,1,0,2,4,4,Fernando Cruz
+8,top,foul,foul,NA,slider,strike,Mike Tauchman,7,"[1, 0, 0]","['Jordan Lawlar', 0, 0]",None,safe,1,1,2,4,4,Fernando Cruz
+8,top,ball,ball,NA,fastball,ball,Mike Tauchman,7,"[1, 0, 0]","['Jordan Lawlar', 0, 0]",None,safe,2,1,2,4,4,Fernando Cruz
+8,top,ball,ball,NA,fastball,ball,Mike Tauchman,7,"[1, 0, 0]","['Jordan Lawlar', 0, 0]",None,safe,3,1,2,4,4,Fernando Cruz
+8,top,walk,walk,NA,fastball,ball,Mike Tauchman,7,"[1, 1, 0]","['Mike Tauchman', 'Jordan Lawlar', 0]",None,safe,4,1,2,4,4,Fernando Cruz
+8,top,ball,ball,NA,fastball,ball,Andrew Benintendi,8,"[1, 1, 0]","['Mike Tauchman', 'Jordan Lawlar', 0]",None,safe,1,0,2,4,4,Shintaro Fujinami
+8,top,strike,called strike,NA,fastball,strike,Andrew Benintendi,8,"[1, 1, 0]","['Mike Tauchman', 'Jordan Lawlar', 0]",None,safe,1,1,2,4,4,Shintaro Fujinami
+8,top,out,fly out,hard,fastball,strike,Andrew Benintendi,8,"[1, 1, 0]","['Mike Tauchman', 'Jordan Lawlar', 0]",None,safe,1,1,3,4,4,Shintaro Fujinami
+8,bottom,ball,ball,NA,fastball,ball,Wilyer Abreu,5,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,0,4,4,Angel Chivilli
+8,bottom,ball,ball,NA,fastball,ball,Wilyer Abreu,5,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,0,4,4,Angel Chivilli
+8,bottom,strike,called strike,NA,fastball,strike,Wilyer Abreu,5,"[0, 0, 0]","[0, 0, 0]",None,NA,2,1,0,4,4,Angel Chivilli
+8,bottom,ball,ball,NA,fastball,ball,Wilyer Abreu,5,"[0, 0, 0]","[0, 0, 0]",None,NA,3,1,0,4,4,Angel Chivilli
+8,bottom,strike,swinging strike,NA,fastball,strike,Wilyer Abreu,5,"[0, 0, 0]","[0, 0, 0]",None,NA,3,2,0,4,4,Angel Chivilli
+8,bottom,walk,walk,NA,slider,ball,Wilyer Abreu,5,"[1, 0, 0]","['Wilyer Abreu', 0, 0]",None,safe,4,2,0,4,4,Angel Chivilli
+8,bottom,strike,called strike,NA,changeup,strike,Brandon Marsh,6,"[1, 0, 0]","['Wilyer Abreu', 0, 0]",None,safe,0,1,0,4,4,Angel Chivilli
+8,bottom,foul,foul,NA,fastball,strike,Brandon Marsh,6,"[1, 0, 0]","['Wilyer Abreu', 0, 0]",None,safe,0,2,0,4,4,Angel Chivilli
+8,bottom,out,fly out,medium,fastball,strike,Brandon Marsh,6,"[1, 0, 0]","['Wilyer Abreu', 0, 0]",None,safe,0,2,1,4,4,Angel Chivilli
+8,bottom,ball,ball,NA,changeup,ball,Jerar Encarnacion,7,"[1, 0, 0]","['Wilyer Abreu', 0, 0]",None,safe,1,0,1,4,4,DJ Herz
+8,bottom,ball,ball,NA,fastball,ball,Jerar Encarnacion,7,"[1, 0, 0]","['Wilyer Abreu', 0, 0]",None,safe,2,0,1,4,4,DJ Herz
+8,bottom,ball,ball,NA,fastball,ball,Jerar Encarnacion,7,"[1, 0, 0]","['Wilyer Abreu', 0, 0]",None,safe,3,0,1,4,4,DJ Herz
+8,bottom,walk,walk,NA,slider,ball,Jerar Encarnacion,7,"[1, 1, 0]","['Jerar Encarnacion', 'Wilyer Abreu', 0]",None,safe,4,0,1,4,4,DJ Herz
+8,bottom,ball,ball,NA,changeup,ball,Jasson Domínguez,8,"[1, 1, 0]","['Jerar Encarnacion', 'Wilyer Abreu', 0]",None,safe,1,0,1,4,4,DJ Herz
+8,bottom,home_run,fly ball home run,soft,fastball,strike,Jasson Domínguez,8,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,4,7,DJ Herz
+8,bottom,ball,ball,NA,fastball,ball,Brandon Crawford,9,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,4,7,DJ Herz
+8,bottom,ball,ball,NA,changeup,ball,Brandon Crawford,9,"[0, 0, 0]","[0, 0, 0]",None,NA,2,0,1,4,7,DJ Herz
+8,bottom,ball,ball,NA,fastball,ball,Brandon Crawford,9,"[0, 0, 0]","[0, 0, 0]",None,NA,3,0,1,4,7,DJ Herz
+8,bottom,foul,foul,NA,fastball,strike,Brandon Crawford,9,"[0, 0, 0]","[0, 0, 0]",None,NA,3,1,1,4,7,DJ Herz
+8,bottom,strike,called strike,NA,changeup,strike,Brandon Crawford,9,"[0, 0, 0]","[0, 0, 0]",None,NA,3,2,1,4,7,DJ Herz
+8,bottom,walk,walk,NA,fastball,ball,Brandon Crawford,9,"[1, 0, 0]","['Brandon Crawford', 0, 0]",None,safe,4,2,1,4,7,DJ Herz
+8,bottom,ball,ball,NA,fastball,ball,Aaron Schunk,1,"[1, 0, 0]","['Brandon Crawford', 0, 0]",None,safe,1,0,1,4,7,DJ Herz
+8,bottom,ball,ball,NA,changeup,ball,Aaron Schunk,1,"[1, 0, 0]","['Brandon Crawford', 0, 0]",None,safe,2,0,1,4,7,DJ Herz
+8,bottom,strike,called strike,NA,changeup,strike,Aaron Schunk,1,"[1, 0, 0]","['Brandon Crawford', 0, 0]",None,safe,2,1,1,4,7,DJ Herz
+8,bottom,strike,called strike,NA,fastball,strike,Aaron Schunk,1,"[1, 0, 0]","['Brandon Crawford', 0, 0]",None,safe,2,2,1,4,7,DJ Herz
+8,bottom,foul,foul,NA,fastball,strike,Aaron Schunk,1,"[1, 0, 0]","['Brandon Crawford', 0, 0]",None,safe,2,2,1,4,7,DJ Herz
+8,bottom,strikeout,strikeout looking,NA,slider,strike,Aaron Schunk,1,"[1, 0, 0]","['Brandon Crawford', 0, 0]",None,safe,2,3,2,4,7,DJ Herz
+8,bottom,ball,ball,NA,fastball,ball,Richie Palacios,2,"[1, 0, 0]","['Brandon Crawford', 0, 0]",None,safe,1,0,2,4,7,Zebby Matthews
+8,bottom,foul,foul,NA,slider,strike,Richie Palacios,2,"[1, 0, 0]","['Brandon Crawford', 0, 0]",None,safe,1,1,2,4,7,Zebby Matthews
+8,bottom,strike,called strike,NA,slider,strike,Richie Palacios,2,"[1, 0, 0]","['Brandon Crawford', 0, 0]",None,safe,1,2,2,4,7,Zebby Matthews
+8,bottom,foul,foul,NA,slider,strike,Richie Palacios,2,"[1, 0, 0]","['Brandon Crawford', 0, 0]",None,safe,1,2,2,4,7,Zebby Matthews
+8,bottom,strikeout,strikeout looking,NA,slider,strike,Richie Palacios,2,"[1, 0, 0]","['Brandon Crawford', 0, 0]",None,safe,1,3,3,4,7,Zebby Matthews
+9,top,out,fly out,medium,fastball,strike,Gleyber Torres,9,"[0, 0, 0]","[0, 0, 0]",None,NA,0,0,1,4,7,Shintaro Fujinami
+9,top,ball,ball,NA,slider,ball,William Contreras,1,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,4,7,Shintaro Fujinami
+9,top,strike,swinging strike,NA,fastball,strike,William Contreras,1,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,1,4,7,Shintaro Fujinami
+9,top,ball,ball,NA,fastball,ball,William Contreras,1,"[0, 0, 0]","[0, 0, 0]",None,NA,2,1,1,4,7,Shintaro Fujinami
+9,top,home_run,fly ball home run,soft,fastball,strike,William Contreras,1,"[0, 0, 0]","[0, 0, 0]",None,NA,2,1,1,5,7,Shintaro Fujinami
+9,top,ball,ball,NA,fastball,ball,Trayce Thompson,2,"[0, 0, 0]","[0, 0, 0]",None,NA,1,0,1,5,7,Shintaro Fujinami
+9,top,strike,called strike,NA,fastball,strike,Trayce Thompson,2,"[0, 0, 0]","[0, 0, 0]",None,NA,1,1,1,5,7,Shintaro Fujinami
+9,top,ball,ball,NA,fastball,ball,Trayce Thompson,2,"[0, 0, 0]","[0, 0, 0]",None,NA,2,1,1,5,7,Shintaro Fujinami
+9,top,strike,called strike,NA,fastball,strike,Trayce Thompson,2,"[0, 0, 0]","[0, 0, 0]",None,NA,2,2,1,5,7,Shintaro Fujinami
+9,top,strikeout,strikeout swinging,NA,slider,strike,Trayce Thompson,2,"[0, 0, 0]","[0, 0, 0]",None,NA,2,3,2,5,7,Shintaro Fujinami
+9,top,out,ground out,hard,fastball,strike,Austin Wells,3,"[0, 0, 0]","[0, 0, 0]",None,NA,0,0,3,5,7,Shintaro Fujinami

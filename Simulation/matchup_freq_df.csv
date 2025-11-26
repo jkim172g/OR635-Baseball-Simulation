@@ -1,13 +1,13 @@
-﻿,Tigers,Red Sox,Reds,Padres,Mariners,Blue Jays,Phillies,Brewers,Mariners,Phillies,Yankees
-,Guardians,Yankees,Dodgers,Cubs,Guardians,Yankees,Dodgers,Cubs,Yankees,Brewers,Brewers
-ALWC_1,1.0,,,,,,,,,,
-ALWC_2,,1.0,,,,,,,,,
-NLWC_1,,,1.0,,,,,,,,
-NLWC_2,,,,1.0,,,,,,,
-ALDS_1,,,,,1.0,,,,,,
-ALDS_2,,,,,,1.0,,,,,
-NLDS_1,,,,,,,1.0,,,,
-NLDS_2,,,,,,,,1.0,,,
-ALCS,,,,,,,,,1.0,,
-NLCS,,,,,,,,,,1.0,
-WS,,,,,,,,,,,1.0
+﻿,Tigers,Red Sox,Reds,Padres,Mariners,Mariners,Blue Jays,Blue Jays,Phillies,Phillies,Brewers,Brewers,Mariners,Mariners,Tigers,Tigers,Mariners,Guardians,Guardians,Tigers,Phillies,Dodgers,Phillies,Phillies,Dodgers,Reds,Dodgers,Reds,Reds,Mariners,Blue Jays,Yankees,Mariners,Yankees,Blue Jays,Mariners,Tigers,Mariners,Yankees,Mariners,Blue Jays,Tigers,Tigers,Guardians,Guardians,Red Sox,Blue Jays,Tigers,Red Sox,Yankees,Red Sox,Mariners,Guardians,Yankees,Tigers,Yankees,Red Sox
+,Guardians,Yankees,Dodgers,Cubs,Tigers,Guardians,Yankees,Red Sox,Reds,Dodgers,Cubs,Padres,Blue Jays,Yankees,Yankees,Blue Jays,Red Sox,Yankees,Blue Jays,Red Sox,Brewers,Padres,Padres,Cubs,Brewers,Brewers,Cubs,Cubs,Padres,Phillies,Dodgers,Padres,Cubs,Phillies,Brewers,Padres,Cubs,Brewers,Dodgers,Dodgers,Phillies,Dodgers,Phillies,Cubs,Phillies,Padres,Cubs,Brewers,Brewers,Reds,Phillies,Reds,Brewers,Cubs,Reds,Brewers,Reds
+ALWC_1,100.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ALWC_2,,100.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+NLWC_1,,,100.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+NLWC_2,,,,100.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ALDS_1,,,,,59.0,41.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ALDS_2,,,,,,,61.0,39.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+NLDS_1,,,,,,,,,40.0,60.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+NLDS_2,,,,,,,,,,,59.0,41.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ALCS,,,,,,,,,,,,,27.0,28.0,10.0,9.0,12.0,7.0,5.0,2.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+NLCS,,,,,,,,,,,,,,,,,,,,,33.0,6.0,14.0,17.0,13.0,6.0,6.0,2.0,3.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+WS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,22.0,4.0,2.0,2.0,9.0,3.0,3.0,1.0,8.0,7.0,5.0,5.0,2.0,4.0,1.0,2.0,1.0,2.0,2.0,1.0,1.0,3.0,2.0,2.0,2.0,1.0,2.0,1.0

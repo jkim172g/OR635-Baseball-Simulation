@@ -1,45 +1,49 @@
 ﻿Round,Iteration,Game,Team1,Team2,Series Record,Team1 Score,Team2 Score
-ALWC_1,1,1,Tigers,Guardians,0-1,8,9
-ALWC_1,1,2,Tigers,Guardians,0-2,5,9
-ALWC_2,1,1,Red Sox,Yankees,0-1,1,13
-ALWC_2,1,2,Red Sox,Yankees,1-1,9,7
-ALWC_2,1,3,Red Sox,Yankees,1-2,0,6
-NLWC_1,1,1,Reds,Dodgers,0-1,0,13
-NLWC_1,1,2,Reds,Dodgers,0-2,6,10
-NLWC_2,1,1,Padres,Cubs,0-1,4,9
-NLWC_2,1,2,Padres,Cubs,0-2,8,11
-ALDS_1,1,1,Mariners,Guardians,1-0,8,6
-ALDS_1,1,2,Mariners,Guardians,1-1,6,9
-ALDS_1,1,3,Mariners,Guardians,2-1,6,1
-ALDS_1,1,4,Mariners,Guardians,3-1,5,4
-ALDS_2,1,1,Blue Jays,Yankees,0-1,10,12
-ALDS_2,1,2,Blue Jays,Yankees,1-1,7,1
-ALDS_2,1,3,Blue Jays,Yankees,1-2,7,8
-ALDS_2,1,4,Blue Jays,Yankees,1-3,2,4
-NLDS_1,1,1,Phillies,Dodgers,1-0,6,3
-NLDS_1,1,2,Phillies,Dodgers,1-1,3,4
-NLDS_1,1,3,Phillies,Dodgers,2-1,5,4
-NLDS_1,1,4,Phillies,Dodgers,3-1,17,7
-NLDS_2,1,1,Brewers,Cubs,0-1,1,3
-NLDS_2,1,2,Brewers,Cubs,0-2,1,5
-NLDS_2,1,3,Brewers,Cubs,1-2,5,3
-NLDS_2,1,4,Brewers,Cubs,2-2,7,1
-NLDS_2,1,5,Brewers,Cubs,3-2,7,2
-ALCS,1,1,Mariners,Yankees,0-1,6,9
-ALCS,1,2,Mariners,Yankees,1-1,11,3
-ALCS,1,3,Mariners,Yankees,1-2,2,7
-ALCS,1,4,Mariners,Yankees,1-3,6,12
-ALCS,1,5,Mariners,Yankees,2-3,8,6
-ALCS,1,6,Mariners,Yankees,2-4,6,7
-NLCS,1,1,Phillies,Brewers,1-0,10,1
-NLCS,1,2,Phillies,Brewers,1-1,6,7
-NLCS,1,3,Phillies,Brewers,2-1,3,2
-NLCS,1,4,Phillies,Brewers,3-1,12,2
-NLCS,1,5,Phillies,Brewers,3-2,4,8
-NLCS,1,6,Phillies,Brewers,3-3,0,6
-NLCS,1,7,Phillies,Brewers,3-4,3,6
-World Series,1,1,Yankees,Brewers,0-1,5,6
-World Series,1,2,Yankees,Brewers,1-1,17,5
-World Series,1,3,Yankees,Brewers,1-2,3,9
-World Series,1,4,Yankees,Brewers,1-3,4,6
-World Series,1,5,Yankees,Brewers,1-4,7,10
+ALWC_1,1,1,Tigers,Guardians,1-0,7,0
+ALWC_1,1,2,Tigers,Guardians,1-1,3,6
+ALWC_1,1,3,Tigers,Guardians,1-2,3,5
+ALWC_2,1,1,Red Sox,Yankees,1-0,12,8
+ALWC_2,1,2,Red Sox,Yankees,2-0,3,0
+NLWC_1,1,1,Reds,Dodgers,1-0,12,2
+NLWC_1,1,2,Reds,Dodgers,2-0,8,4
+NLWC_2,1,1,Padres,Cubs,1-0,7,4
+NLWC_2,1,2,Padres,Cubs,1-1,0,2
+NLWC_2,1,3,Padres,Cubs,1-2,1,6
+ALDS_1,1,1,Mariners,Guardians,0-1,1,6
+ALDS_1,1,2,Mariners,Guardians,1-1,9,2
+ALDS_1,1,3,Mariners,Guardians,2-1,5,3
+ALDS_1,1,4,Mariners,Guardians,2-2,5,6
+ALDS_1,1,5,Mariners,Guardians,3-2,17,2
+ALDS_2,1,1,Blue Jays,Red Sox,0-1,0,2
+ALDS_2,1,2,Blue Jays,Red Sox,1-1,6,5
+ALDS_2,1,3,Blue Jays,Red Sox,2-1,9,4
+ALDS_2,1,4,Blue Jays,Red Sox,2-2,5,7
+ALDS_2,1,5,Blue Jays,Red Sox,2-3,2,6
+NLDS_1,1,1,Phillies,Reds,0-1,3,4
+NLDS_1,1,2,Phillies,Reds,1-1,7,1
+NLDS_1,1,3,Phillies,Reds,2-1,14,3
+NLDS_1,1,4,Phillies,Reds,3-1,12,3
+NLDS_2,1,1,Brewers,Cubs,0-1,6,12
+NLDS_2,1,2,Brewers,Cubs,1-1,7,1
+NLDS_2,1,3,Brewers,Cubs,2-1,4,3
+NLDS_2,1,4,Brewers,Cubs,3-1,6,4
+ALCS,1,1,Mariners,Red Sox,0-1,2,3
+ALCS,1,2,Mariners,Red Sox,0-2,0,5
+ALCS,1,3,Mariners,Red Sox,1-2,1,0
+ALCS,1,4,Mariners,Red Sox,2-2,4,2
+ALCS,1,5,Mariners,Red Sox,2-3,2,6
+ALCS,1,6,Mariners,Red Sox,3-3,4,0
+ALCS,1,7,Mariners,Red Sox,3-4,0,1
+NLCS,1,1,Phillies,Brewers,1-0,11,1
+NLCS,1,2,Phillies,Brewers,2-0,5,3
+NLCS,1,3,Phillies,Brewers,2-1,2,7
+NLCS,1,4,Phillies,Brewers,2-2,7,8
+NLCS,1,5,Phillies,Brewers,2-3,7,8
+NLCS,1,6,Phillies,Brewers,3-3,17,1
+NLCS,1,7,Phillies,Brewers,4-3,5,2
+World Series,1,1,Red Sox,Phillies,0-1,1,3
+World Series,1,2,Red Sox,Phillies,1-1,10,5
+World Series,1,3,Red Sox,Phillies,1-2,6,14
+World Series,1,4,Red Sox,Phillies,2-2,8,1
+World Series,1,5,Red Sox,Phillies,3-2,8,2
+World Series,1,6,Red Sox,Phillies,4-2,10,6

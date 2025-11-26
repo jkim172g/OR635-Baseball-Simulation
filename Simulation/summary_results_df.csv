@@ -1,12 +1,12 @@
 ﻿Round,Team1,Team2,Winner,Team1 Series Win %,Team2 Series Win %,Team1 Avg Score,Team2 Avg Score,Avg Final Record
-Wildcard,Tigers,Guardians,Guardians,0.0,1.0,6.5,9.0,0.0-2.0
-Wildcard,Red Sox,Yankees,Yankees,0.0,1.0,3.3333333333333335,8.666666666666666,1.0-2.0
-Wildcard,Reds,Dodgers,Dodgers,0.0,1.0,3.0,11.5,0.0-2.0
-Wildcard,Padres,Cubs,Cubs,0.0,1.0,6.0,10.0,0.0-2.0
-Division,Mariners,Guardians,Mariners,1.0,0.0,6.25,5.0,3.0-1.0
-Division,Blue Jays,Yankees,Yankees,0.0,1.0,6.5,6.25,1.0-3.0
-Division,Phillies,Dodgers,Phillies,1.0,0.0,7.75,4.5,3.0-1.0
-Division,Brewers,Cubs,Brewers,1.0,0.0,4.2,2.8,3.0-2.0
-Conference,Mariners,Yankees,Yankees,0.0,1.0,6.5,7.333333333333333,2.0-4.0
-Conference,Phillies,Brewers,Brewers,0.0,1.0,5.428571428571429,4.571428571428571,3.0-4.0
-World Series,Yankees,Brewers,Brewers,0.0,1.0,7.2,7.2,1.0-4.0
+Wildcard,Tigers,Guardians,Guardians,0.0,1.0,4.333333333333333,3.6666666666666665,1.0-2.0
+Wildcard,Red Sox,Yankees,Red Sox,1.0,0.0,7.5,4.0,2.0-0.0
+Wildcard,Reds,Dodgers,Reds,1.0,0.0,10.0,3.0,2.0-0.0
+Wildcard,Padres,Cubs,Cubs,0.0,1.0,2.6666666666666665,4.0,1.0-2.0
+Division,Mariners,Guardians,Mariners,1.0,0.0,7.4,3.8,3.0-2.0
+Division,Blue Jays,Red Sox,Red Sox,0.0,1.0,4.4,4.8,2.0-3.0
+Division,Phillies,Reds,Phillies,1.0,0.0,9.0,2.75,3.0-1.0
+Division,Brewers,Cubs,Brewers,1.0,0.0,5.75,5.0,3.0-1.0
+Conference,Mariners,Red Sox,Red Sox,0.0,1.0,1.8571428571428572,2.4285714285714284,3.0-4.0
+Conference,Phillies,Brewers,Phillies,1.0,0.0,7.714285714285714,4.285714285714286,4.0-3.0
+World Series,Red Sox,Phillies,Red Sox,1.0,0.0,7.166666666666667,5.166666666666667,4.0-2.0
